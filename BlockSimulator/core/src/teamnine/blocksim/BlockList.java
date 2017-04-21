@@ -46,18 +46,18 @@ public class BlockList implements Disposable {
 	public ArrayList<Block> getBlockList() {
 		return blockList;
 	}
-	
+
 	public ArrayList<Block> getBlockList(Block.Type type) {
-		if(type == Block.Type.Floor) {
+		if (type == Block.Type.Floor) {
 			return floorList;
-		} else if(type == Block.Type.Goal) {
+		} else if (type == Block.Type.Goal) {
 			return goalList;
-		} else if(type == Block.Type.Obstacle) {
+		} else if (type == Block.Type.Obstacle) {
 			return obstacleList;
 		}
 		return null;
 	}
-	
+
 	public ArrayList<RobotBlock> getRobotBlockList() {
 		return robotList;
 	}
@@ -72,16 +72,16 @@ public class BlockList implements Disposable {
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), false));
 		}
-		
-		//Add Block to different List
-		if(block.getType() == Block.Type.Floor) {
+
+		// Add Block to different List
+		if (block.getType() == Block.Type.Floor) {
 			floorList.add(block);
-		} else if(block.getType() == Block.Type.Goal) {
+		} else if (block.getType() == Block.Type.Goal) {
 			goalList.add(block);
-		} else if(block.getType() == Block.Type.Obstacle) {
+		} else if (block.getType() == Block.Type.Obstacle) {
 			obstacleList.add(block);
 		}
-		
+
 		registerAction = true;
 		blockList.add(block);
 	}
@@ -120,7 +120,7 @@ public class BlockList implements Disposable {
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
 		}
-		
+
 		// Add Block to different List
 		if (block.getType() == Block.Type.Floor) {
 			floorList.remove(block);
@@ -129,12 +129,12 @@ public class BlockList implements Disposable {
 		} else if (block.getType() == Block.Type.Obstacle) {
 			obstacleList.remove(block);
 		}
-		
+
 		// If it's a robot block
 		if (block.getType() == Block.Type.Robot) {
 			robotList.remove(block);
 		}
-		
+
 		registerAction = true;
 		blockList.remove(block);
 	}
@@ -163,18 +163,18 @@ public class BlockList implements Disposable {
 		}
 		return null;
 	}
-	
+
 	public void resizeFloor(int gridSize) {
-		if(gridSize <= 0) {
+		if (gridSize <= 0) {
 			blockSimulator.gridSize = 0;
 			return;
 		}
-		
+
 		this.gridSize = gridSize;
-		
+
 		ArrayList<Block> floorBlocks = new ArrayList<Block>();
-		for(Block block : blockList) {
-			if(block.getType() == Block.Type.Floor) {
+		for (Block block : blockList) {
+			if (block.getType() == Block.Type.Floor) {
 				floorBlocks.add(block);
 			}
 		}
@@ -267,16 +267,23 @@ public class BlockList implements Disposable {
 		for (int i = 0; i < blockList.size(); i++) {
 			Block block = blockList.get(i);
 			block.moveModel();
-			
-			//Check for collision
-			if(block.getType() == Block.Type.Robot) {
-				for(int j = 0; j < blockList.size(); j++) {
-					if(block.intersect(blockList.get(i))) {
-						System.out.println("Collision");
+
+			// Check for collision
+			if (block.getType() == Block.Type.Robot) {
+				for (int j = 0; j < blockList.size(); j++) {
+					// Don't check if block is same
+					if (block == blockList.get(j)) {
+						continue;
+					}
+
+					// Check for intersection between blocks
+					if (block.intersect(blockList.get(j))) {
+						// Detecting Collision
+						//TODO Stop movement
 					}
 				}
 			}
-			
+
 			modelBatch.render(blockList.get(i).getModelInstance(), environment);
 		}
 	}
