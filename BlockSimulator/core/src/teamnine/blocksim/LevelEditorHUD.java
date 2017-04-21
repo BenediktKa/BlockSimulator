@@ -24,6 +24,7 @@ public class LevelEditorHUD implements Disposable {
 	// Block Simulator
 	// Enjoy everything
 	// Marta likes skateboarding
+	// Enjoy your competition on monday
 	
 	private BlockSimulator blockSimulator;
 
