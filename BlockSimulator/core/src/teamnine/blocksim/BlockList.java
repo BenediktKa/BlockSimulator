@@ -18,7 +18,10 @@ public class BlockList implements Disposable {
 
 	// Block Lists
 	private ArrayList<Block> blockList = new ArrayList<Block>();
-	private ArrayList<RobotBlock> robotBlockList = new ArrayList<RobotBlock>();
+	private ArrayList<Block> floorList = new ArrayList<Block>();
+	private ArrayList<Block> obstacleList = new ArrayList<Block>();
+	private ArrayList<Block> goalList = new ArrayList<Block>();
+	private ArrayList<RobotBlock> robotList = new ArrayList<RobotBlock>();
 
 	// Selector Block
 	private Block selectorBlock;
@@ -43,9 +46,20 @@ public class BlockList implements Disposable {
 	public ArrayList<Block> getBlockList() {
 		return blockList;
 	}
-
+	
+	public ArrayList<Block> getBlockList(Block.Type type) {
+		if(type == Block.Type.Floor) {
+			return floorList;
+		} else if(type == Block.Type.Goal) {
+			return goalList;
+		} else if(type == Block.Type.Obstacle) {
+			return obstacleList;
+		}
+		return null;
+	}
+	
 	public ArrayList<RobotBlock> getRobotBlockList() {
-		return robotBlockList;
+		return robotList;
 	}
 
 	public Block getBlock(int i) {
@@ -58,6 +72,16 @@ public class BlockList implements Disposable {
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), false));
 		}
+		
+		//Add Block to different List
+		if(block.getType() == Block.Type.Floor) {
+			floorList.add(block);
+		} else if(block.getType() == Block.Type.Goal) {
+			goalList.add(block);
+		} else if(block.getType() == Block.Type.Obstacle) {
+			obstacleList.add(block);
+		}
+		
 		registerAction = true;
 		blockList.add(block);
 	}
@@ -65,7 +89,7 @@ public class BlockList implements Disposable {
 	public Block createBlock(Vector3 vector, Block.Type type) {
 		if (type == Block.Type.Robot) {
 			RobotBlock robotBlock = new RobotBlock(vector, type);
-			robotBlockList.add(robotBlock);
+			robotList.add(robotBlock);
 			addBlock((Block) robotBlock);
 			return robotBlock;
 		} else {
@@ -78,7 +102,7 @@ public class BlockList implements Disposable {
 	public Block createBlock(Vector3 vector, Block.Type type, double ID) {
 		if (type == Block.Type.Robot) {
 			RobotBlock robotBlock = new RobotBlock(vector, type);
-			robotBlockList.add(robotBlock);
+			robotList.add(robotBlock);
 			addBlock((Block) robotBlock);
 			robotBlock.setID(ID);
 			return robotBlock;
@@ -96,13 +120,23 @@ public class BlockList implements Disposable {
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
 		}
-		registerAction = true;
-		blockList.remove(block);
-
+		
+		// Add Block to different List
+		if (block.getType() == Block.Type.Floor) {
+			floorList.remove(block);
+		} else if (block.getType() == Block.Type.Goal) {
+			goalList.remove(block);
+		} else if (block.getType() == Block.Type.Obstacle) {
+			obstacleList.remove(block);
+		}
+		
 		// If it's a robot block
 		if (block.getType() == Block.Type.Robot) {
-			robotBlockList.remove(block);
+			robotList.remove(block);
 		}
+		
+		registerAction = true;
+		blockList.remove(block);
 	}
 
 	public void removeBlock(int i) {
@@ -117,7 +151,7 @@ public class BlockList implements Disposable {
 
 		// If it's a robot block
 		if (block.getType() == Block.Type.Robot) {
-			robotBlockList.remove(block);
+			robotList.remove(block);
 		}
 	}
 
@@ -231,7 +265,18 @@ public class BlockList implements Disposable {
 
 	public void render(ModelBatch modelBatch, Environment environment) {
 		for (int i = 0; i < blockList.size(); i++) {
-			blockList.get(i).moveModel();
+			Block block = blockList.get(i);
+			block.moveModel();
+			
+			//Check for collision
+			if(block.getType() == Block.Type.Robot) {
+				for(int j = 0; j < blockList.size(); j++) {
+					if(block.intersect(blockList.get(i))) {
+						System.out.println("Collision");
+					}
+				}
+			}
+			
 			modelBatch.render(blockList.get(i).getModelInstance(), environment);
 		}
 	}

@@ -145,7 +145,7 @@ public class FPSControl extends FirstPersonCameraController {
 		} else if (keycode == Keys.P) {
 			ArrayList<RobotBlock> robotBlockList = blockSimulator.blockList.getRobotBlockList();
 			for (RobotBlock rb : robotBlockList) {
-				rb.moveLeft();
+				rb.fall();
 			}
 		} else if (keycode == Keys.C) {
 			camera.lookAt(blockSimulator.selectorBlock.getPosition());

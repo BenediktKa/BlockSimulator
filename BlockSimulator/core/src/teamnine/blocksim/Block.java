@@ -22,6 +22,11 @@ public class Block implements Disposable {
 	protected Vector3 position;
 	protected Type type;
 	protected double ID;
+	
+	// HitBox Variables
+	public float posMinX, posMaxX;
+	public float posMinY, posMaxY;
+	public float posMinZ, posMaxZ;
 
 	public Block(Vector3 position, Type type) {
 		this.position = position;
@@ -63,6 +68,22 @@ public class Block implements Disposable {
 					Usage.Position | Usage.Normal);
 			modelInstance = new ModelInstance(model);
 		}
+		createHitBox();
+	}
+	
+	public void createHitBox() {
+		
+		// X-Coordinate
+		posMinX = position.x;
+		posMaxX = position.x + 1;
+		
+		// Y-Coordinate
+		posMinY = position.y;
+		posMaxY = position.y + 1;
+		
+		// Z-Coordinate
+		posMinZ = position.z;
+		posMaxZ = position.z + 1;
 	}
 
 	public Model getModel() {
@@ -75,6 +96,7 @@ public class Block implements Disposable {
 
 	public void moveModel() {
 		modelInstance.transform = new Matrix4().translate(position.x, position.y, position.z);
+		createHitBox();
 	}
 
 	public void setPosition(float x, float y, float z) {
@@ -117,6 +139,12 @@ public class Block implements Disposable {
 
 	public double getID() {
 		return ID;
+	}
+	
+	public boolean intersect(Block block) {
+		return	(posMinX <= block.posMaxX && posMaxX >= block.posMinX) && 
+				(posMinY <= block.posMaxY && posMaxY >= block.posMinY) &&
+				(posMinZ <= block.posMaxZ && posMaxZ >= block.posMinZ);
 	}
 
 	@Override

@@ -83,6 +83,7 @@ public class RobotBlock<T> extends Block {
 		if (position.equals(moveTo)) {
 			return;
 		}
+		
 		if (position.cpy().sub(moveTo).isZero(0.01f)) {
 			position.x = moveTo.x;
 			position.y = moveTo.y;
