@@ -9,6 +9,7 @@ public class Action {
 
 	/** Block Position. */
 	private Vector3 position;
+	//Test
 	
 	/** Block Type. */
 	private Block.Type type;
