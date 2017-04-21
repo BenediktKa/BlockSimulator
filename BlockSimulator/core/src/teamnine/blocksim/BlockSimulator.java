@@ -14,121 +14,118 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector3;
 
 public class BlockSimulator implements ApplicationListener {
-	
-	//Camera variables
+
+	// Camera variables
 	public final float FIELDOFVIEW = 67;
 	public final float CAMERA_NEAR = 1;
 	public final float CAMERA_FAR = 300;
 	public final float CAMERA_ORBITSPEED = 0.10f;
-	
+
 	public Environment environment;
 	public PerspectiveCamera camera;
 	public FPSControl cameraController;
 	public SpriteBatch spriteBatch;
 	public ModelBatch modelBatch;
-	
-	//Input Multiplexer
+
+	// Input Multiplexer
 	public InputMultiplexer inputMultiplexer;
-	
-	//HUD
+
+	// HUD
 	public LevelEditorHUD levelHUD;
-	
-	//Grid size
+
+	// Grid size
 	public int gridSize = 25;
-	
-	//BlockList
+
+	// BlockList
 	public BlockList blockList;
-	public Grid grid;
-	
-	//Notifications
+
+	// Notifications
 	public Notification notification;
-	
-	//Crosshair
+
+	// Crosshair
 	public Texture crosshair;
-	
-	//Loading
+
+	// Loading
 	public Block selectorBlock;
-	
+
 	@Override
-	public void create () {
-		
-		//Create Environment
+	public void create() {
+
+		// Create Environment
 		environment = new Environment();
 		spriteBatch = new SpriteBatch();
 		modelBatch = new ModelBatch();
-		
-		//Notification
+
+		// Notification
 		notification = new Notification();
-		
-		//Input Multiplexer
+
+		// Input Multiplexer
 		inputMultiplexer = new InputMultiplexer();
-		
-		//Lighting
+
+		// Lighting
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-        
-        //BlockList
-		grid = new Grid(gridSize);
-        blockList = new BlockList(gridSize, grid);
-        //PathFinding pf = new PathFinding(gridSize, blockList);
-        selectorBlock = new Block(new Vector3(0, 0, 0), Block.Type.Selector);
-        selectorBlock.moveModel();
-        blockList.setSelectorBlock(selectorBlock);
-        
-        //Crosshair
-        crosshair = new Texture(Gdx.files.internal("interface/Crosshair.png"));
-		
-		//Create Camera
+
+		// BlockList
+		blockList = new BlockList(gridSize, this);
+		// PathFinding pf = new PathFinding(gridSize, blockList);
+		selectorBlock = new Block(new Vector3(0, 0, 0), Block.Type.Selector);
+		selectorBlock.moveModel();
+		blockList.setSelectorBlock(selectorBlock);
+
+		// Crosshair
+		crosshair = new Texture(Gdx.files.internal("interface/Crosshair.png"));
+
+		// Create Camera
 		camera = new PerspectiveCamera(FIELDOFVIEW, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.translate(12.5f, 12.5f, 12.5f);
-        camera.lookAt(0,0,0);
-        camera.rotateAround(new Vector3(25f / 2f, 20f, 25f / 2f), new Vector3(0, 1, 0), CAMERA_ORBITSPEED);
+		camera.lookAt(0, 0, 0);
+		camera.rotateAround(new Vector3(25f / 2f, 20f, 25f / 2f), new Vector3(0, 1, 0), CAMERA_ORBITSPEED);
 		camera.near = CAMERA_NEAR;
 		camera.far = CAMERA_FAR;
 		camera.update();
-		
-		//Camera Control
+
+		// Camera Control
 		cameraController = new FPSControl(camera, this);
-		
-		//Interface
+
+		// Interface
 		levelHUD = new LevelEditorHUD(this);
-		
-		
-		//Input
+
+		// Input
 		inputMultiplexer.addProcessor(cameraController);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		Gdx.input.setCursorCatched(true);
 	}
 
 	@Override
-	public void render () {
-		//Camera Update
+	public void render() {
+		// Camera Update
 		cameraController.update();
-		
-		//Set Background Color
-		Gdx.gl.glClearColor(44f/255f, 62f/255f, 80f/255f, 1);
+
+		// Set Background Color
+		Gdx.gl.glClearColor(44f / 255f, 62f / 255f, 80f / 255f, 1);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		
-		//Rendering Models
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+		// Rendering Models
 		modelBatch.begin(camera);
 		modelBatch.render(selectorBlock.getModelInstance(), environment);
 		blockList.render(modelBatch, environment);
 		modelBatch.end();
-		
+
 		float crosshair_x = (Gdx.graphics.getWidth() - 25) / 2;
 		float crosshair_y = (Gdx.graphics.getHeight() - 25) / 2;
-		
-		//Render LevelHUD
+
+		// Render LevelHUD
 		levelHUD.render();
-		
-		//Rendering Sprites
+
+		// Rendering Sprites
 		spriteBatch.begin();
 		notification.render(spriteBatch);
 		spriteBatch.draw(crosshair, crosshair_x, crosshair_y, 25, 25);
 		spriteBatch.end();
 	}
-	
+
 	@Override
 	public void resize(int width, int height) {
 	}
@@ -138,11 +135,11 @@ public class BlockSimulator implements ApplicationListener {
 	}
 
 	@Override
-	public void resume() {		
+	public void resume() {
 	}
-	
+
 	@Override
-	public void dispose () {
+	public void dispose() {
 		blockList.dispose();
 		notification.dispose();
 	}

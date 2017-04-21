@@ -1,12 +1,8 @@
 package teamnine.blocksim;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.badlogic.gdx.Gdx;
@@ -21,222 +17,243 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class LevelEditorHUD implements Disposable{
-	
-	//Block Simulator
+public class LevelEditorHUD implements Disposable {
+
+	// Block Simulator
 	private BlockSimulator blockSimulator;
-	
-	//Stage
+
+	// Stage
 	private Stage stage;
-	
-	//Skin
+
+	// Skin
 	private Skin skin;
-	
-	//Tables
+
+	// Tables
 	private Table table;
-	
-	//Import Button
+
+	// Import Button
 	private TextButton importButton;
-	
-	//Export Button
+
+	// Export Button
 	private TextButton exportButton;
-	
-	//Clear Button
+
+	// Undo Button
 	private TextButton undoButton;
-	
-	//Start Button
+
+	// Redo Button
+	private TextButton redoButton;
+
+	// Start Button
 	private TextButton startButton;
-	
-	//Load Simulation Button
+
+	// Load Simulation Button
 	private TextButton simulationButton;
-	
-	//Block Dialog
+
+	// Block Dialog
 	private Label blockLabel;
-	
-	//File Chooser
+
+	// File Chooser
 	private JFileChooser fileChooser;
-	
-	//Configuration Checker
-	private ConfigurationChecker check;
-	
+
+	// Configuration Checker
+	//private ConfigurationChecker check;
+
 	public LevelEditorHUD(final BlockSimulator blockSimulator) {
 		this.blockSimulator = blockSimulator;
-		
+
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
 		stage = new Stage(new ScreenViewport());
-		
-		//Buttons Table
+
+		// Buttons Table
 		table = new Table();
 		table.setWidth(stage.getWidth());
 		table.align(Align.left | Align.top);
 		table.setPosition(0, stage.getHeight() - 5);
-		
-		//Create Buttons
+
+		// Create Buttons
 		importButton = new TextButton("Import", skin);
 		exportButton = new TextButton("Export", skin);
+		//undoButton = new TextButton("Undo", skin, "midnight");
 		undoButton = new TextButton("Undo", skin);
+		//redoButton = new TextButton("Redo", skin, "midnight");
+		redoButton = new TextButton("Redo", skin);
 		startButton = new TextButton("Start", skin);
 		simulationButton = new TextButton("Load Simulation", skin);
-		
-		//File Chooser
+
+		// File Chooser
 		fileChooser = new JFileChooser();
-		
-		//Create Labels
+
+		// Create Labels
 		blockLabel = new Label("Selected: " + blockSimulator.cameraController.getBlockType(), skin);
-		
-		//Import Button Listener
+
+		// Import Button Listener
 		importButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(isMenuMode()) {
+				if (isMenuMode()) {
 					fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
 					fileChooser.setDialogTitle("Open Start Robot Configuration");
-					
-					if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 						File selectedFile = fileChooser.getSelectedFile();
 						Reader reader = new Reader(selectedFile);
 						blockSimulator.blockList.createRobot(reader.getBlockData());
 					}
 					fileChooser.setDialogTitle("Open Target Configuration");
-					if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 						File selectedFile = fileChooser.getSelectedFile();
 						Reader reader = new Reader(selectedFile);
 						blockSimulator.blockList.createTarget(reader.getBlockData());
 					}
 					fileChooser.setDialogTitle("Open Obstacle Configuration");
-					if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 						File selectedFile = fileChooser.getSelectedFile();
 						Reader reader = new Reader(selectedFile);
 						blockSimulator.blockList.createObstacles(reader.getBlockData());
 					}
-					
+
 				}
 				super.clicked(event, x, y);
 			}
 		});
-			
-		//Export Button Listener
+
+		// Export Button Listener
 		exportButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(isMenuMode()) {
-					check = new ConfigurationChecker (blockSimulator.blockList, blockSimulator.grid);
-					
-					if(check.checkConfiguration()){
-						
-						
-						FileCreator fileCreator = new FileCreator();
-						File robotFile = new File("myRobot.txt");
-						File targetFile = new File("myTarget.txt");
-						File obstacleFile = new File("myObstacle.txt");
-						
-						fileChooser.setSelectedFile(robotFile);
-						if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-							fileCreator.print(fileChooser.getSelectedFile(), check.getRobotBlockList());
-						}
-						
-						fileChooser.setSelectedFile(targetFile);
-						if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-							fileCreator.print(fileChooser.getSelectedFile(), check.getGoalBlockList());
-						}
-						
-						fileChooser.setSelectedFile(obstacleFile);
-						if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-							fileCreator.print(fileChooser.getSelectedFile(), check.getObstacleBlockList());
-						}
-						
-						
-					}else{
-						JPanel panel = new JPanel();
-						JOptionPane.showMessageDialog(panel, check.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
+				if (isMenuMode()) {
+					// check = new
+					// ConfigurationChecker(blockSimulator.blockList);
+
+					/*
+					 * if (check.checkConfiguration()) {
+					 * 
+					 * FileCreator fileCreator = new FileCreator(); File
+					 * robotFile = new File("myRobot.txt"); File targetFile =
+					 * new File("myTarget.txt"); File obstacleFile = new
+					 * File("myObstacle.txt");
+					 * 
+					 * fileChooser.setSelectedFile(robotFile); if
+					 * (fileChooser.showSaveDialog(null) ==
+					 * JFileChooser.APPROVE_OPTION) {
+					 * fileCreator.print(fileChooser.getSelectedFile(),
+					 * check.getRobotBlockList()); }
+					 * 
+					 * fileChooser.setSelectedFile(targetFile); if
+					 * (fileChooser.showSaveDialog(null) ==
+					 * JFileChooser.APPROVE_OPTION) {
+					 * fileCreator.print(fileChooser.getSelectedFile(),
+					 * check.getGoalBlockList()); }
+					 * 
+					 * fileChooser.setSelectedFile(obstacleFile); if
+					 * (fileChooser.showSaveDialog(null) ==
+					 * JFileChooser.APPROVE_OPTION) {
+					 * fileCreator.print(fileChooser.getSelectedFile(),
+					 * check.getObstacleBlockList()); }
+					 * 
+					 * } else { JPanel panel = new JPanel();
+					 * JOptionPane.showMessageDialog(panel,
+					 * check.getErrorMessage(), "Error",
+					 * JOptionPane.ERROR_MESSAGE); }
+					 */
 				}
-				
-				
-				
+
 				super.clicked(event, x, y);
 			}
 		});
-		
-		//Undo Button Listener
+
+		// Undo Button Listener
 		undoButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(isMenuMode()) {
-					blockSimulator.blockList.getBlockList().remove(blockSimulator.blockList.size() - 1);
+				if (isMenuMode()) {
+					blockSimulator.blockList.undo();
 				}
 				super.clicked(event, x, y);
 			}
 		});
-		
-		//Start Button Listener
+
+		// Redo Button Listener
+		redoButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if (isMenuMode()) {
+					blockSimulator.blockList.redo();
+				}
+				super.clicked(event, x, y);
+			}
+		});
+
+		// Start Button Listener
 		startButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(blockSimulator.cameraController.getModeType() == FPSControl.Type.SimulationMode) {
+				if (blockSimulator.cameraController.getModeType() == FPSControl.Type.SimulationMode) {
 					blockSimulator.cameraController.setModeType(FPSControl.Type.BuildMode);
 					startButton.setText("Start");
-					
+
 				} else {
 					blockSimulator.cameraController.setModeType(FPSControl.Type.SimulationMode);
 					startButton.setText("Stop");
-					new Movement(blockSimulator.blockList);
+					// new Movement(blockSimulator.blockList);
 				}
-				
+
 				super.clicked(event, x, y);
 			}
 		});
-		
-		//Simulation Button Listener
+
+		// Simulation Button Listener
 		simulationButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(isMenuMode()){
+				if (isMenuMode()) {
 					fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
 					fileChooser.setDialogTitle("Load a simulation from file");
-					if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 						File selectedFile = fileChooser.getSelectedFile();
-						Reader reader = new Reader(selectedFile);
-						new simulationRunner(reader.getSimulationData(), blockSimulator);
+						//Reader reader = new Reader(selectedFile);
+						// new simulationRunner(reader.getSimulationData(),
+						// blockSimulator);
 					}
 				}
-				
+
 				super.clicked(event, x, y);
 			}
-			
+
 		});
-		
-		//Add to Table
+
+		// Add to Table
 		table.add(importButton).padRight(20);
 		table.add(exportButton).padRight(20);
 		table.add(simulationButton).padRight(20);
+		table.add(blockLabel);
 		table.row().height(20);
 		table.add(undoButton).padRight(20);
+		table.add(redoButton).padRight(20);
 		table.add(startButton).padRight(20);
-		table.add(blockLabel);
-		
-		//Add to Stage
+
+		// Add to Stage
 		stage.addActor(table);
-		
+
 		blockSimulator.inputMultiplexer.addProcessor(stage);
 	}
-	
+
 	public void render() {
 		blockLabel.setText("Selected: " + blockSimulator.cameraController.getBlockType());
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
 
-	@Override
-	public void dispose() {
-		stage.dispose();
-	}
-	
 	public boolean isMenuMode() {
-		if(blockSimulator.cameraController.getModeType() == FPSControl.Type.MenuMode) {
+		if (blockSimulator.cameraController.getModeType() == FPSControl.Type.MenuMode) {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void dispose() {
+		stage.dispose();
 	}
 
 }
