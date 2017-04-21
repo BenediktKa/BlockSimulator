@@ -73,10 +73,8 @@ public class LevelEditorHUD implements Disposable {
 		// Create Buttons
 		importButton = new TextButton("Import", skin);
 		exportButton = new TextButton("Export", skin);
-		//undoButton = new TextButton("Undo", skin, "midnight");
-		undoButton = new TextButton("Undo", skin);
-		//redoButton = new TextButton("Redo", skin, "midnight");
-		redoButton = new TextButton("Redo", skin);
+		undoButton = new TextButton("Undo", skin, "midnight");
+		redoButton = new TextButton("Redo", skin, "midnight");
 		startButton = new TextButton("Start", skin);
 		simulationButton = new TextButton("Load Simulation", skin);
 
