@@ -71,6 +71,7 @@ public class BlockList implements Disposable {
 		// Add Adder Action To Queue
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), false));
+			redoQueue.clear();
 		}
 
 		// Add Block to different List
@@ -119,6 +120,7 @@ public class BlockList implements Disposable {
 		// Add Removal Action To Queue
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
+			redoQueue.clear();
 		}
 
 		// Add Block to different List
@@ -145,6 +147,7 @@ public class BlockList implements Disposable {
 		// Add Removal Action To Queue
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
+			redoQueue.clear();
 		}
 		registerAction = true;
 		blockList.remove(block);
