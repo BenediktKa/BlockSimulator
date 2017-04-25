@@ -14,19 +14,21 @@ public class Move {
 		for(int i=0;i<path.size();i++)
 			decideMove(this.path.get(i));
 	}
+	//does all the prep work with finding and assigning distances
 	public void decideMove(Vector3 v)
-	{
+	{	
 		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
 		float targetX=v.x;
 		
 		float targetZ=v.z;
-		
+		//finds distance from the block to the target assigns the value to the block 
 		for(int i=0;i<robots.size();i++)
 		{
 			float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y;
 			robots.get(i).setDistanceToPath(distanceToPath);
 			orderToMove.add(robots.get(i));
 		}
+		
 		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
@@ -34,6 +36,7 @@ public class Move {
 		}
 		
 	}
+	//orders the block based on their distance to the target using bucket sort. largest distance first.
 	public ArrayList<RobotBlock> order(ArrayList<RobotBlock> otm)
 	{	
 		ArrayList<RobotBlock> sorted = new ArrayList<RobotBlock>();
@@ -63,16 +66,20 @@ public class Move {
 		}
 		return sorted;
 	}
+	//once the order has been made, the movements will go to try and place the block as close to the first step of 
+	//the path as possible all the way to the target
 	public void moving(RobotBlock b, Vector3 v)
 	{
 		Vector3 bestMovement=new Vector3(0,0,0);
 		boolean targetReached=false;
+		Vector3 lastPosition = new Vector3(0,0,0);
+		//runs until target has been reached or no further movements are possible
 		while(!targetReached)
-		{
-			
+		{			
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			boolean safe =false;
+			//checks if movement is possible
 			for(int k=0;k<robots.size();k++)
 			{
 				if(b.getPosition().x+1==robots.get(k).getPosition().x&&v.y==b.getPosition().y||b.getPosition().z+1==robots.get(k).getPosition().z&&v.y==b.getPosition().y||
@@ -83,6 +90,7 @@ public class Move {
 					break;
 				}
 			}
+			//checks which movements are possible
 			for(int i=0;i<robots.size();i++)
 			{
 				if(v.x==b.getPosition().x+1&&v.y<=b.getPosition().y)
@@ -127,28 +135,28 @@ public class Move {
 						break;
 					}
 				}
-				if(robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
+				if(lastPosition.x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}					
 				}
-				if(robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z+1)
+				if(lastPosition.z!=b.getPosition().z+1&&robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z+1)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}
 				}
-				if(robots.get(i).getPosition().x==b.getPosition().x-1&&robots.get(i).getPosition().z==b.getPosition().z)
+				if(lastPosition.x!=b.getPosition().x-1&&robots.get(i).getPosition().x==b.getPosition().x-1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}
 				}
-				if(robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z-1)
+				if(lastPosition.z!=b.getPosition().z-1&&robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z-1)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
@@ -156,7 +164,7 @@ public class Move {
 					}
 				}
 			}
-			
+			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
 			if(possibleMovements.size()==0)
 			{
 				targetReached=true;
@@ -200,6 +208,7 @@ public class Move {
 					b.climb();
 				}
 			}
+			lastPosition=v;
 		}
 	}
 }
