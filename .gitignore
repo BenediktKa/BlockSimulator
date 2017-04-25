@@ -1,0 +1,6 @@
+
+*.class
+
+*.lock
+
+*.bin
