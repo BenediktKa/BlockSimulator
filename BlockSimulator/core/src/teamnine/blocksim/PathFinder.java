@@ -1,6 +1,9 @@
 package teamnine.blocksim;
 import java.util.AbstractList;
 import java.util.ArrayList;
+
+import com.badlogic.gdx.math.Vector3;
+
 import static java.lang.Float.MAX_VALUE;
 
 public class PathFinder
