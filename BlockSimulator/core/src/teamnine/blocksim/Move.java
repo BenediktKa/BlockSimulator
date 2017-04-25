@@ -6,17 +6,17 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Move {
 	private ArrayList<Vector3> path;
-	private ArrayList<Block> robots;
-	public Move(ArrayList<Vector3> path, ArrayList<Block> robots)
+	private ArrayList<RobotBlock> robots;
+	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots)
 	{
 		this.path=path;
-		this.robots= new ArrayList<Block>(robots);
+		this.robots= new ArrayList<RobotBlock>(robots);
 		for(int i=0;i<path.size();i++)
 			decideMove(this.path.get(i));
 	}
 	public void decideMove(Vector3 v)
 	{
-		ArrayList<Block> orderToMove=new ArrayList<Block>();
+		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
 		float targetX=v.x;
 		
 		float targetZ=v.z;
@@ -27,16 +27,16 @@ public class Move {
 			robots.get(i).setDistanceToPath(distanceToPath);
 			orderToMove.add(robots.get(i));
 		}
-		ArrayList<Block> newOrderToMove=order(orderToMove);
+		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
 			moving(newOrderToMove.get(i),v);
 		}
 		
 	}
-	public ArrayList<Block> order(ArrayList<Block> otm)
+	public ArrayList<RobotBlock> order(ArrayList<RobotBlock> otm)
 	{	
-		ArrayList<Block> sorted = new ArrayList<Block>();
+		ArrayList<RobotBlock> sorted = new ArrayList<RobotBlock>();
 		float maxDistance=0;
 		for(int i=0; i<otm.size();i++)
 		{
@@ -63,7 +63,7 @@ public class Move {
 		}
 		return sorted;
 	}
-	public void moving(Block b, Vector3 v)
+	public void moving(RobotBlock b, Vector3 v)
 	{
 		Vector3 bestMovement=new Vector3(0,0,0);
 		boolean targetReached=false;
@@ -179,7 +179,26 @@ public class Move {
 						}
 					}
 				}
-				b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
+				if(bestMovement.x<b.getPosition().x)
+				{
+					b.moveLeft();
+				}
+				else if(bestMovement.x>b.getPosition().x)
+				{
+					b.moveRight();
+				}
+				else if(bestMovement.z<b.getPosition().z)
+				{
+					b.moveBackwards();
+				}
+				else
+				{
+					b.moveForward();
+				}
+				if(bestMovement.y>b.getPosition().y)
+				{
+					b.climb();
+				}
 			}
 		}
 	}
