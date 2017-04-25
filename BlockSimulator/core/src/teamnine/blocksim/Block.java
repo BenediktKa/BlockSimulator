@@ -27,11 +27,20 @@ public class Block implements Disposable {
 	public float posMinX, posMaxX;
 	public float posMinY, posMaxY;
 	public float posMinZ, posMaxZ;
+	protected float distanceToPath=0;
 
 	public Block(Vector3 position, Type type) {
 		this.position = position;
 		this.type = type;
 		createModel();
+	}
+	public void setDistanceToPath(float p)
+	{
+		distanceToPath=p;
+	}
+	public float getDistanceToPath()
+	{
+		return distanceToPath;
 	}
 
 	public void createModel() {
@@ -84,6 +93,9 @@ public class Block implements Disposable {
 		// Z-Coordinate
 		posMinZ = position.z;
 		posMaxZ = position.z + 1;
+		
+		//System.out.println(position);
+		//System.out.println("MinX: " + posMinX + " MaxX: " + posMaxX + " MinY: "+ posMinY + " MaxY: " + posMaxY + " MinZ: " + posMinZ + " MaxZ: " + posMaxZ);
 	}
 
 	public Model getModel() {
@@ -142,9 +154,9 @@ public class Block implements Disposable {
 	}
 	
 	public boolean intersect(Block block) {
-		return	(posMinX <= block.posMaxX && posMaxX >= block.posMinX) && 
-				(posMinY <= block.posMaxY && posMaxY >= block.posMinY) &&
-				(posMinZ <= block.posMaxZ && posMaxZ >= block.posMinZ);
+		return	(posMinX < block.posMaxX && posMaxX > block.posMinX) && 
+				(posMinY < block.posMaxY && posMaxY > block.posMinY) &&
+				(posMinZ < block.posMaxZ && posMaxZ > block.posMinZ);
 	}
 
 	@Override
