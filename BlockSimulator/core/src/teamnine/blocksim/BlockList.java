@@ -269,24 +269,23 @@ public class BlockList implements Disposable {
 	public void render(ModelBatch modelBatch, Environment environment) {
 		for (int i = 0; i < blockList.size(); i++) {
 			Block block = blockList.get(i);
-			block.moveModel();
 
 			// Check for collision
 			if (block.getType() == Block.Type.Robot) {
 				for (int j = 0; j < blockList.size(); j++) {
+					RobotBlock robotBlock = robotList.get(robotList.indexOf(block));
 					// Don't check if block is same
-					if (block == blockList.get(j)) {
+					if (i == j) {
 						continue;
 					}
 
 					// Check for intersection between blocks
-					if (block.intersect(blockList.get(j))) {
-						// Detecting Collision
-						//TODO Stop movement
+					if (robotBlock.intersect(blockList.get(j))) {
+						robotBlock.setOriginalPos();
 					}
 				}
 			}
-
+			block.moveModel();
 			modelBatch.render(blockList.get(i).getModelInstance(), environment);
 		}
 	}
