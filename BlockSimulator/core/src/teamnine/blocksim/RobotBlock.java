@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
-public class RobotBlock<T> extends Block {
+public class RobotBlock extends Block {
 
 	private Vector3 moveTo, movement;
 	private float speed = 5;
