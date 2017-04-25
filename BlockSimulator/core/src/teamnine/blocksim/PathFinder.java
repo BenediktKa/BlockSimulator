@@ -18,19 +18,19 @@ public class PathFinder
         ArrayList<DistanceBlock> disObstacles = null;
         for (int i = 0; i<obstacles.size(); i++)
         {
-            float x = obstacles.get(i).getPosition.x;
-            float z = obstacles.get(i).getPosition.z;
-            disObstacles.add(new DistanceBlock(MAX_VALUE, obstacles.get(i).getPosition(), obstacles.get(i).getPosition().y));
+            float x = obstacles.get(i).getPosition().x;
+            float z = obstacles.get(i).getPosition().z;
+            disObstacles.add(new DistanceBlock(MAX_VALUE, obstacles.get(i).getPosition(), (int)obstacles.get(i).getPosition().y));
             for (int j = 0; j<disObstacles.size(); j++)
             {
-                if ((x == disObstacles.get(j).getData().x) && (z == disObstacles.get(j).getData().z) && (disObstacles.get(j).getHigh()>obstacles.get(i).getPosition.y))
+                if ((x == disObstacles.get(j).getData().x) && (z == disObstacles.get(j).getData().z) && (disObstacles.get(j).getHigh()>obstacles.get(i).getPosition().y))
                 {
                     disObstacles.remove(disObstacles.size()-1);
                 }
             }
         }
         disObstacles.add(new DistanceBlock(0, initialPosition.getPosition(), 0));
-        disObstacles.add(new DistanceBlock(MAX_VALUE, target.getPosition, 0));
+        disObstacles.add(new DistanceBlock(MAX_VALUE, target.getPosition(), 0));
 
         //create a list with all the possible positions
         for(int i = 0; i<maxX; i++)

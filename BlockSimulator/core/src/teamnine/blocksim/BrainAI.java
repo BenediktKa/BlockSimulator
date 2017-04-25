@@ -16,7 +16,7 @@ public class BrainAI {
 		Block maxTarget=findFurthestTarget();
 		RobotBlock maxRobot=findClosestRobot(maxTarget);
 		PathFinder path = new PathFinder(obstacles,maxRobot ,maxTarget,gridSize,gridSize);
-		new Move(path.getFinalPath(), robots);
+		new Move(path.getFinalList(), robots);
 	}
 	public Block findFurthestTarget()
 	{
@@ -38,7 +38,7 @@ public class BrainAI {
 	{
 		
 		int minDistance=-1;
-		Block minRobot=robots.get(0);
+		RobotBlock minRobot=robots.get(0);
 		for(int i=0; i<robots.size();i++)
 		{
 			int distance = (int)(Math.abs(mt.getPosition().x-robots.get(i).getPosition().x)+Math.abs(mt.getPosition().z-robots.get(i).getPosition().z)+robots.get(i).getPosition().y);
@@ -51,7 +51,7 @@ public class BrainAI {
 			else if(distance<minDistance)
 			{
 				minDistance=distance;
-				minRobot=target.get(i);
+				minRobot=robots.get(i);
 			}
 		}
 		return minRobot;

@@ -1,4 +1,7 @@
 package teamnine.blocksim;
+
+import com.badlogic.gdx.math.Vector3;
+
 public class DistanceBlock
 {
     private float distance;

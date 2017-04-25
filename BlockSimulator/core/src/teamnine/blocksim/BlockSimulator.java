@@ -70,7 +70,7 @@ public class BlockSimulator implements ApplicationListener {
 
 		// BlockList
 		blockList = new BlockList(gridSize, this);
-		// PathFinding pf = new PathFinding(gridSize, blockList);
+		
 		selectorBlock = new Block(new Vector3(0, 0, 0), Block.Type.Selector);
 		selectorBlock.moveModel();
 		blockList.setSelectorBlock(selectorBlock);
