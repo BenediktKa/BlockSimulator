@@ -27,11 +27,20 @@ public class Block implements Disposable {
 	public float posMinX, posMaxX;
 	public float posMinY, posMaxY;
 	public float posMinZ, posMaxZ;
+	protected float distanceToPath=0;
 
 	public Block(Vector3 position, Type type) {
 		this.position = position;
 		this.type = type;
 		createModel();
+	}
+	public void setDistanceToPath(float p)
+	{
+		distanceToPath=p;
+	}
+	public float getDistanceToPath()
+	{
+		return distanceToPath;
 	}
 
 	public void createModel() {
