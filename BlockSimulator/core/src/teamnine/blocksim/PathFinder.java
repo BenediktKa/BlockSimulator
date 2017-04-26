@@ -10,12 +10,13 @@ public class PathFinder
 {
     ArrayList<DistanceBlock> initialList;
     ArrayList<DistanceBlock> list;
-    ArrayList<Vector3> finalList;
+    ArrayList<Vector3> finalList = new ArrayList<Vector3>();
 
     public PathFinder(AbstractList<Block> obstacles, Block initialPosition, Block target, int maxX, int maxZ)
     {
         //create a List with the obstacles and the initial position
-        ArrayList<DistanceBlock> disObstacles = null;
+        ArrayList<DistanceBlock> disObstacles = new ArrayList<DistanceBlock>();
+        initialList = new ArrayList<DistanceBlock>();
         for (int i = 0; i<obstacles.size(); i++)
         {
             float x = obstacles.get(i).getPosition().x;
@@ -30,12 +31,13 @@ public class PathFinder
             }
         }
         disObstacles.add(new DistanceBlock(0, initialPosition.getPosition(), 0));
-        disObstacles.add(new DistanceBlock(MAX_VALUE, target.getPosition(), 0));
-
+        DistanceBlock targetDB= new DistanceBlock(MAX_VALUE, target.getPosition(), 0);
+        disObstacles.add(targetDB);
+        float one=1;
         //create a list with all the possible positions
-        for(int i = 0; i<maxX; i++)
+        for(float i = 0; i<maxZ; i++)
         {
-            for(int j=0; j<maxZ; j++)
+            for(float j=0; j<maxX; j++)
             {
                 boolean added = false;
                 for(int m= 0; m<disObstacles.size(); m++)
@@ -48,29 +50,29 @@ public class PathFinder
                 }
                 if(!(added))
                 {
-                    initialList.add(new DistanceBlock(MAX_VALUE, new Vector3(i, 1, j), 0));
+                    initialList.add(new DistanceBlock(MAX_VALUE, new Vector3(one, one, one), 0));
                 }
             }
         }
 
-        //set the neighbours
+      //set the neighbours
         //set corners
-        initialList.get(0).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(2), initialList.get(maxX)});
-        initialList.get(maxX).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(maxX-1), initialList.get(maxX*2)});
-        initialList.get(maxX*(maxZ-1) +1).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(maxX*(maxZ-2) +1), initialList.get(maxX*(maxZ-1) +2)});
-        initialList.get(maxX*maxZ).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(maxX*(maxZ-1)), initialList.get(maxX*maxZ -1)});
+        initialList.get(0).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(2), initialList.get(maxX)}); //
+        initialList.get(maxX -1).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(maxX-1 -1), initialList.get((maxX*2) -1)}); //
+        initialList.get(maxX*(maxZ-1)).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(maxX*(maxZ-2)), initialList.get(maxX*(maxZ-1) +1)}); //
+        initialList.get(maxX*maxZ -1).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(maxX*(maxZ-1) -1), initialList.get((maxX*maxZ -1) -1)}); //
 
         //set sides
-        for(int i=1; i<maxX-1; i++)
+        for(int i=1; i<maxX-2; i++)
         {
             initialList.get(i).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(i-1),initialList.get(i+1),initialList.get(i + maxX)});
-            initialList.get(i + (maxX*(maxZ-1) +1)).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(i + (maxX*(maxZ-1) +1) -1),initialList.get(i + (maxX*(maxZ-1) +1) +1),
+            initialList.get(i + (maxX*(maxZ-1))).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(i + (maxX*(maxZ-1)) -1),initialList.get(i + (maxX*(maxZ-1)) +1),
                     initialList.get((i + (maxX*(maxZ-1) +1))-maxX)});
         }
         for(int i=1; i<maxZ-1; i++)
         {
-            initialList.get(i*maxX +1).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(i*maxX +1 + maxX),initialList.get(i*maxX +1 - maxX), initialList.get(i*maxX +1 +1)});
-            initialList.get((i+1) * maxX).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(((i+1) * maxX) + maxX),initialList.get(((i+1) * maxX) - maxX), initialList.get(((i+1) * maxX) -1)});
+            initialList.get(i*maxX).setNeighboursAndWeights(new DistanceBlock[]{initialList.get(i*maxX + maxX),initialList.get(i*maxX - maxX), initialList.get(i*maxX +1)});
+            initialList.get(((i+1) * maxX)-1).setNeighboursAndWeights(new DistanceBlock[]{initialList.get((((i+1) * maxX)-1) + maxX),initialList.get((((i+1) * maxX)-1) - maxX), initialList.get(((i+1) * maxX)-1 -1)}); //
         }
 
         //set middle
@@ -82,9 +84,12 @@ public class PathFinder
             }
         }
 
-        //implement Dijkstra's algorithm
-        Dijkstra dijkstra = new Dijkstra(initialList);
+        //implement DTR/ijkstra's algorithm
+        Dijkstra dijkstra = new Dijkstra(initialList, targetDB);
         list = dijkstra.getFinalList();
+        
+        	System.out.println(list.size());
+        
         finalList.add(list.get(list.size()-1).getData());
         setFinalList(list.get(list.size()-1).getPrevious());
     }

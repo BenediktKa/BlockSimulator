@@ -26,10 +26,15 @@ public class DistanceBlock
     public void setNeighboursAndWeights(DistanceBlock[] neighbours)
     {
         this.neighbours = neighbours;
-        for (int i = 0; i<neighbours.length; i++)
+        weights = new int[neighbours.length];
+        if(neighbours!=null)
         {
-            weights[i] = (neighbours[i].getHigh()) + 1;
+        	for (int i = 0; i<neighbours.length; i++)
+            {
+                weights[i] = (neighbours[i].getHigh()) + 1;
+            }
         }
+        
     }
 
     public int getHigh()

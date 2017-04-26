@@ -61,7 +61,12 @@ public class BlockList implements Disposable {
 	public ArrayList<RobotBlock> getRobotBlockList() {
 		return robotList;
 	}
-
+	public ArrayList<Block> getObstacleList() {
+		return obstacleList;
+	}
+	public ArrayList<Block> getTargetList() {
+		return goalList;
+	}
 	public Block getBlock(int i) {
 		return blockList.get(i);
 	}
