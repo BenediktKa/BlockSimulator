@@ -9,7 +9,6 @@ public class BrainAI {
 	int gridSize;
 	public BrainAI(ArrayList<Block> obstacles, ArrayList<RobotBlock> robots, ArrayList<Block> target, int gridSize)
 	{
-		System.out.println("reached");
 		this.obstacles=obstacles;
 		this.robots=robots;
 		this.target=target;

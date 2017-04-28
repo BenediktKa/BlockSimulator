@@ -199,7 +199,8 @@ public class LevelEditorHUD implements Disposable {
 				} else {
 					blockSimulator.cameraController.setModeType(FPSControl.Type.SimulationMode);
 					startButton.setText("Stop");
-					new BrainAI(blockList.getObstacleList(),blockList.getRobotBlockList(),blockList.getTargetList(),blockSimulator.gridSize);
+					// new Movement(blockSimulator.blockList);
+					new BrainAI(blockList.getObstacleList(),blockList.getRobotBlockList(),blockList.getTargetList(),blockList.getGridSize());
 				}
 
 				super.clicked(event, x, y);

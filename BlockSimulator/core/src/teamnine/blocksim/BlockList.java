@@ -57,7 +57,10 @@ public class BlockList implements Disposable {
 		}
 		return null;
 	}
-
+	public int getGridSize()
+	{
+		return gridSize;
+	}
 	public ArrayList<RobotBlock> getRobotBlockList() {
 		return robotList;
 	}
