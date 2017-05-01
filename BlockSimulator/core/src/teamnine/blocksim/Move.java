@@ -60,7 +60,7 @@ public class Move {
 			buckets.get(d).addBlock(otm.get(i));
 		}
 		
-		for(int i=buckets.size();i>1;i--)
+		for(int i=buckets.size()-1;i>0;i--)
 		{
 			buckets.get(i).getBloks().addAll(sorted);
 		}
