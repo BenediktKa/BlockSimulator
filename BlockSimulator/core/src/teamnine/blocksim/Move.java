@@ -9,6 +9,7 @@ public class Move {
 	private ArrayList<RobotBlock> robots;
 	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots)
 	{
+		System.out.println("start movement");
 		this.path=path;
 		this.robots= new ArrayList<RobotBlock>(robots);
 		for(int i=0;i<path.size();i++)
@@ -17,6 +18,7 @@ public class Move {
 	//does all the prep work with finding and assigning distances
 	public void decideMove(Vector3 v)
 	{	
+		System.out.println("movement");
 		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
 		float targetX=v.x;
 		
@@ -28,7 +30,7 @@ public class Move {
 			robots.get(i).setDistanceToPath(distanceToPath);
 			orderToMove.add(robots.get(i));
 		}
-		
+		System.out.println("order is decided");
 		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
@@ -38,7 +40,7 @@ public class Move {
 	}
 	//orders the block based on their distance to the target using bucket sort. largest distance first.
 	public ArrayList<RobotBlock> order(ArrayList<RobotBlock> otm)
-	{	
+	{	System.out.println("decide movement");
 		ArrayList<RobotBlock> sorted = new ArrayList<RobotBlock>();
 		float maxDistance=0;
 		for(int i=0; i<otm.size();i++)
@@ -70,12 +72,14 @@ public class Move {
 	//the path as possible all the way to the target
 	public void moving(RobotBlock b, Vector3 v)
 	{
+		System.out.println("moving start");
 		Vector3 bestMovement=new Vector3(0,0,0);
 		boolean targetReached=false;
 		Vector3 lastPosition = new Vector3(0,0,0);
 		//runs until target has been reached or no further movements are possible
 		while(!targetReached)
 		{			
+			System.out.println("attempt movement");
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			boolean safe =false;
@@ -187,20 +191,25 @@ public class Move {
 						}
 					}
 				}
+				System.out.println("yay move");
 				if(bestMovement.x<b.getPosition().x)
 				{
+					System.out.println("move left");
 					b.moveLeft();
 				}
 				else if(bestMovement.x>b.getPosition().x)
 				{
+					System.out.println("move right");
 					b.moveRight();
 				}
 				else if(bestMovement.z<b.getPosition().z)
 				{
+					System.out.println("move back");
 					b.moveBackwards();
 				}
 				else
 				{
+					System.out.println("move forward");
 					b.moveForward();
 				}
 				if(bestMovement.y>b.getPosition().y)
