@@ -23,6 +23,7 @@ public class Dijkstra
         }
 
         completeFinalList(originalList);
+        System.out.println(target.getData() + "dijk");
     }
 
     public void completeFinalList(PriorityQueue<DistanceBlock> listToReduce)
@@ -32,7 +33,7 @@ public class Dijkstra
         DistanceBlock[] neighbours = position.getNeighbours();
         int[] weights = position.getWeights();
         
-        if(position.getData() == target.getData())
+        if(position.getData().equals(target.getData()))
         {
         	System.out.println("called");
         	return;

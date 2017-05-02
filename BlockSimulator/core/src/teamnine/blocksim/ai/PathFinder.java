@@ -79,9 +79,12 @@ public class PathFinder
         //set middle
         for(int i=1; i<maxX-1; i++)
         {
-            for(int j=1; i<maxZ-1; i++)
+            for(int j=1; j<maxZ-1; j++)
             {
+            	if (initialList.get((maxZ*i)+ j).getNeighbours() == null)
+            	{
                 initialList.get((maxZ*i)+ j).setNeighboursAndWeights(new DistanceBlock[]{initialList.get((maxX*i) + j - maxX),initialList.get((maxX*i) + j -1),initialList.get((maxX*i) + j + maxX), initialList.get((maxX*i) + j +1)}); //
+            	}
             }
         }
 

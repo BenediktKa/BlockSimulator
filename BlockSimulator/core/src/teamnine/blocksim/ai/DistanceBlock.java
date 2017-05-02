@@ -23,9 +23,9 @@ public class DistanceBlock
         this.distance = distance;
     }
 
-    public void setNeighboursAndWeights(DistanceBlock[] neighbours)
+    public void setNeighboursAndWeights(DistanceBlock[] neig)
     {
-        this.neighbours = neighbours;
+        this.neighbours = neig;
         weights = new int[neighbours.length];
         if(neighbours!=null)
         {
