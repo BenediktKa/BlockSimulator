@@ -90,14 +90,19 @@ public class Move {
 			//checks if movement is possible
 			for(int k=0;k<robots.size();k++)
 			{
+				if(b.getPosition().x==robots.get(k).getPosition().x&&b.getPosition().z==robots.get(k).getPosition().z&&b.getPosition().y==robots.get(k).getPosition().y-1)
+				{
+					System.out.println("safe dammit");
+				}
 				if(b.getPosition().x+1==robots.get(k).getPosition().x&&v.y==b.getPosition().y||b.getPosition().z+1==robots.get(k).getPosition().z&&v.y==b.getPosition().y||
-				   b.getPosition().x==robots.get(k).getPosition().x&&v.y-1==b.getPosition().y&&b.getPosition().z==robots.get(k).getPosition().z||b.getPosition().x-1==robots.get(k).getPosition().x&&v.y==b.getPosition().y ||
+				   b.getPosition().x==robots.get(k).getPosition().x&&b.getPosition().z==robots.get(k).getPosition().z&&b.getPosition().y==robots.get(k).getPosition().y-1||b.getPosition().x-1==robots.get(k).getPosition().x&&v.y==b.getPosition().y ||
 				   b.getPosition().z-1==robots.get(k).getPosition().z&&v.y==b.getPosition().y)
 				{
 					safe= true;
 					break;
 				}
 			}
+			
 			//checks which movements are possible
 			for(int i=0;i<robots.size();i++)
 			{
@@ -161,32 +166,32 @@ public class Move {
 				{
 					none=false;
 					System.out.println("climb");
-					b.setPosition(b.getPosition().x,b.getPosition().y+1,b.getPosition().z);
+					//b.setPosition(b.getPosition().x,b.getPosition().y+1,b.getPosition().z);
 				}
 				else if(bestMovement.x<b.getPosition().x)
 				{
 					none=false;
 					System.out.println("move left");
-					b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
+					//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
 				}
 				else if(bestMovement.x>b.getPosition().x)
 				{
 					none=false;
 					System.out.println("move right");
-					b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
+					//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
 				}
 				else if(bestMovement.z<b.getPosition().z)
 				{
 					none=false;
 					System.out.println("move back");
-					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
+					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
 				}
 				else
 				{
 					none=false;
 					System.out.println("move forward");
 
-					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);					
+					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);					
 				}
 			
 				
@@ -195,7 +200,7 @@ public class Move {
 			if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
 			{
 				
-				if(none)
+				if(none&&safe)
 				{
 					System.out.println("right");
 					bestMovement=v;
@@ -207,7 +212,7 @@ public class Move {
 			}
 			if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
 			{
-				if(none)
+				if(none&&safe)
 				{
 					System.out.println("left");
 					bestMovement=v;
@@ -218,7 +223,7 @@ public class Move {
 			}
 			if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
 			{
-				if(none)
+				if(none&&safe)
 				{
 					System.out.println("forward");
 					bestMovement=v;
@@ -229,7 +234,7 @@ public class Move {
 			}
 			if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
 			{
-				if(none)
+				if(none&&safe)
 				{
 					System.out.println("back");
 					bestMovement=v;
