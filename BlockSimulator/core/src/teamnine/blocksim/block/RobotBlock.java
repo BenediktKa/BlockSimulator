@@ -11,8 +11,6 @@ public class RobotBlock extends Block {
 	private Vector3 moveTo, movement;
 	private float speed = 5;
 	private boolean moving = false;
-	
-	private Move move;
 
 	public RobotBlock(Vector3 position, Type type) {
 		super(position, type);
@@ -20,10 +18,6 @@ public class RobotBlock extends Block {
 	
 	public boolean getMoving() {
 		return moving;
-	}
-	
-	public void setMove(Move move) {
-		this.move = move;
 	}
 
 	public void moveLeft() {
@@ -89,6 +83,16 @@ public class RobotBlock extends Block {
 		moveTo = new Vector3(position.x, position.y - 1, position.z);
 		movement = new Vector3(0, -1, 0);
 		moving = true;
+	}
+	
+	public void setPosition(float x, float y, float z) {
+		position = new Vector3(x, y, z);
+		moveModel();
+	}
+	
+	public void setPosition(Vector3 vector) {
+		position = vector;
+		moveModel();
 	}
 
 	public void moveModel() {

@@ -2,7 +2,6 @@ package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.RobotBlock;
@@ -14,12 +13,6 @@ public class Move {
 	{
 		this.path=path;
 		this.robots= new ArrayList<RobotBlock>(robots);
-		
-		for(int i = 0; i < robots.size(); i++)
-		{
-			robots.get(i).setMove(this);
-		}
-		
 		for(int i=path.size()-1;i>0;i--)
 			decideMove(this.path.get(i));
 	}
