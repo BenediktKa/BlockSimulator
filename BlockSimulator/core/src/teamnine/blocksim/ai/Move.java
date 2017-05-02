@@ -13,7 +13,7 @@ public class Move {
 	{
 		this.path=path;
 		this.robots= new ArrayList<RobotBlock>(robots);
-		for(int i=0;i<path.size();i++)
+		for(int i=path.size()-1;i>0;i--)
 			decideMove(this.path.get(i));
 	}
 	//does all the prep work with finding and assigning distances
@@ -206,7 +206,7 @@ public class Move {
 				}
 				else if(bestMovement.x>b.getPosition().x)
 				{
-					System.out.println("move right");
+					//System.out.println("move right");
 					b.moveRight();
 				}
 				else if(bestMovement.z<b.getPosition().z)
