@@ -19,10 +19,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import teamnine.blocksim.BlockSimulator;
 import teamnine.blocksim.FPSControl;
-import teamnine.blocksim.Reader;
 import teamnine.blocksim.FPSControl.Type;
 import teamnine.blocksim.ai.BrainAI;
 import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.configs.Reader;
 
 public class LevelEditorHUD implements Disposable {
 

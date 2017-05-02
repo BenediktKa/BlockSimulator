@@ -1,4 +1,4 @@
-package teamnine.blocksim;
+package teamnine.blocksim.configs;
 
 import java.io.File;
 import java.io.FileWriter;
