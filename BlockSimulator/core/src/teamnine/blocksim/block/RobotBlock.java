@@ -4,25 +4,34 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.ai.Move;
+
 public class RobotBlock extends Block {
 
 	private Vector3 moveTo, movement;
 	private float speed = 5;
 	private boolean moving = false;
+	
+	private Move move;
 
 	public RobotBlock(Vector3 position, Type type) {
 		super(position, type);
 	}
-	public boolean getMoving()
-	{
+	
+	public boolean getMoving() {
 		return moving;
+	}
+	
+	public void setMove(Move move) {
+		this.move = move;
 	}
 
 	public void moveLeft() {
 		if (moving) {
 			return;
 		}
-
+		
+		System.out.println("Left");
 		moveTo = new Vector3(position.x - 1, position.y, position.z);
 		movement = new Vector3(-1, 0, 0);
 		moving = true;
@@ -33,6 +42,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		System.out.println("Right");
 		moveTo = new Vector3(position.x + 1, position.y, position.z);
 		movement = new Vector3(1, 0, 0);
 		moving = true;
@@ -43,6 +53,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		System.out.println("Forward");
 		moveTo = new Vector3(position.x, position.y, position.z + 1);
 		movement = new Vector3(0, 0, 1);
 		moving = true;
@@ -53,6 +64,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		System.out.println("Backwards");
 		moveTo = new Vector3(position.x, position.y, position.z - 1);
 		movement = new Vector3(0, 0, -1);
 		moving = true;
@@ -63,6 +75,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		System.out.println("Climb");
 		moveTo = new Vector3(position.x, position.y + 1, position.z);
 		movement = new Vector3(0, 1, 0);
 		moving = true;
@@ -79,6 +92,7 @@ public class RobotBlock extends Block {
 	}
 
 	public void moveModel() {
+		System.out.println("Called");
 		if (movement == null) {
 			modelInstance.transform = new Matrix4().translate(position.x, position.y, position.z);
 			return;
