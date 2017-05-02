@@ -12,6 +12,7 @@ import teamnine.blocksim.block.RobotBlock;
 public class Move {
 	private ArrayList<Vector3> path;
 	private ArrayList<RobotBlock> robots;
+	private Vector3 lastPosition = new Vector3(0,0,0);
 	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots)
 	{
 		this.path=path;
@@ -83,7 +84,7 @@ public class Move {
 		System.out.println("moving startblock: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 		Vector3 bestMovement=new Vector3(0,0,0);
 		boolean targetReached=false;
-		Vector3 lastPosition = new Vector3(0,0,0);
+		
 		//runs until target has been reached or no further movements are possible
 		while(!targetReached)
 		{	
@@ -163,6 +164,16 @@ public class Move {
 				if(possibleMovements.size()<=i)
 					break;
 			}
+			for(int i=0;i<possibleMovements.size();i++)
+			{
+				System.out.println("search");
+				if(possibleMovements.get(i).x==lastPosition.x&&possibleMovements.get(i).y==lastPosition.y&&possibleMovements.get(i).z==lastPosition.z)
+					{
+					possibleMovements.remove(i);
+					System.out.println("last removed");
+					}
+				
+			}
 			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
 			System.out.println("possible movements "+possibleMovements.size());
 			boolean none=true;
@@ -231,7 +242,7 @@ public class Move {
 				}
 			
 				
-			}
+			
 			
 			//System.out.println("lol"+"none "+none+" safe "+safe);
 			if(none&&safe)
@@ -322,7 +333,7 @@ public class Move {
 					
 				}
 			}
-			
+			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			none=true;
 			
 			lastPosition=v;
@@ -330,9 +341,9 @@ public class Move {
 			{
 				
 			}
+			}
 			
 			
-			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			
 		}
 	}
