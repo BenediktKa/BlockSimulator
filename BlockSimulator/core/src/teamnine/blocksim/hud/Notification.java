@@ -55,12 +55,10 @@ public class Notification implements Disposable {
 		}
 		
 		//If there is no Text
-		if (text != null) {
+		if (text == null) {
 			return;
 		}
 		
-		//Set font size
-			
 		//Change Text Color based on Type
 		if (type == Type.Error) {
 			font.setColor(192f / 255f, 57f / 255f, 43f / 255f, alpha);
@@ -78,9 +76,12 @@ public class Notification implements Disposable {
 	 * @param text to display
 	 * @param type of notification
 	 */
-	public void setNotification(String text, Type type) {
+	public void setNotification(String text, Type type, float scale) {
 		this.text = text;
 		this.type = type;
+		
+		font.getData().setScale(scale);
+		
 		this.alpha = 1;
 		layout.setText(font, text);
 	}

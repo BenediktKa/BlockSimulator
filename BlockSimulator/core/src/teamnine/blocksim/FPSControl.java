@@ -134,9 +134,9 @@ public class FPSControl extends FirstPersonCameraController {
 			if (blockToDelete != null && blockToDelete.getType() != Block.Type.Floor) {
 				blockSimulator.blockList.removeBlock(blockToDelete);
 			} else if (blockToDelete == null) {
-				blockSimulator.notification.setNotification("Block doesn't exist", Notification.Type.Error);
+				blockSimulator.notification.setNotification("Block doesn't exist", Notification.Type.Error, 1);
 			} else {
-				blockSimulator.notification.setNotification("Can't delete the floor", Notification.Type.Error);
+				blockSimulator.notification.setNotification("Can't delete the floor", Notification.Type.Error, 1);
 			}
 		} else if (keycode == Keys.SPACE) {
 			if (blockSimulator.blockList.blockAtPoint(new Vector3(blockSimulator.selectorBlock.getPosition().x,
@@ -155,11 +155,11 @@ public class FPSControl extends FirstPersonCameraController {
 			camera.lookAt(blockSimulator.selectorBlock.getPosition());
 		} else if (keycode == Keys.ESCAPE) {
 			if (modeType == Type.BuildMode) {
-				blockSimulator.notification.setNotification("Menu Mode", Notification.Type.ModeChange);
+				blockSimulator.notification.setNotification("Menu Mode", Notification.Type.ModeChange, 2);
 				modeType = Type.MenuMode;
 				Gdx.input.setCursorCatched(false);
 			} else {
-				blockSimulator.notification.setNotification("Build Mode", Notification.Type.ModeChange);
+				blockSimulator.notification.setNotification("Build Mode", Notification.Type.ModeChange, 2);
 				modeType = Type.BuildMode;
 				Gdx.input.setCursorCatched(true);
 			}
@@ -169,7 +169,7 @@ public class FPSControl extends FirstPersonCameraController {
 
 	public boolean inGrid(float value) {
 		if (value >= blockSimulator.gridSize || value < 0) {
-			blockSimulator.notification.setNotification("Out of bounds", Notification.Type.Error);
+			blockSimulator.notification.setNotification("Out of bounds", Notification.Type.Error, 1);
 			return false;
 		}
 		return true;

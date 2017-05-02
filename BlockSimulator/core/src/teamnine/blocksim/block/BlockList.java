@@ -384,7 +384,7 @@ public class BlockList implements Disposable {
 
 	public void undo() {
 		if (undoQueue.isEmpty()) {
-			blockSimulator.notification.setNotification("Can't Undo", Notification.Type.Error);
+			blockSimulator.notification.setNotification("Can't Undo", Notification.Type.Error, 1);
 			return;
 		}
 
@@ -404,7 +404,7 @@ public class BlockList implements Disposable {
 
 	public void redo() {
 		if (redoQueue.isEmpty()) {
-			blockSimulator.notification.setNotification("Can't Redo", Notification.Type.Error);
+			blockSimulator.notification.setNotification("Can't Redo", Notification.Type.Error, 1);
 			return;
 		}
 
