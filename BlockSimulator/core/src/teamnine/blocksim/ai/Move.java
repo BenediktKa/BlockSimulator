@@ -90,16 +90,18 @@ public class Move {
 			//checks if movement is possible
 			for(int k=0;k<robots.size();k++)
 			{
-				if(b.getPosition().x==robots.get(k).getPosition().x&&b.getPosition().z==robots.get(k).getPosition().z&&b.getPosition().y==robots.get(k).getPosition().y-1)
-				{
-					System.out.println("safe dammit");
-				}
-				if(b.getPosition().x+1==robots.get(k).getPosition().x&&v.y==b.getPosition().y||b.getPosition().z+1==robots.get(k).getPosition().z&&v.y==b.getPosition().y||
+	
+				if(b.getPosition().x+1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y||b.getPosition().z+1==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y||
 				   b.getPosition().x==robots.get(k).getPosition().x&&b.getPosition().z==robots.get(k).getPosition().z&&b.getPosition().y==robots.get(k).getPosition().y-1||b.getPosition().x-1==robots.get(k).getPosition().x&&v.y==b.getPosition().y ||
-				   b.getPosition().z-1==robots.get(k).getPosition().z&&v.y==b.getPosition().y)
+				   b.getPosition().z-1==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y)
 				{
 					safe= true;
 					break;
+				}
+				if(b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y+1&&b.getPosition().z==robots.get(k).getPosition().z)
+				{
+					System.out.println("not safe dammit");
+					safe=false;
 				}
 			}
 			
