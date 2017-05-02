@@ -19,8 +19,8 @@ public class FPSControl extends FirstPersonCameraController {
 	private Block.Type blockType = Block.Type.Obstacle;
 
 	// Mouse Variables
-	private int mouseX = 0;
-	private int mouseY = 0;
+	private int mouseX = 200;
+	private int mouseY = 200;
 	private float rotSpeed = 0.2f;
 
 	public enum Type {
@@ -155,9 +155,11 @@ public class FPSControl extends FirstPersonCameraController {
 			camera.lookAt(blockSimulator.selectorBlock.getPosition());
 		} else if (keycode == Keys.ESCAPE) {
 			if (modeType == Type.BuildMode) {
+				blockSimulator.notification.setNotification("Menu Mode", Notification.Type.ModeChange);
 				modeType = Type.MenuMode;
 				Gdx.input.setCursorCatched(false);
 			} else {
+				blockSimulator.notification.setNotification("Build Mode", Notification.Type.ModeChange);
 				modeType = Type.BuildMode;
 				Gdx.input.setCursorCatched(true);
 			}

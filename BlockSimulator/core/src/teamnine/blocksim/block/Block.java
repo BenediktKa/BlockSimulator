@@ -44,24 +44,28 @@ public class Block implements Disposable {
 	}
 
 	public void createModel() {
+		//Robot Block
 		if (type == Type.Robot) {
 			ModelBuilder modelBuilder = new ModelBuilder();
 			model = modelBuilder.createBox(1f, 1f, 1f,
 					new Material(ColorAttribute.createDiffuse(new Color(142f / 255f, 68f / 255f, 173f / 255f, 1.0f))),
 					Usage.Position | Usage.Normal);
 			modelInstance = new ModelInstance(model);
+		//Floor Block
 		} else if (type == Type.Floor) {
 			ModelBuilder modelBuilder = new ModelBuilder();
 			model = modelBuilder.createBox(1f, 1f, 1f,
 					new Material(ColorAttribute.createDiffuse(new Color(149f / 255f, 165f / 255f, 166f / 255f, 1.0f))),
 					Usage.Position | Usage.Normal);
 			modelInstance = new ModelInstance(model);
+		//Obstacle Block
 		} else if (type == Type.Obstacle) {
 			ModelBuilder modelBuilder = new ModelBuilder();
 			model = modelBuilder.createBox(1f, 1f, 1f,
 					new Material(ColorAttribute.createDiffuse(new Color(231f / 255f, 76f / 255f, 60f / 255f, 1.0f))),
 					Usage.Position | Usage.Normal);
 			modelInstance = new ModelInstance(model);
+		//Goal Block
 		} else if (type == Type.Goal) {
 			ModelBuilder modelBuilder = new ModelBuilder();
 			model = modelBuilder.createBox(1f, 1f, 1f,
@@ -69,6 +73,7 @@ public class Block implements Disposable {
 							new BlendingAttribute(0.4f)),
 					Usage.Position | Usage.Normal);
 			modelInstance = new ModelInstance(model);
+		//Selector Block
 		} else if (type == Type.Selector) {
 			ModelBuilder modelBuilder = new ModelBuilder();
 			model = modelBuilder.createBox(1f, 1f, 1f,

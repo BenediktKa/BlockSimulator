@@ -96,7 +96,6 @@ public class BlockSimulator implements ApplicationListener {
 
 		// Camera Control
 		cameraController = new FPSControl(camera, this);
-		camera.update();
 
 		// Interface
 		levelHUD = new LevelEditorHUD(this, blockList);
