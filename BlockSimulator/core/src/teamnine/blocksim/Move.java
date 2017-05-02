@@ -9,7 +9,6 @@ public class Move {
 	private ArrayList<RobotBlock> robots;
 	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots)
 	{
-		System.out.println("start movement");
 		this.path=path;
 		this.robots= new ArrayList<RobotBlock>(robots);
 		for(int i=0;i<path.size();i++)
@@ -18,19 +17,19 @@ public class Move {
 	//does all the prep work with finding and assigning distances
 	public void decideMove(Vector3 v)
 	{	
-		System.out.println("movement");
+		
 		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
 		float targetX=v.x;
 		
 		float targetZ=v.z;
 		//finds distance from the block to the target assigns the value to the block 
+		
 		for(int i=0;i<robots.size();i++)
 		{
 			float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y;
 			robots.get(i).setDistanceToPath(distanceToPath);
 			orderToMove.add(robots.get(i));
 		}
-		System.out.println("order is decided");
 		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
@@ -40,7 +39,7 @@ public class Move {
 	}
 	//orders the block based on their distance to the target using bucket sort. largest distance first.
 	public ArrayList<RobotBlock> order(ArrayList<RobotBlock> otm)
-	{	System.out.println("decide movement");
+	{	
 		ArrayList<RobotBlock> sorted = new ArrayList<RobotBlock>();
 		float maxDistance=0;
 		for(int i=0; i<otm.size();i++)
@@ -56,6 +55,7 @@ public class Move {
 		{
 			buckets.add(new Bucket());
 		}
+		
 		for(int i=0; i<otm.size();i++)
 		{
 			int d =(int)otm.get(i).getDistanceToPath();
@@ -64,22 +64,22 @@ public class Move {
 		
 		for(int i=buckets.size()-1;i>0;i--)
 		{
-			buckets.get(i).getBloks().addAll(sorted);
+			sorted.addAll(buckets.get(i).getBloks());
 		}
+		
 		return sorted;
 	}
 	//once the order has been made, the movements will go to try and place the block as close to the first step of 
 	//the path as possible all the way to the target
 	public void moving(RobotBlock b, Vector3 v)
 	{
-		System.out.println("moving start");
+		//System.out.println("moving start block: "+b+" b.vector: "+b.getPosition()+" "+" vector: "+v);
 		Vector3 bestMovement=new Vector3(0,0,0);
 		boolean targetReached=false;
 		Vector3 lastPosition = new Vector3(0,0,0);
 		//runs until target has been reached or no further movements are possible
 		while(!targetReached)
-		{			
-			System.out.println("attempt movement");
+		{	
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			boolean safe =false;
@@ -97,7 +97,7 @@ public class Move {
 			//checks which movements are possible
 			for(int i=0;i<robots.size();i++)
 			{
-				if(v.x==b.getPosition().x+1&&v.y<=b.getPosition().y)
+				if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
 				{
 					
 					if(safe)
@@ -109,7 +109,7 @@ public class Move {
 					}
 					
 				}
-				if(v.x==b.getPosition().x-1&&v.y<=b.getPosition().y)
+				if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
 				{
 					if(safe)
 					{
@@ -119,7 +119,7 @@ public class Move {
 						break;
 					}
 				}
-				if(v.z==b.getPosition().z+1&&v.y<=b.getPosition().y)
+				if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
 				{
 					if(safe)
 					{
@@ -129,7 +129,7 @@ public class Move {
 						break;
 					}
 				}
-				if(v.z==b.getPosition().z-1&&v.y<=b.getPosition().y)
+				if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
 				{
 					if(safe)
 					{
@@ -169,6 +169,7 @@ public class Move {
 				}
 			}
 			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
+			
 			if(possibleMovements.size()==0)
 			{
 				targetReached=true;
@@ -191,7 +192,7 @@ public class Move {
 						}
 					}
 				}
-				System.out.println("yay move");
+			
 				if(bestMovement.x<b.getPosition().x)
 				{
 					System.out.println("move left");

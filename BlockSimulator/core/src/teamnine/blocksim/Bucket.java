@@ -3,12 +3,12 @@ package teamnine.blocksim;
 import java.util.ArrayList;
 
 public class Bucket {
-	private ArrayList<Block> bloks = new ArrayList<Block>();
-	public void addBlock(Block b)
+	private ArrayList<RobotBlock> bloks = new ArrayList<RobotBlock>();
+	public void addBlock(RobotBlock b)
 	{
 		bloks.add(b);
 	}
-	public ArrayList<Block> getBloks()
+	public ArrayList<RobotBlock> getBloks()
 	{
 		return bloks;
 	}

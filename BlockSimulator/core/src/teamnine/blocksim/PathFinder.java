@@ -110,6 +110,7 @@ public class PathFinder
     }
 
     public ArrayList<Vector3> getFinalList() {
+    	System.out.println(finalList.size());
         return finalList;
     }
 }
