@@ -100,7 +100,6 @@ public class PathFinder
 
     public void setFinalList(DistanceBlock current)
     {
-
         finalList.add(current.getData());
         if (current.getPrevious() != null)
         {
