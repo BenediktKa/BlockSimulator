@@ -19,8 +19,8 @@ public class FPSControl extends FirstPersonCameraController {
 	private Block.Type blockType = Block.Type.Obstacle;
 
 	// Mouse Variables
-	private int mouseX = 200;
-	private int mouseY = 200;
+	private int mouseX = 0;
+	private int mouseY = 0;
 	private float rotSpeed = 0.2f;
 
 	public enum Type {

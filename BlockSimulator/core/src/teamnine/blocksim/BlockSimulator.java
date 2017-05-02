@@ -108,8 +108,6 @@ public class BlockSimulator implements ApplicationListener {
 
 	@Override
 	public void render() {
-		// Camera Update
-		cameraController.update();
 
 		// Set Background Color
 		Gdx.gl.glClearColor(44f / 255f, 62f / 255f, 80f / 255f, 1);
@@ -136,6 +134,9 @@ public class BlockSimulator implements ApplicationListener {
 		notification.render(spriteBatch);
 		spriteBatch.draw(crosshair, crosshair_x, crosshair_y, 25, 25);
 		spriteBatch.end();
+		
+		// Camera Update
+		cameraController.update();
 	}
 
 	@Override
