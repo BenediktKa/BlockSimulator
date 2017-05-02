@@ -1,3 +1,6 @@
+//to do:
+//prioritize blocks who have the highest height
+//add safe to everything
 package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
@@ -87,23 +90,27 @@ public class Move {
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			boolean safe =false;
+			
 			//checks if movement is possible
 			for(int k=0;k<robots.size();k++)
 			{
-	
-				if(b.getPosition().x+1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y||b.getPosition().z+1==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y||
-				   b.getPosition().x==robots.get(k).getPosition().x&&b.getPosition().z==robots.get(k).getPosition().z&&b.getPosition().y==robots.get(k).getPosition().y-1||b.getPosition().x-1==robots.get(k).getPosition().x&&v.y==b.getPosition().y ||
-				   b.getPosition().z-1==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y)
+				
+				if(b.getPosition().z==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y+1&&b.getPosition().x==robots.get(k).getPosition().x)
 				{
-					safe= true;
+					safe=false;
 					break;
 				}
-				if(b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y+1&&b.getPosition().z==robots.get(k).getPosition().z)
+		
+				if(b.getPosition().x+1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z||b.getPosition().x-1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z
+				  ||b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z+1||b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z-1
+				  ||b.getPosition().z==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y-1&&b.getPosition().x==robots.get(k).getPosition().x)
 				{
-					System.out.println("not safe dammit");
-					safe=false;
+					safe= true;
 				}
+				
+				
 			}
+			
 			
 			//checks which movements are possible
 			for(int i=0;i<robots.size();i++)
@@ -202,7 +209,8 @@ public class Move {
 			
 				
 			}
-			System.out.println("lol"+"none "+none+" safe "+safe);
+			
+			//System.out.println("lol"+"none "+none+" safe "+safe);
 			if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
 			{
 				
@@ -212,6 +220,7 @@ public class Move {
 					bestMovement=v;
 					bestDistance=1;
 					b.moveRight();
+					
 					//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
 					break;
 				}
@@ -255,12 +264,15 @@ public class Move {
 			}
 			
 			none=true;
-			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
+			
 			lastPosition=v;
 			while(b.getMoving())
 			{
-				System.out.println("moving");
+				
 			}
+			
+			
+			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			
 		}
 	}
