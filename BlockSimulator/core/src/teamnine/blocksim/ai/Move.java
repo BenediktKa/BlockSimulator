@@ -167,30 +167,34 @@ public class Move {
 					none=false;
 					System.out.println("climb");
 					//b.setPosition(b.getPosition().x,b.getPosition().y+1,b.getPosition().z);
+					b.climb();
 				}
 				else if(bestMovement.x<b.getPosition().x)
 				{
 					none=false;
 					System.out.println("move left");
 					//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
+					b.moveLeft();
 				}
 				else if(bestMovement.x>b.getPosition().x)
 				{
 					none=false;
 					System.out.println("move right");
 					//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
+					b.moveRight();
 				}
 				else if(bestMovement.z<b.getPosition().z)
 				{
 					none=false;
 					System.out.println("move back");
 					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
+					b.moveBackwards();
 				}
 				else
 				{
 					none=false;
 					System.out.println("move forward");
-
+					b.moveForward();
 					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);					
 				}
 			
@@ -205,7 +209,8 @@ public class Move {
 					System.out.println("right");
 					bestMovement=v;
 					bestDistance=1;
-					b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
+					b.moveRight();
+					//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
 					break;
 				}
 				
@@ -217,7 +222,8 @@ public class Move {
 					System.out.println("left");
 					bestMovement=v;
 					bestDistance=1;
-					b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
+					b.moveLeft();
+					//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
 					break;
 				}
 			}
@@ -228,7 +234,8 @@ public class Move {
 					System.out.println("forward");
 					bestMovement=v;
 					bestDistance=1;
-					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
+					b.moveForward();
+					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
 					break;
 				}
 			}
@@ -239,13 +246,19 @@ public class Move {
 					System.out.println("back");
 					bestMovement=v;
 					bestDistance=1;
-					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
+					b.moveBackwards();
+					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
 					break;
 				}
 			}
+			
 			none=true;
 			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			lastPosition=v;
+			while(b.getMoving())
+			{
+				System.out.println("moving");
+			}
 			
 		}
 	}
