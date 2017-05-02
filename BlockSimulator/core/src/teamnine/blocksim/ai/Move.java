@@ -101,52 +101,7 @@ public class Move {
 			//checks which movements are possible
 			for(int i=0;i<robots.size();i++)
 			{
-			/*	if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
-				{
-					
-					if(safe)
-					{
-						System.out.println("target1");
-						bestMovement=v;
-						bestDistance=1;
-						b.moveRight();
-						break;
-					}
-					
-				}
-				if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
-				{
-					if(safe)
-					{
-						System.out.println("target2");
-						bestMovement=v;
-						bestDistance=1;
-						b.moveLeft();
-						break;
-					}
-				}
-				if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
-				{
-					if(safe)
-					{
-						System.out.println("target3");
-						bestMovement=v;
-						bestDistance=1;
-						b.moveForward();
-						break;
-					}
-				}
-				if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
-				{
-					if(safe)
-					{
-						System.out.println("target4");
-						bestMovement=v;
-						bestDistance=1;
-						b.moveBackwards();
-						break;
-					}
-				}*/
+			
 				if(lastPosition.x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
@@ -177,7 +132,8 @@ public class Move {
 				}
 			}
 			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
-			
+			System.out.println("possible movements "+possibleMovements.size());
+			boolean none=true;
 			if(possibleMovements.size()==0)
 			{
 				targetReached=true;
@@ -200,41 +156,89 @@ public class Move {
 						}
 					}
 				}
+				
 				if(bestMovement.y>b.getPosition().y)
 				{
+					none=false;
 					System.out.println("climb");
 					b.setPosition(b.getPosition().x,b.getPosition().y+1,b.getPosition().z);
 				}
 				else if(bestMovement.x<b.getPosition().x)
 				{
+					none=false;
 					System.out.println("move left");
 					b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
 				}
 				else if(bestMovement.x>b.getPosition().x)
 				{
+					none=false;
 					System.out.println("move right");
 					b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
 				}
 				else if(bestMovement.z<b.getPosition().z)
 				{
+					none=false;
 					System.out.println("move back");
 					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
 				}
 				else
 				{
+					none=false;
 					System.out.println("move forward");
 
-					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
-
-					b.moveForward();
+					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);					
 				}
-				while(b.getMoving()==true)
+			
+				
+			}
+			System.out.println("lol"+"none "+none+" safe "+safe);
+			if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
+			{
+				
+				if(none)
 				{
-					//System.out.println("moving "+b.getMoving());
-
+					System.out.println("right");
+					bestMovement=v;
+					bestDistance=1;
+					b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
+					break;
 				}
 				
 			}
+			if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
+			{
+				if(none)
+				{
+					System.out.println("left");
+					bestMovement=v;
+					bestDistance=1;
+					b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
+					break;
+				}
+			}
+			if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
+			{
+				if(none)
+				{
+					System.out.println("forward");
+					bestMovement=v;
+					bestDistance=1;
+					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
+					break;
+				}
+			}
+			if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
+			{
+				if(none)
+				{
+					System.out.println("back");
+					bestMovement=v;
+					bestDistance=1;
+					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
+					break;
+				}
+			}
+			none=true;
 			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			lastPosition=v;
 			
