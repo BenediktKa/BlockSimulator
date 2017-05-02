@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -28,6 +29,7 @@ public class BlockSimulator implements ApplicationListener {
 	public ExtendViewport viewport;
 	public SpriteBatch spriteBatch;
 	public ModelBatch modelBatch;
+	public BitmapFont font;
 
 	// Input Multiplexer
 	public InputMultiplexer inputMultiplexer;
@@ -76,6 +78,9 @@ public class BlockSimulator implements ApplicationListener {
 
 		// Crosshair
 		crosshair = new Texture(Gdx.files.internal("interface/Crosshair.png"));
+		
+		//Font
+		font = new BitmapFont();
 
 		// Create Camera
 		camera = new PerspectiveCamera(FIELDOFVIEW, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -122,6 +127,9 @@ public class BlockSimulator implements ApplicationListener {
 
 		// Rendering Sprites
 		spriteBatch.begin();
+		
+		font.draw(spriteBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 5, 20);
+		
 		notification.render(spriteBatch);
 		spriteBatch.draw(crosshair, crosshair_x, crosshair_y, 25, 25);
 		spriteBatch.end();
