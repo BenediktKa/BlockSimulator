@@ -12,7 +12,6 @@ public class Dijkstra
     ArrayList finalList = new ArrayList();
     Comparator blockComparator = new BlockComparator();
     DistanceBlock target;
-    float disTarget;
 
     public Dijkstra(ArrayList<DistanceBlock> list, DistanceBlock target)
     {
@@ -30,44 +29,36 @@ public class Dijkstra
     public void completeFinalList(PriorityQueue<DistanceBlock> listToReduce)
     {
         DistanceBlock position = listToReduce.poll();
-        DistanceBlock[] neighbours = position.getNeighbours();
-        int[] weights = position.getWeights();
+        finalList.add(position);
         
-        if (position != null)
+        if(position.getData() == target.getData())
         {
-            finalList.add(position);
-
-            if (neighbours != null)
+        	return;
+        }
+        else
+        {
+            DistanceBlock[] neighbours = position.getNeighbours();
+            int[] weights = position.getWeights();
+           
+            for (int i = 0; i < neighbours.length; i++)
             {
-                for (int i = 0; i < neighbours.length; i++)
+            	DistanceBlock neighbour = neighbours[i];
+                if (listToReduce.contains(neighbour))
                 {
-                    DistanceBlock neighbour = neighbours[i];
-                    if (listToReduce.contains(neighbour))
-                    {
-	                    if (neighbour.getDistance() > (position.getDistance() + weights[i]))
-	                    {
-	                    	listToReduce.remove(neighbour);
-	                    	neighbour.setPrevious(position);
-	                    	neighbour.setDistance(position.getDistance() + weights[i]);
-	                    	listToReduce.add(neighbour);
-	                    	if (neighbour.getData().equals(target.getData()))
-	                    	{
-	                    		disTarget = neighbour.getDistance();
-	                    	}
-	                    }
-                    } 		
-                }
+	                if (neighbour.getDistance() > (position.getDistance() + weights[i]))
+	                {
+	                  	listToReduce.remove(neighbour);
+	                   	neighbour.setPrevious(position);
+	                   	neighbour.setDistance(position.getDistance() + weights[i]);
+	                   	listToReduce.add(neighbour);
+	                }
+	            } 		
             }
             if (listToReduce.size() != 0)
             {
-            completeFinalList(listToReduce);
+            	completeFinalList(listToReduce);
             }
         }
-    }
-    
-    public float getDistanceTarget()
-    {
-    	return disTarget;
     }
 
     public ArrayList<DistanceBlock> getFinalList()

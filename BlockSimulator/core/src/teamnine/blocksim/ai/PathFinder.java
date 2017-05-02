@@ -12,7 +12,7 @@ import static java.lang.Float.MAX_VALUE;
 public class PathFinder
 {
     ArrayList<DistanceBlock> initialList = new ArrayList<DistanceBlock>();
-    ArrayList<DistanceBlock> list;
+    ArrayList<DistanceBlock> list = new ArrayList<DistanceBlock>();
     ArrayList<Vector3> finalList = new ArrayList<Vector3>();
 
     public PathFinder(AbstractList<Block> obstacles, Block initialPosition, Block target, int maxX, int maxZ)
@@ -90,7 +90,11 @@ public class PathFinder
         DistanceBlock tar = new DistanceBlock(MAX_VALUE, target.getPosition(), 0);
         Dijkstra dijkstra = new Dijkstra(initialList, tar);
         list = dijkstra.getFinalList();
-        //wdhiw
+        if(list.get(list.size()-1).getData().equals(target.getPosition()))
+        {
+        	setFinalList(list.get(list.size()-1));
+        }
+        
     }
 
     public void setFinalList(DistanceBlock current)
@@ -102,7 +106,8 @@ public class PathFinder
         }
     }
 
-    public ArrayList<Vector3> getFinalList() {
+    public ArrayList<Vector3> getFinalList() 
+    {
     	System.out.println(finalList.size());
         return finalList;
     }
