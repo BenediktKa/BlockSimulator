@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.DistanceBlock;
 
 import static java.lang.Float.MAX_VALUE;
 

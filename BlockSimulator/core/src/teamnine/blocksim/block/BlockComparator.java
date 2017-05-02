@@ -1,6 +1,8 @@
 package teamnine.blocksim.block;
 import java.util.Comparator;
 
+import teamnine.blocksim.ai.DistanceBlock;
+
 public class BlockComparator implements Comparator<DistanceBlock>
 {
     public int compare(DistanceBlock first, DistanceBlock second)

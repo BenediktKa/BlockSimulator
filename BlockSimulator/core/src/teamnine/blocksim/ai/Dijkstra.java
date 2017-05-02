@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 import teamnine.blocksim.block.BlockComparator;
-import teamnine.blocksim.block.DistanceBlock;
 
 public class Dijkstra
 {
@@ -35,6 +34,7 @@ public class Dijkstra
         
         if(position.getData() == target.getData())
         {
+        	System.out.println("called");
         	return;
         }
         else if (neighbours != null)
