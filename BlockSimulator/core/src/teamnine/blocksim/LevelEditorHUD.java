@@ -64,7 +64,7 @@ public class LevelEditorHUD implements Disposable {
 	// Configuration Checker
 	//private ConfigurationChecker check;
 
-	public LevelEditorHUD(final BlockSimulator blockSimulator) {
+	public LevelEditorHUD(final BlockSimulator blockSimulator, final BlockList blockList) {
 		this.blockSimulator = blockSimulator;
 
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
@@ -200,6 +200,7 @@ public class LevelEditorHUD implements Disposable {
 					blockSimulator.cameraController.setModeType(FPSControl.Type.SimulationMode);
 					startButton.setText("Stop");
 					// new Movement(blockSimulator.blockList);
+					new BrainAI(blockList.getObstacleList(),blockList.getRobotBlockList(),blockList.getTargetList(),blockList.getGridSize());
 				}
 
 				super.clicked(event, x, y);

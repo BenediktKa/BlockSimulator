@@ -57,11 +57,19 @@ public class BlockList implements Disposable {
 		}
 		return null;
 	}
-
+	public int getGridSize()
+	{
+		return gridSize;
+	}
 	public ArrayList<RobotBlock> getRobotBlockList() {
 		return robotList;
 	}
-
+	public ArrayList<Block> getObstacleList() {
+		return obstacleList;
+	}
+	public ArrayList<Block> getTargetList() {
+		return goalList;
+	}
 	public Block getBlock(int i) {
 		return blockList.get(i);
 	}
@@ -120,6 +128,7 @@ public class BlockList implements Disposable {
 		// Add Removal Action To Queue
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
+			redoQueue.clear();
 		}
 
 		// Add Block to different List
@@ -146,6 +155,7 @@ public class BlockList implements Disposable {
 		// Add Removal Action To Queue
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
+			redoQueue.clear();
 		}
 		registerAction = true;
 		blockList.remove(block);
@@ -265,28 +275,26 @@ public class BlockList implements Disposable {
 	}
 
 	public void render(ModelBatch modelBatch, Environment environment) {
-		selectorBlock.moveModel();
 		for (int i = 0; i < blockList.size(); i++) {
 			Block block = blockList.get(i);
+			block.moveModel();
 
 			// Check for collision
 			if (block.getType() == Block.Type.Robot) {
 				for (int j = 0; j < blockList.size(); j++) {
-					RobotBlock robotBlock = robotList.get(robotList.indexOf(block));
 					// Don't check if block is same
-					if (i == j) {
+					if (block == blockList.get(j)) {
 						continue;
 					}
-					
+
 					// Check for intersection between blocks
-					if (robotBlock.intersect(blockList.get(j))) {
-						robotBlock.setOriginalPos();
-					} else if(!robotBlock.intersectY(blockList.get(j))) {
-						robotBlock.setGravity(true);
+					if (block.intersect(blockList.get(j))) {
+						// Detecting Collision
+						//TODO Stop movement
 					}
 				}
 			}
-			block.moveModel();
+
 			modelBatch.render(blockList.get(i).getModelInstance(), environment);
 		}
 	}

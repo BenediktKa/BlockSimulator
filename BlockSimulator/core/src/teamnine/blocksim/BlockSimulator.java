@@ -70,7 +70,6 @@ public class BlockSimulator implements ApplicationListener {
 
 		// BlockList
 		blockList = new BlockList(gridSize, this);
-		// PathFinding pf = new PathFinding(gridSize, blockList);
 		selectorBlock = new Block(new Vector3(0, 0, 0), Block.Type.Selector);
 		selectorBlock.moveModel();
 		blockList.setSelectorBlock(selectorBlock);
@@ -91,7 +90,7 @@ public class BlockSimulator implements ApplicationListener {
 		cameraController = new FPSControl(camera, this);
 
 		// Interface
-		levelHUD = new LevelEditorHUD(this);
+		levelHUD = new LevelEditorHUD(this, blockList);
 
 		// Input
 		inputMultiplexer.addProcessor(cameraController);
