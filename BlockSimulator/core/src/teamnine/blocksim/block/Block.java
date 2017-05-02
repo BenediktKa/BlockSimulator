@@ -120,6 +120,7 @@ public class Block implements Disposable {
 	public void setPosition(Vector3 vector) {
 		position = vector;
 	}
+	//Blub
 
 	public Vector3 getPosition() {
 		return position;
