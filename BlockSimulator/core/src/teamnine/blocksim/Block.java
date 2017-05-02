@@ -22,24 +22,24 @@ public class Block implements Disposable {
 	protected Vector3 position;
 	protected Type type;
 	protected double ID;
-	
+
 	// HitBox Variables
 	public float posMinX, posMaxX;
 	public float posMinY, posMaxY;
 	public float posMinZ, posMaxZ;
-	protected float distanceToPath=0;
+	protected float distanceToPath = 0;
 
 	public Block(Vector3 position, Type type) {
 		this.position = position;
 		this.type = type;
 		createModel();
 	}
-	public void setDistanceToPath(float p)
-	{
-		distanceToPath=p;
+
+	public void setDistanceToPath(float p) {
+		distanceToPath = p;
 	}
-	public float getDistanceToPath()
-	{
+
+	public float getDistanceToPath() {
 		return distanceToPath;
 	}
 
@@ -79,23 +79,20 @@ public class Block implements Disposable {
 		}
 		createHitBox();
 	}
-	
+
 	public void createHitBox() {
-		
+
 		// X-Coordinate
 		posMinX = position.x;
 		posMaxX = position.x + 1;
-		
+
 		// Y-Coordinate
 		posMinY = position.y;
 		posMaxY = position.y + 1;
-		
+
 		// Z-Coordinate
 		posMinZ = position.z;
 		posMaxZ = position.z + 1;
-		
-		//System.out.println(position);
-		//System.out.println("MinX: " + posMinX + " MaxX: " + posMaxX + " MinY: "+ posMinY + " MaxY: " + posMaxY + " MinZ: " + posMinZ + " MaxZ: " + posMaxZ);
 	}
 
 	public Model getModel() {
@@ -113,12 +110,10 @@ public class Block implements Disposable {
 
 	public void setPosition(float x, float y, float z) {
 		position = new Vector3(x, y, z);
-		moveModel();
 	}
 
 	public void setPosition(Vector3 vector) {
 		position = vector;
-		moveModel();
 	}
 
 	public Vector3 getPosition() {
@@ -152,11 +147,16 @@ public class Block implements Disposable {
 	public double getID() {
 		return ID;
 	}
-	
+
 	public boolean intersect(Block block) {
-		return	(posMinX < block.posMaxX && posMaxX > block.posMinX) && 
-				(posMinY < block.posMaxY && posMaxY > block.posMinY) &&
-				(posMinZ < block.posMaxZ && posMaxZ > block.posMinZ);
+		return (posMinX < block.posMaxX && posMaxX > block.posMinX)
+				&& (posMinY < block.posMaxY && posMaxY > block.posMinY)
+				&& (posMinZ < block.posMaxZ && posMaxZ > block.posMinZ);
+	}
+
+	public boolean intersectY(Block block) {
+		return (posMinX <= block.posMaxX && posMaxX >= block.posMinX)
+				&& (posMinZ <= block.posMaxZ && posMaxZ >= block.posMinZ);
 	}
 
 	@Override

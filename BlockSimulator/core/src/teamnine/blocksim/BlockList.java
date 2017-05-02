@@ -120,7 +120,6 @@ public class BlockList implements Disposable {
 		// Add Removal Action To Queue
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
-			redoQueue.clear();
 		}
 
 		// Add Block to different List
@@ -147,7 +146,6 @@ public class BlockList implements Disposable {
 		// Add Removal Action To Queue
 		if (registerAction) {
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
-			redoQueue.clear();
 		}
 		registerAction = true;
 		blockList.remove(block);
@@ -267,6 +265,7 @@ public class BlockList implements Disposable {
 	}
 
 	public void render(ModelBatch modelBatch, Environment environment) {
+		selectorBlock.moveModel();
 		for (int i = 0; i < blockList.size(); i++) {
 			Block block = blockList.get(i);
 
@@ -278,10 +277,12 @@ public class BlockList implements Disposable {
 					if (i == j) {
 						continue;
 					}
-
+					
 					// Check for intersection between blocks
 					if (robotBlock.intersect(blockList.get(j))) {
 						robotBlock.setOriginalPos();
+					} else if(!robotBlock.intersectY(blockList.get(j))) {
+						robotBlock.setGravity(true);
 					}
 				}
 			}

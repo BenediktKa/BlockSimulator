@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
-public class RobotBlock<T> extends Block {
+public class RobotBlock<T> extends BlockPhysics {
 
 	private Vector3 originalPos, moveTo, movement;
 	private float speed = 5;
@@ -88,10 +88,12 @@ public class RobotBlock<T> extends Block {
 	public void moveModel() {
 		if (movement == null) {
 			modelInstance.transform = new Matrix4().translate(position.x, position.y, position.z);
+			super.moveModel();
 			return;
 		}
 
 		if (position.equals(moveTo)) {
+			super.moveModel();
 			return;
 		}
 		
@@ -105,6 +107,5 @@ public class RobotBlock<T> extends Block {
 			position.y += movement.y * speed * Gdx.graphics.getDeltaTime();
 			position.z += movement.z * speed * Gdx.graphics.getDeltaTime();
 		}
-		super.moveModel();
 	}
 }
