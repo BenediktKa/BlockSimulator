@@ -13,6 +13,10 @@ public class RobotBlock extends Block {
 	public RobotBlock(Vector3 position, Type type) {
 		super(position, type);
 	}
+	public boolean getMoving()
+	{
+		return moving;
+	}
 
 	public void moveLeft() {
 		if (moving) {

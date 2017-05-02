@@ -75,7 +75,8 @@ public class Move {
 	//the path as possible all the way to the target
 	public void moving(RobotBlock b, Vector3 v)
 	{
-		System.out.println("moving start block: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
+		
+		System.out.println("moving startblock: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 		Vector3 bestMovement=new Vector3(0,0,0);
 		boolean targetReached=false;
 		Vector3 lastPosition = new Vector3(0,0,0);
@@ -107,7 +108,7 @@ public class Move {
 						System.out.println("target1");
 						bestMovement=v;
 						bestDistance=1;
-						b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
+						b.moveRight();
 						break;
 					}
 					
@@ -119,7 +120,7 @@ public class Move {
 						System.out.println("target2");
 						bestMovement=v;
 						bestDistance=1;
-						b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
+						b.moveLeft();
 						break;
 					}
 				}
@@ -130,7 +131,7 @@ public class Move {
 						System.out.println("target3");
 						bestMovement=v;
 						bestDistance=1;
-						b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
+						b.moveForward();
 						break;
 					}
 				}
@@ -141,7 +142,7 @@ public class Move {
 						System.out.println("target4");
 						bestMovement=v;
 						bestDistance=1;
-						b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
+						b.moveBackwards();
 						break;
 					}
 				}
@@ -198,8 +199,11 @@ public class Move {
 						}
 					}
 				}
-			
-				if(bestMovement.x<b.getPosition().x)
+				if(bestMovement.y>b.getPosition().y)
+				{
+					b.climb();
+				}
+				else if(bestMovement.x<b.getPosition().x)
 				{
 					System.out.println("move left");
 					b.moveLeft();
@@ -219,12 +223,13 @@ public class Move {
 					System.out.println("move forward");
 					b.moveForward();
 				}
-				if(bestMovement.y>b.getPosition().y)
+				while(b.getMoving()==true)
 				{
-					b.climb();
+					System.out.println("moving "+b.getMoving());
 				}
 			}
 			lastPosition=v;
+			
 		}
 	}
 }
