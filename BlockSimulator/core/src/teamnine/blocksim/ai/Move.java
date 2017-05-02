@@ -223,7 +223,15 @@ public class Move {
 				else
 				{
 					System.out.println("move forward");
+
 					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
+
+					b.moveForward();
+				}
+				while(b.getMoving()==true)
+				{
+					//System.out.println("moving "+b.getMoving());
+
 				}
 				
 			}
