@@ -42,6 +42,22 @@ public class BlockList implements Disposable {
 		this.gridSize = gridSize;
 		this.blockSimulator = blockSimulator;
 		createFloor();
+		
+		//Temporary
+		preconfig();
+	}
+	
+	public void preconfig() {
+		//Robots
+		createBlock(new Vector3(0, 1, 10), Block.Type.Robot);
+		createBlock(new Vector3(1, 1, 10), Block.Type.Robot);
+		
+		//Obstacle
+		createBlock(new Vector3(15, 1, 15), Block.Type.Obstacle);
+		
+		//Goal
+		createBlock(new Vector3(12, 1, 12), Block.Type.Goal);
+		createBlock(new Vector3(12, 1, 13), Block.Type.Goal);
 	}
 
 	public int size() {

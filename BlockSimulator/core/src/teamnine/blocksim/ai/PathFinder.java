@@ -90,6 +90,8 @@ public class PathFinder
         DistanceBlock tar = new DistanceBlock(MAX_VALUE, target.getPosition(), 0);
         Dijkstra dijkstra = new Dijkstra(initialList, tar);
         list = dijkstra.getFinalList();
+        System.out.println(list.get(list.size()-1).getData());
+        System.out.println(target.getPosition());
         if(list.get(list.size()-1).getData().equals(target.getPosition()))
         {
         	setFinalList(list.get(list.size()-1));
@@ -99,6 +101,7 @@ public class PathFinder
 
     public void setFinalList(DistanceBlock current)
     {
+
         finalList.add(current.getData());
         if (current.getPrevious() != null)
         {

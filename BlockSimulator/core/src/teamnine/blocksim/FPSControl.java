@@ -20,7 +20,7 @@ public class FPSControl extends FirstPersonCameraController {
 
 	// Mouse Variables
 	private int mouseX = 0;
-	private int mouseY = 0;
+	private int mouseY = 100;
 	private float rotSpeed = 0.2f;
 
 	public enum Type {
