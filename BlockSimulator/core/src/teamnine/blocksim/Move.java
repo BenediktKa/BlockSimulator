@@ -73,7 +73,7 @@ public class Move {
 	//the path as possible all the way to the target
 	public void moving(RobotBlock b, Vector3 v)
 	{
-		//System.out.println("moving start block: "+b+" b.vector: "+b.getPosition()+" "+" vector: "+v);
+		System.out.println("moving start block: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 		Vector3 bestMovement=new Vector3(0,0,0);
 		boolean targetReached=false;
 		Vector3 lastPosition = new Vector3(0,0,0);
@@ -102,6 +102,7 @@ public class Move {
 					
 					if(safe)
 					{
+						System.out.println("target1");
 						bestMovement=v;
 						bestDistance=1;
 						b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
@@ -113,6 +114,7 @@ public class Move {
 				{
 					if(safe)
 					{
+						System.out.println("target2");
 						bestMovement=v;
 						bestDistance=1;
 						b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
@@ -123,6 +125,7 @@ public class Move {
 				{
 					if(safe)
 					{
+						System.out.println("target3");
 						bestMovement=v;
 						bestDistance=1;
 						b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
@@ -133,6 +136,7 @@ public class Move {
 				{
 					if(safe)
 					{
+						System.out.println("target4");
 						bestMovement=v;
 						bestDistance=1;
 						b.setPosition(bestMovement.x,bestMovement.y,bestMovement.z);
