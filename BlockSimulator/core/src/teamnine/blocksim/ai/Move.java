@@ -145,12 +145,35 @@ public class Move {
 					}
 				}
 			}
+			
+			for(int i=0;i<possibleMovements.size();i++)
+			{
+				for(int j=0;j<robots.size();j++)
+				{
+					if(possibleMovements.get(i).x==robots.get(j).getPosition().x&&possibleMovements.get(i).y==robots.get(j).getPosition().y&&possibleMovements.get(i).z==robots.get(j).getPosition().z)
+					{
+						possibleMovements.remove(i);
+						System.out.println("size "+possibleMovements.size()+" i "+i);
+						if(possibleMovements.size()<=i)
+							break;
+					}
+					if(possibleMovements.size()<=i)
+						break;
+				}
+				if(possibleMovements.size()<=i)
+					break;
+			}
 			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
 			System.out.println("possible movements "+possibleMovements.size());
 			boolean none=true;
 			if(possibleMovements.size()==0)
 			{
 				targetReached=true;
+			}
+			else if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
+			{
+				targetReached=true;
+				System.out.println("yaaaay");
 			}
 			else
 			{
@@ -211,55 +234,92 @@ public class Move {
 			}
 			
 			//System.out.println("lol"+"none "+none+" safe "+safe);
-			if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
+			if(none&&safe)
 			{
-				
-				if(none&&safe)
+				if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
 				{
-					System.out.println("right");
-					bestMovement=v;
-					bestDistance=1;
-					b.moveRight();
+					boolean right=true;
+					for(int l =0;l<robots.size();l++)
+					{
+						if(robots.get(l).getPosition().x==b.getPosition().x+1&&robots.get(l).getPosition().z==b.getPosition().z&&robots.get(l).getPosition().y<=b.getPosition().y)
+						{
+							right=false;
+						}
+					}
+					if(right)
+					{
+						System.out.println("right");
+						bestMovement=v;
+						bestDistance=1;
+						b.moveRight();
 					
-					//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
-					break;
+						//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
+						break;
+					}
+					
+					
 				}
-				
-			}
-			if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
-			{
-				if(none&&safe)
-				{
-					System.out.println("left");
-					bestMovement=v;
-					bestDistance=1;
-					b.moveLeft();
-					//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
-					break;
+				if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
+				{	
+					boolean left=true;
+					for(int l =0;l<robots.size();l++)
+					{
+						if(robots.get(l).getPosition().x==b.getPosition().x-11&&robots.get(l).getPosition().z==b.getPosition().z&&robots.get(l).getPosition().y<=b.getPosition().y)
+						{
+							left=false;
+						}
+					}
+					if(left)
+					{
+						System.out.println("left");
+						bestMovement=v;
+						bestDistance=1;
+						b.moveLeft();
+						//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
+						break;
+					}
+					
 				}
-			}
-			if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
-			{
-				if(none&&safe)
+				if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
 				{
-					System.out.println("forward");
-					bestMovement=v;
-					bestDistance=1;
-					b.moveForward();
-					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
-					break;
+					boolean forw=true;
+					for(int l =0;l<robots.size();l++)
+					{
+						if(robots.get(l).getPosition().x==b.getPosition().x+1&&robots.get(l).getPosition().z==b.getPosition().z&&robots.get(l).getPosition().y<=b.getPosition().y)
+						{
+							forw=false;
+						}
+					}
+					if(forw)
+					{
+						System.out.println("forward");
+						bestMovement=v;
+						bestDistance=1;
+						b.moveForward();
+						//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
+						break;
+					}
 				}
-			}
-			if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
-			{
-				if(none&&safe)
+				if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
 				{
-					System.out.println("back");
-					bestMovement=v;
-					bestDistance=1;
-					b.moveBackwards();
-					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
-					break;
+					boolean back=true;
+					for(int l =0;l<robots.size();l++)
+					{
+						if(robots.get(l).getPosition().x==b.getPosition().x+1&&robots.get(l).getPosition().z==b.getPosition().z&&robots.get(l).getPosition().y<=b.getPosition().y)
+						{
+							back=false;
+						}
+					}
+					if(back)
+					{
+						System.out.println("back");
+						bestMovement=v;
+						bestDistance=1;
+						b.moveBackwards();
+						//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
+						break;
+					}
+					
 				}
 			}
 			
