@@ -35,6 +35,7 @@ public class Move {
 		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
+			
 			moving(newOrderToMove.get(i),v);
 		}
 		
@@ -100,7 +101,7 @@ public class Move {
 			//checks which movements are possible
 			for(int i=0;i<robots.size();i++)
 			{
-				if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
+			/*	if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
 				{
 					
 					if(safe)
@@ -145,7 +146,7 @@ public class Move {
 						b.moveBackwards();
 						break;
 					}
-				}
+				}*/
 				if(lastPosition.x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
@@ -201,33 +202,32 @@ public class Move {
 				}
 				if(bestMovement.y>b.getPosition().y)
 				{
-					b.climb();
+					System.out.println("climb");
+					b.setPosition(b.getPosition().x,b.getPosition().y+1,b.getPosition().z);
 				}
 				else if(bestMovement.x<b.getPosition().x)
 				{
 					System.out.println("move left");
-					b.moveLeft();
+					b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
 				}
 				else if(bestMovement.x>b.getPosition().x)
 				{
-					//System.out.println("move right");
-					b.moveRight();
+					System.out.println("move right");
+					b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
 				}
 				else if(bestMovement.z<b.getPosition().z)
 				{
 					System.out.println("move back");
-					b.moveBackwards();
+					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
 				}
 				else
 				{
 					System.out.println("move forward");
-					b.moveForward();
+					b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
 				}
-				while(b.getMoving()==true)
-				{
-					System.out.println("moving "+b.getMoving());
-				}
+				
 			}
+			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			lastPosition=v;
 			
 		}
