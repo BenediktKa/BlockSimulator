@@ -2,6 +2,8 @@ package teamnine.blocksim;
 
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.block.Block;
+
 /**
  * Class that saves information of removed/added block for the undo/redo stacks
  */

@@ -1,6 +1,9 @@
-package teamnine.blocksim;
+package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
+
+import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.RobotBlock;
 
 public class BrainAI {
 	private ArrayList<Block> obstacles;

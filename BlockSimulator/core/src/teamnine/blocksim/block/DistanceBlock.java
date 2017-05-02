@@ -1,4 +1,4 @@
-package teamnine.blocksim;
+package teamnine.blocksim.block;
 
 import com.badlogic.gdx.math.Vector3;
 

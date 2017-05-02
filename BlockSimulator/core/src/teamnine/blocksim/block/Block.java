@@ -1,4 +1,4 @@
-package teamnine.blocksim;
+package teamnine.blocksim.block;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;

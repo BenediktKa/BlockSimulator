@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import teamnine.blocksim.block.Block;
+
 public class FileCreator {
 
 	public void print(File file, ArrayList<Block> blockList) {

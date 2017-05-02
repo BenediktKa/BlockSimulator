@@ -1,7 +1,10 @@
-package teamnine.blocksim;
+package teamnine.blocksim.ai;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+
+import teamnine.blocksim.block.BlockComparator;
+import teamnine.blocksim.block.DistanceBlock;
 
 public class Dijkstra
 {

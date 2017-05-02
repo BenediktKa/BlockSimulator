@@ -15,13 +15,18 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.block.SelectorBlock;
+import teamnine.blocksim.hud.LevelEditorHUD;
+import teamnine.blocksim.hud.Notification;
+
 public class BlockSimulator implements ApplicationListener {
 
 	// Camera variables
 	public final float FIELDOFVIEW = 67;
 	public final float CAMERA_NEAR = 1;
 	public final float CAMERA_FAR = 300;
-	public final float CAMERA_ORBITSPEED = 0.10f;
 
 	public Environment environment;
 	public PerspectiveCamera camera;
@@ -50,7 +55,7 @@ public class BlockSimulator implements ApplicationListener {
 	public Texture crosshair;
 
 	// Loading
-	public Block selectorBlock;
+	public SelectorBlock selectorBlock;
 
 	@Override
 	public void create() {
@@ -72,7 +77,7 @@ public class BlockSimulator implements ApplicationListener {
 
 		// BlockList
 		blockList = new BlockList(gridSize, this);
-		selectorBlock = new Block(new Vector3(0, 0, 0), Block.Type.Selector);
+		selectorBlock = new SelectorBlock(new Vector3(0, 0, 0), Block.Type.Selector);
 		selectorBlock.moveModel();
 		blockList.setSelectorBlock(selectorBlock);
 
@@ -86,13 +91,12 @@ public class BlockSimulator implements ApplicationListener {
 		camera = new PerspectiveCamera(FIELDOFVIEW, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.translate(12.5f, 12.5f, 12.5f);
 		camera.lookAt(0, 0, 0);
-		camera.rotateAround(new Vector3(25f / 2f, 20f, 25f / 2f), new Vector3(0, 1, 0), CAMERA_ORBITSPEED);
 		camera.near = CAMERA_NEAR;
 		camera.far = CAMERA_FAR;
-		camera.update();
 
 		// Camera Control
 		cameraController = new FPSControl(camera, this);
+		camera.update();
 
 		// Interface
 		levelHUD = new LevelEditorHUD(this, blockList);

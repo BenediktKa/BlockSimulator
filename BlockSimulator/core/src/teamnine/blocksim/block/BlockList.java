@@ -1,4 +1,4 @@
-package teamnine.blocksim;
+package teamnine.blocksim.block;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector3;
 import java.util.Stack;
 import com.badlogic.gdx.utils.Disposable;
+
+import teamnine.blocksim.Action;
+import teamnine.blocksim.BlockSimulator;
+import teamnine.blocksim.hud.Notification;
+import teamnine.blocksim.hud.Notification.Type;
 
 public class BlockList implements Disposable {
 

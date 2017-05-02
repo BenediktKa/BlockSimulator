@@ -1,6 +1,8 @@
-package teamnine.blocksim;
+package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
+
+import teamnine.blocksim.block.RobotBlock;
 
 public class Bucket {
 	private ArrayList<RobotBlock> bloks = new ArrayList<RobotBlock>();

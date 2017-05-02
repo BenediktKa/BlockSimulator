@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.RobotBlock;
+import teamnine.blocksim.hud.Notification;
+
 public class FPSControl extends FirstPersonCameraController {
 	private BlockSimulator blockSimulator;
 	private Camera camera;

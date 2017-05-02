@@ -1,4 +1,4 @@
-package teamnine.blocksim;
+package teamnine.blocksim.block;
 import java.util.Comparator;
 
 public class BlockComparator implements Comparator<DistanceBlock>

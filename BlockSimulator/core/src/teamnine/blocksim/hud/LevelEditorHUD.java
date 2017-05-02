@@ -1,4 +1,4 @@
-package teamnine.blocksim;
+package teamnine.blocksim.hud;
 
 import java.io.File;
 
@@ -16,6 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import teamnine.blocksim.BlockSimulator;
+import teamnine.blocksim.FPSControl;
+import teamnine.blocksim.Reader;
+import teamnine.blocksim.FPSControl.Type;
+import teamnine.blocksim.ai.BrainAI;
+import teamnine.blocksim.block.BlockList;
 
 public class LevelEditorHUD implements Disposable {
 

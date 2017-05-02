@@ -3,6 +3,9 @@ package teamnine.blocksim;
 
 import java.util.ArrayList;
 
+import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockList;
+
 public class ConfigurationChecker {
 	private BlockList blockList;
     private Grid grid;

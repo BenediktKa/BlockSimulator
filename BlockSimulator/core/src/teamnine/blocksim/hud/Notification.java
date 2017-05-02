@@ -1,4 +1,4 @@
-package teamnine.blocksim;
+package teamnine.blocksim.hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
