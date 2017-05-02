@@ -30,16 +30,15 @@ public class Dijkstra
     {
         DistanceBlock position = listToReduce.poll();
         finalList.add(position);
+        DistanceBlock[] neighbours = position.getNeighbours();
+        int[] weights = position.getWeights();
         
         if(position.getData() == target.getData())
         {
         	return;
         }
-        else
+        else if (neighbours != null)
         {
-            DistanceBlock[] neighbours = position.getNeighbours();
-            int[] weights = position.getWeights();
-           
             for (int i = 0; i < neighbours.length; i++)
             {
             	DistanceBlock neighbour = neighbours[i];
