@@ -2,6 +2,8 @@ package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
 
@@ -10,7 +12,7 @@ public class BrainAI {
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> target;
 	int gridSize;
-	public BrainAI(ArrayList<Block> obstacles, ArrayList<RobotBlock> robots, ArrayList<Block> target, int gridSize)
+	public BrainAI(ArrayList<Block> obstacles, final ArrayList<RobotBlock> robots, ArrayList<Block> target, int gridSize)
 	{
 		this.obstacles=obstacles;
 		this.robots=robots;
@@ -18,8 +20,14 @@ public class BrainAI {
 		this.gridSize=gridSize;
 		Block maxTarget=findFurthestTarget();
 		RobotBlock maxRobot=findClosestRobot(maxTarget);
-		PathFinder path = new PathFinder(obstacles,maxRobot ,maxTarget,gridSize,gridSize);
-		new Move(path.getFinalList(), robots);
+		final PathFinder path = new PathFinder(obstacles,maxRobot ,maxTarget,gridSize,gridSize);
+		
+		new Thread(new Runnable() {
+			   @Override
+			   public void run() {
+				  new Move(path.getFinalList(), robots);
+			   }
+			}).start();
 	}
 	public Block findFurthestTarget()
 	{
