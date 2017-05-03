@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 public class RobotBlock extends Block {
 
 	private Vector3 originalPos, moveTo, movement;
-	private float speed = 2;
+	private float speed = 5;
 	private boolean moving = false;
 	private BlockList blockList;
 
@@ -105,7 +105,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 		
-		if (position.cpy().sub(moveTo).isZero(0.01f)) {
+		if (position.cpy().sub(moveTo).isZero(0.01f) || originalPos.dst(moveTo) > 1) {
 			position.x = moveTo.x;
 			position.y = moveTo.y;
 			position.z = moveTo.z;
@@ -114,7 +114,7 @@ public class RobotBlock extends Block {
 			//Temporary Gravity
 			if(moveTo.y != originalPos.y + 1) {
 				Block block = blockList.blockAtPoint(new Vector3(position.x, position.y - 1, position.z));
-				if(block == null || block.getType() == Block.Type.Path) {
+				if(block == null || block.getType() == Block.Type.Path || block.getType() == Block.Type.Goal) {
 					fall();
 				}
 			}
