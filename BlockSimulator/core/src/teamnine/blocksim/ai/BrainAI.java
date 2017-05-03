@@ -2,25 +2,26 @@ package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.block.RobotBlock;
 
-public class BrainAI {
+public class BrainAI 
+{
 	private ArrayList<Block> obstacles;
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> target;
-	int gridSize;
-	public BrainAI(ArrayList<Block> obstacles, final ArrayList<RobotBlock> robots, ArrayList<Block> target, int gridSize)
+	private int gridSize;
+
+	public BrainAI(BlockList blockList)
 	{
-		this.obstacles=obstacles;
-		this.robots=robots;
-		this.target=target;
-		this.gridSize=gridSize;
+		this.obstacles=blockList.getObstacleList();
+		this.robots=blockList.getRobotBlockList();
+		this.target=blockList.getTargetList();
+		this.gridSize=blockList.getGridSize();
 		Block maxTarget=findFurthestTarget();
 		RobotBlock maxRobot=findClosestRobot(maxTarget);
-		final PathFinder path = new PathFinder(obstacles,maxRobot ,maxTarget,gridSize,gridSize);
+		final PathFinder path = new PathFinder(blockList , maxRobot, maxTarget);
 		
 		new Thread(new Runnable() {
 			   @Override

@@ -19,8 +19,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import teamnine.blocksim.BlockSimulator;
 import teamnine.blocksim.FPSControl;
-import teamnine.blocksim.FPSControl.Type;
 import teamnine.blocksim.ai.BrainAI;
+import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.configs.Reader;
 
@@ -202,12 +202,13 @@ public class LevelEditorHUD implements Disposable {
 				if (blockSimulator.cameraController.getModeType() == FPSControl.Type.SimulationMode) {
 					blockSimulator.cameraController.setModeType(FPSControl.Type.BuildMode);
 					startButton.setText("Start");
+					blockList.removeBlockType(Block.Type.Path);
 
 				} else {
 					blockSimulator.cameraController.setModeType(FPSControl.Type.SimulationMode);
 					startButton.setText("Stop");
 					// new Movement(blockSimulator.blockList);
-					new BrainAI(blockList.getObstacleList(),blockList.getRobotBlockList(),blockList.getTargetList(),blockList.getGridSize());
+					new BrainAI(blockList);
 				}
 
 				super.clicked(event, x, y);

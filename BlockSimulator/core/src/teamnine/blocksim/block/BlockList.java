@@ -26,6 +26,7 @@ public class BlockList implements Disposable {
 	private ArrayList<Block> floorList = new ArrayList<Block>();
 	private ArrayList<Block> obstacleList = new ArrayList<Block>();
 	private ArrayList<Block> goalList = new ArrayList<Block>();
+	private ArrayList<Block> pathList = new ArrayList<Block>();
 	private ArrayList<RobotBlock> robotList = new ArrayList<RobotBlock>();
 
 	// Selector Block
@@ -75,6 +76,8 @@ public class BlockList implements Disposable {
 			return goalList;
 		} else if (type == Block.Type.Obstacle) {
 			return obstacleList;
+		} else if (type == Block.Type.Path) {
+			return pathList;
 		}
 		return null;
 	}
@@ -90,6 +93,9 @@ public class BlockList implements Disposable {
 	}
 	public ArrayList<Block> getTargetList() {
 		return goalList;
+	}
+	public ArrayList<Block> getPathList() {
+		return pathList;
 	}
 	public Block getBlock(int i) {
 		return blockList.get(i);
@@ -110,6 +116,8 @@ public class BlockList implements Disposable {
 			goalList.add(block);
 		} else if (block.getType() == Block.Type.Obstacle) {
 			obstacleList.add(block);
+		} else if (block.getType() == Block.Type.Path) {
+			pathList.add(block);
 		}
 
 		registerAction = true;
@@ -168,6 +176,22 @@ public class BlockList implements Disposable {
 
 		registerAction = true;
 		blockList.remove(block);
+	}
+	
+	public void removeBlockType(Block.Type type) {
+		if (type == Block.Type.Floor) {
+			blockList.removeAll(floorList);
+			floorList.clear();
+		} else if (type == Block.Type.Goal) {
+			blockList.removeAll(goalList);
+			goalList.clear();
+		} else if (type == Block.Type.Obstacle) {
+			blockList.removeAll(obstacleList);
+			obstacleList.clear();
+		} else if (type == Block.Type.Path) {
+			blockList.removeAll(pathList);
+			pathList.clear();
+		}
 	}
 
 	public void removeBlock(int i) {

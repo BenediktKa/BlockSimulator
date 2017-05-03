@@ -81,7 +81,15 @@ public class Block implements Disposable {
 							new BlendingAttribute(0.4f)),
 					Usage.Position | Usage.Normal);
 			modelInstance = new ModelInstance(model);
-		}
+		//Path Block
+		} else if (type == Type.Path) {
+			ModelBuilder modelBuilder = new ModelBuilder();
+			model = modelBuilder.createBox(1f, 1f, 1f,
+					new Material(ColorAttribute.createDiffuse(new Color(0.0f, 0.0f, 1.0f, 1.0f)),
+							new BlendingAttribute(0.1f)),
+					Usage.Position | Usage.Normal);
+			modelInstance = new ModelInstance(model);
+		} 
 		createHitBox();
 	}
 
@@ -126,7 +134,7 @@ public class Block implements Disposable {
 	}
 
 	public enum Type {
-		Robot, Floor, Obstacle, Goal, Selector;
+		Robot, Obstacle, Goal, Selector, Floor, Path;
 
 		public Type next() {
 			Type types[] = Type.values();
@@ -134,8 +142,6 @@ public class Block implements Disposable {
 			ordinal = ++ordinal % types.length;
 			if (types[ordinal] == Selector) {
 				return types[0];
-			} else if (types[ordinal] == Floor) {
-				return types[2];
 			}
 			return types[ordinal];
 		}
