@@ -9,9 +9,12 @@ public class RobotBlock extends Block {
 	private Vector3 originalPos, moveTo, movement;
 	private float speed = 2;
 	private boolean moving = false;
+	private BlockList blockList;
 
-	public RobotBlock(Vector3 position, Type type) {
+	public RobotBlock(Vector3 position, Type type, BlockList blockList) {
 		super(position, type);
+		
+		this.blockList = blockList;
 	}
 	public boolean getMoving()
 	{
@@ -107,6 +110,15 @@ public class RobotBlock extends Block {
 			position.y = moveTo.y;
 			position.z = moveTo.z;
 			moving = false;
+			
+			//Temporary Gravity
+			if(moveTo.y != originalPos.y + 1) {
+				Block block = blockList.blockAtPoint(new Vector3(position.x, position.y - 1, position.z));
+				if(block == null || block.getType() == Block.Type.Path) {
+					fall();
+				}
+			}
+			
 		} else {
 			position.x += movement.x * speed * Gdx.graphics.getDeltaTime();
 			position.y += movement.y * speed * Gdx.graphics.getDeltaTime();

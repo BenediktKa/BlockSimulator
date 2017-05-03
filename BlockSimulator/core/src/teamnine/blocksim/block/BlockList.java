@@ -126,7 +126,7 @@ public class BlockList implements Disposable {
 
 	public Block createBlock(Vector3 vector, Block.Type type) {
 		if (type == Block.Type.Robot) {
-			RobotBlock robotBlock = new RobotBlock(vector, type);
+			RobotBlock robotBlock = new RobotBlock(vector, type, this);
 			robotList.add(robotBlock);
 			addBlock((Block) robotBlock);
 			return robotBlock;
@@ -139,7 +139,7 @@ public class BlockList implements Disposable {
 
 	public Block createBlock(Vector3 vector, Block.Type type, double ID) {
 		if (type == Block.Type.Robot) {
-			RobotBlock robotBlock = new RobotBlock(vector, type);
+			RobotBlock robotBlock = new RobotBlock(vector, type, this);
 			robotList.add(robotBlock);
 			addBlock((Block) robotBlock);
 			robotBlock.setID(ID);
@@ -323,23 +323,6 @@ public class BlockList implements Disposable {
 		for (int i = 0; i < blockList.size(); i++) {
 			Block block = blockList.get(i);
 			block.moveModel();
-
-			// Check for collision
-			if (block.getType() == Block.Type.Robot) {
-				for (int j = 0; j < blockList.size(); j++) {
-					// Don't check if block is same
-					if (block == blockList.get(j)) {
-						continue;
-					}
-
-					// Check for intersection between blocks
-					if (block.intersect(blockList.get(j))) {
-						// Detecting Collision
-						//TODO Stop movement
-					}
-				}
-			}
-
 			modelBatch.render(blockList.get(i).getModelInstance(), environment);
 		}
 	}
