@@ -39,7 +39,8 @@ public class Move {
 		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
 		
 			
-			moving(newOrderToMove.get(0),v);
+		for(int i=0;i<newOrderToMove.size();i++)
+			moving(newOrderToMove.get(i),v);
 		
 		
 	}
@@ -80,7 +81,7 @@ public class Move {
 	public void moving(RobotBlock b, Vector3 v)
 	{
 		
-		System.out.println("moving startblock: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
+		//System.out.println("moving startblock: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 		Vector3 bestMovement=new Vector3(0,0,0);
 		boolean targetReached=false;
 		
@@ -113,7 +114,7 @@ public class Move {
 			
 			
 			//checks which movements are possible
-			System.out.println("orpos "+b.getOriginalPos());
+		//	System.out.println("orpos "+b.getOriginalPos());
 			for(int i=0;i<robots.size();i++)
 			{
 			
@@ -166,23 +167,23 @@ public class Move {
 			}
 			for(int i=0;i<possibleMovements.size();i++)
 			{
-				System.out.println("search");
+				//System.out.println("search");
 				if(possibleMovements.get(i).x==b.getOriginalPos().x&&possibleMovements.get(i).y==b.getOriginalPos().y&&possibleMovements.get(i).z==b.getOriginalPos().z)
 					{
 					possibleMovements.remove(i);
-					System.out.println("last removed");
+					//System.out.println("last removed");
 					}
 				
 			}
 			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
-			System.out.println("possible movements "+possibleMovements.size());
+			//System.out.println("possible movements "+possibleMovements.size());
 			boolean none=true;
 			boolean reallyReached=false;
 			if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
 			{
 				targetReached=true;
 				reallyReached=true;
-				System.out.println("yaaaay");
+			//	System.out.println("yaaaay");
 				break;
 			}
 			if(possibleMovements.size()==0)
@@ -337,13 +338,13 @@ public class Move {
 					
 				}
 			}
-			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
+			//System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			none=true;
 			
 			
 			while(b.getMoving())
 			{
-				
+				System.out.print(", ");
 			}
 			
 			

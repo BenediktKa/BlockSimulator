@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 public class RobotBlock extends Block {
 
 	private Vector3 originalPos, moveTo, movement;
-	private float speed = 2;
+	private float speed = 100;
 	private boolean moving = false;
 	private BlockList blockList;
 
