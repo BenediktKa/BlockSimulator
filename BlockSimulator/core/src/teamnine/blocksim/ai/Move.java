@@ -17,32 +17,32 @@ public class Move {
 	{
 		this.path=path;
 		this.robots= new ArrayList<RobotBlock>(robots);
-		for(int i=path.size()-1;i>0;i--)
-			decideMove(this.path.get(i));
+		
+		decideMove();
 	}
 	//does all the prep work with finding and assigning distances
-	public void decideMove(Vector3 v)
+	public void decideMove()
 	{	
-		
 		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
-		float targetX=v.x;
-		
-		float targetZ=v.z;
 		//finds distance from the block to the target assigns the value to the block 
-		
-		for(int i=0;i<robots.size();i++)
+
+		for(int j=0;j<path.size();j++)
 		{
-			float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y;
-			robots.get(i).setDistanceToPath(distanceToPath);
-			orderToMove.add(robots.get(i));
+			float targetX=path.get(j).x;
+			float targetZ=path.get(j).z;
+			for(int i=0;i<robots.size();i++)
+			{
+				float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y;
+				robots.get(i).setDistanceToPath(distanceToPath);
+				orderToMove.add(robots.get(i));
+			}
+			ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
+			for(int i=0;i<newOrderToMove.size();i++)
+				moving(newOrderToMove.get(i),path.get(j));
 		}
-		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
-		
 			
-		for(int i=0;i<newOrderToMove.size();i++)
-			moving(newOrderToMove.get(i),v);
 		
-		
+		System.out.println("reaced");
 	}
 	//orders the block based on their distance to the target using bucket sort. largest distance first.
 	public ArrayList<RobotBlock> order(ArrayList<RobotBlock> otm)
@@ -183,7 +183,7 @@ public class Move {
 			{
 				targetReached=true;
 				reallyReached=true;
-			//	System.out.println("yaaaay");
+				System.out.println("yaaaay");
 				break;
 			}
 			if(possibleMovements.size()==0)
@@ -344,7 +344,7 @@ public class Move {
 			
 			while(b.getMoving())
 			{
-				System.out.print(", ");
+				System.out.print(" ");
 			}
 			
 			
