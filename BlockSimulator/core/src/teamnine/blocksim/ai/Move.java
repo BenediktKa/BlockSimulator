@@ -93,6 +93,11 @@ public class Move {
 		//runs until target has been reached or no further movements are possible
 		while(!targetReached)
 		{
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			boolean safe =false;
@@ -357,13 +362,13 @@ public class Move {
 			//System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			none=true;
 			
-			while (b.getMoving()) {
+			/*while (b.getMoving()) {
 				try {
-					Thread.sleep(500);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
+			}*/
 		}
 		System.out.println("next block");
 	}
