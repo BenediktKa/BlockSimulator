@@ -94,16 +94,130 @@ public class Move {
 		while(!targetReached)
 		{
 			try {
-				Thread.sleep(1500);
+				Thread.sleep(600);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			boolean safe =false;
+			boolean none=true;
 
 			//checks which movements are possible
+			for(int k=0;k<robots.size();k++)
+			{
+				
+				if(b.getPosition().z==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y+1&&b.getPosition().x==robots.get(k).getPosition().x)
+				{
+					safe=false;
+					break;
+				}
 		
+				if(b.getPosition().x+1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z||b.getPosition().x-1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z
+				  ||b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z+1||b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z-1
+				  ||b.getPosition().z==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y-1&&b.getPosition().x==robots.get(k).getPosition().x)
+				{
+					safe= true;
+				}
+				
+				
+			}
+			//System.out.println("lol"+"none "+none+" safe "+safe);
+			if(safe)
+			{
+				if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z)
+				{
+					boolean right=true;
+					for(int l =0;l<robots.size();l++)
+					{
+						System.out.println(robots.get(l).getPosition()+" ,  "+b.getPosition());
+						if(b.getPosition().x+1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
+						{
+							right=false;
+						}
+					}
+					if(right)
+					{
+						System.out.println("right"+" BLOCK: "+b);
+						bestMovement=v;
+						bestDistance=1;
+						b.moveRight();
+						none=false;
+						//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
+						break;
+					}
+					
+					
+				}
+				if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z)
+				{	
+					boolean left=true;
+					for(int l =0;l<robots.size();l++)
+					{
+						if(b.getPosition().x-1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
+						{
+							left=false;
+						}
+					}
+					if(left)
+					{
+						System.out.println("left"+" BLOCK: "+b);
+						bestMovement=v;
+						bestDistance=1;
+						b.moveLeft();
+						none=false;
+						//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
+						break;
+					}
+					
+				}
+				if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x)
+				{
+					boolean forw=true;
+					for(int l =0;l<robots.size();l++)
+					{
+						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z+1==robots.get(l).getPosition().z)
+						{
+							forw=false;
+						}
+					}
+					if(forw)
+					{
+						System.out.println("forward"+" BLOCK: "+b);
+						bestMovement=v;
+						bestDistance=1;
+						b.moveForward();
+						none=false;
+						//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
+						break;
+					}
+				}
+				if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x)
+				{
+					boolean back=true;
+					for(int l =0;l<robots.size();l++)
+					{
+						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z-1)
+						{
+							back=false;
+						}
+					}
+					if(back)
+					{
+						System.out.println("back"+" BLOCK: "+b);
+						bestMovement=v;
+						bestDistance=1;
+						b.moveBackwards();
+						none=false;
+						//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
+						break;
+					}
+					
+				}
+			}
+			
+			/////////////////////////////////////////////////////////////
+			if(none){
 			for(int i=0;i<robots.size();i++)
 			{
 			
@@ -170,7 +284,7 @@ public class Move {
 			System.out.println("pms2 "+possibleMovements.size());
 			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
 			//System.out.println("possible movements "+possibleMovements.size());
-			boolean none=true;
+			
 			boolean reallyReached=false;
 			if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
 			{
@@ -214,7 +328,7 @@ public class Move {
 						}
 					if(possible)
 					{
-					none=false;
+					
 					System.out.println("climb"+" BLOCK: "+b);
 					//b.setPosition(b.getPosition().x,b.getPosition().y+1,b.getPosition().z);
 					b.climb();
@@ -223,142 +337,37 @@ public class Move {
 				}
 				else if(bestMovement.x<b.getPosition().x)
 				{
-					none=false;
+					
 					System.out.println("move left"+" BLOCK: "+b);
 					//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
 					b.moveLeft();
 				}
 				else if(bestMovement.x>b.getPosition().x)
 				{
-					none=false;
+					
 					System.out.println("move right"+" BLOCK: "+b);
 					//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
 					b.moveRight();
 				}
 				else if(bestMovement.z<b.getPosition().z)
 				{
-					none=false;
+					
 					System.out.println("move back"+" BLOCK: "+b);
 					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
 					b.moveBackwards();
 				}
 				else
 				{
-					none=false;
+					
 					System.out.println("move forward"+" BLOCK: "+b);
 					b.moveForward();
 					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);					
 				}
 			
 			}
+			}
 			
-			for(int k=0;k<robots.size();k++)
-			{
-				
-				if(b.getPosition().z==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y+1&&b.getPosition().x==robots.get(k).getPosition().x)
-				{
-					safe=false;
-					break;
-				}
-		
-				if(b.getPosition().x+1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z||b.getPosition().x-1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z
-				  ||b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z+1||b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z-1
-				  ||b.getPosition().z==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y-1&&b.getPosition().x==robots.get(k).getPosition().x)
-				{
-					safe= true;
-				}
-				
-				
-			}
-			//System.out.println("lol"+"none "+none+" safe "+safe);
-			if(none&&safe&&reallyReached==false)
-			{
-				if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
-				{
-					boolean right=true;
-					for(int l =0;l<robots.size();l++)
-					{
-						if(robots.get(l).getPosition().x==b.getPosition().x+1&&robots.get(l).getPosition().z==b.getPosition().z&&robots.get(l).getPosition().y<=b.getPosition().y)
-						{
-							right=false;
-						}
-					}
-					if(right)
-					{
-						System.out.println("right"+" BLOCK: "+b);
-						bestMovement=v;
-						bestDistance=1;
-						b.moveRight();
-					
-						//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
-						break;
-					}
-					
-					
-				}
-				if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
-				{	
-					boolean left=true;
-					for(int l =0;l<robots.size();l++)
-					{
-						if(robots.get(l).getPosition().x==b.getPosition().x-11&&robots.get(l).getPosition().z==b.getPosition().z&&robots.get(l).getPosition().y<=b.getPosition().y)
-						{
-							left=false;
-						}
-					}
-					if(left)
-					{
-						System.out.println("left"+" BLOCK: "+b);
-						bestMovement=v;
-						bestDistance=1;
-						b.moveLeft();
-						//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
-						break;
-					}
-					
-				}
-				if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
-				{
-					boolean forw=true;
-					for(int l =0;l<robots.size();l++)
-					{
-						if(robots.get(l).getPosition().x==b.getPosition().x+1&&robots.get(l).getPosition().z==b.getPosition().z&&robots.get(l).getPosition().y<=b.getPosition().y)
-						{
-							forw=false;
-						}
-					}
-					if(forw)
-					{
-						System.out.println("forward"+" BLOCK: "+b);
-						bestMovement=v;
-						bestDistance=1;
-						b.moveForward();
-						//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
-						break;
-					}
-				}
-				if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x&&v.y<=b.getPosition().y)
-				{
-					boolean back=true;
-					for(int l =0;l<robots.size();l++)
-					{
-						if(robots.get(l).getPosition().x==b.getPosition().x+1&&robots.get(l).getPosition().z==b.getPosition().z&&robots.get(l).getPosition().y<=b.getPosition().y)
-						{
-							back=false;
-						}
-					}
-					if(back)
-					{
-						System.out.println("back"+" BLOCK: "+b);
-						bestMovement=v;
-						bestDistance=1;
-						b.moveBackwards();
-						//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
-						break;
-					}
-					
-				}
-			}
+			
 			//System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			none=true;
 			
