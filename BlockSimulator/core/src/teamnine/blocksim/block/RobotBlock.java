@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class RobotBlock extends Block {
 
-	private Vector3 moveTo, movement;
+	private Vector3 originalPos, moveTo, movement;
 	private float speed = 2;
 	private boolean moving = false;
 
@@ -23,6 +23,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		originalPos = position;
 		moveTo = new Vector3(position.x - 1, position.y, position.z);
 		movement = new Vector3(-1, 0, 0);
 		moving = true;
@@ -33,6 +34,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		originalPos = position;
 		moveTo = new Vector3(position.x + 1, position.y, position.z);
 		movement = new Vector3(1, 0, 0);
 		moving = true;
@@ -43,6 +45,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		originalPos = position;
 		moveTo = new Vector3(position.x, position.y, position.z + 1);
 		movement = new Vector3(0, 0, 1);
 		moving = true;
@@ -53,6 +56,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		originalPos = position;
 		moveTo = new Vector3(position.x, position.y, position.z - 1);
 		movement = new Vector3(0, 0, -1);
 		moving = true;
@@ -63,6 +67,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		originalPos = position;
 		moveTo = new Vector3(position.x, position.y + 1, position.z);
 		movement = new Vector3(0, 1, 0);
 		moving = true;
@@ -73,9 +78,18 @@ public class RobotBlock extends Block {
 			return;
 		}
 
+		originalPos = position;
 		moveTo = new Vector3(position.x, position.y - 1, position.z);
 		movement = new Vector3(0, -1, 0);
 		moving = true;
+	}
+	
+	public Vector3 getOriginalPos() {
+		if(originalPos == null) {
+			return position;
+		} else {
+			return originalPos;
+		}
 	}
 
 	public void moveModel() {
