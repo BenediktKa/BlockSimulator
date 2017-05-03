@@ -12,7 +12,7 @@ import teamnine.blocksim.block.RobotBlock;
 public class Move {
 	private ArrayList<Vector3> path;
 	private ArrayList<RobotBlock> robots;
-	private Vector3 lastPosition = new Vector3(0,0,0);
+	
 	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots)
 	{
 		this.path=path;
@@ -37,11 +37,10 @@ public class Move {
 			orderToMove.add(robots.get(i));
 		}
 		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
-		for(int i=0;i<newOrderToMove.size();i++)
-		{
+		
 			
-			moving(newOrderToMove.get(i),v);
-		}
+			moving(newOrderToMove.get(0),v);
+		
 		
 	}
 	//orders the block based on their distance to the target using bucket sort. largest distance first.
@@ -114,31 +113,32 @@ public class Move {
 			
 			
 			//checks which movements are possible
+			System.out.println("orpos "+b.getOriginalPos());
 			for(int i=0;i<robots.size();i++)
 			{
 			
-				if(lastPosition.x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
+				if(b.getOriginalPos().x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}					
 				}
-				if(lastPosition.z!=b.getPosition().z+1&&robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z+1)
+				if(b.getOriginalPos().z!=b.getPosition().z+1&&robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z+1)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}
 				}
-				if(lastPosition.x!=b.getPosition().x-1&&robots.get(i).getPosition().x==b.getPosition().x-1&&robots.get(i).getPosition().z==b.getPosition().z)
+				if(b.getOriginalPos().x!=b.getPosition().x-1&&robots.get(i).getPosition().x==b.getPosition().x-1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}
 				}
-				if(lastPosition.z!=b.getPosition().z-1&&robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z-1)
+				if(b.getOriginalPos().z!=b.getPosition().z-1&&robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z-1)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
@@ -167,7 +167,7 @@ public class Move {
 			for(int i=0;i<possibleMovements.size();i++)
 			{
 				System.out.println("search");
-				if(possibleMovements.get(i).x==lastPosition.x&&possibleMovements.get(i).y==lastPosition.y&&possibleMovements.get(i).z==lastPosition.z)
+				if(possibleMovements.get(i).x==b.getOriginalPos().x&&possibleMovements.get(i).y==b.getOriginalPos().y&&possibleMovements.get(i).z==b.getOriginalPos().z)
 					{
 					possibleMovements.remove(i);
 					System.out.println("last removed");
@@ -177,15 +177,19 @@ public class Move {
 			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
 			System.out.println("possible movements "+possibleMovements.size());
 			boolean none=true;
+			boolean reallyReached=false;
+			if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
+			{
+				targetReached=true;
+				reallyReached=true;
+				System.out.println("yaaaay");
+				break;
+			}
 			if(possibleMovements.size()==0)
 			{
 				targetReached=true;
 			}
-			else if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
-			{
-				targetReached=true;
-				System.out.println("yaaaay");
-			}
+			
 			else
 			{
 				for(int j=0;j<possibleMovements.size();j++)
@@ -241,11 +245,11 @@ public class Move {
 					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);					
 				}
 			
-				
+			}
 			
 			
 			//System.out.println("lol"+"none "+none+" safe "+safe);
-			if(none&&safe)
+			if(none&&safe&&reallyReached==false)
 			{
 				if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z&&v.y<=b.getPosition().y)
 				{
@@ -336,12 +340,12 @@ public class Move {
 			System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			none=true;
 			
-			lastPosition=v;
+			
 			while(b.getMoving())
 			{
 				
 			}
-			}
+			
 			
 			
 			
