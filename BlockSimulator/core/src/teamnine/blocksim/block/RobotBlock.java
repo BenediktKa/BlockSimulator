@@ -23,7 +23,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
-		originalPos = position;
+		originalPos = position.cpy();
 		moveTo = new Vector3(position.x - 1, position.y, position.z);
 		movement = new Vector3(-1, 0, 0);
 		moving = true;
@@ -34,7 +34,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
-		originalPos = position;
+		originalPos = position.cpy();
 		moveTo = new Vector3(position.x + 1, position.y, position.z);
 		movement = new Vector3(1, 0, 0);
 		moving = true;
@@ -45,7 +45,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
-		originalPos = position;
+		originalPos = position.cpy();
 		moveTo = new Vector3(position.x, position.y, position.z + 1);
 		movement = new Vector3(0, 0, 1);
 		moving = true;
@@ -56,7 +56,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
-		originalPos = position;
+		originalPos = position.cpy();
 		moveTo = new Vector3(position.x, position.y, position.z - 1);
 		movement = new Vector3(0, 0, -1);
 		moving = true;
@@ -67,7 +67,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
-		originalPos = position;
+		originalPos = position.cpy();
 		moveTo = new Vector3(position.x, position.y + 1, position.z);
 		movement = new Vector3(0, 1, 0);
 		moving = true;
@@ -78,7 +78,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 
-		originalPos = position;
+		originalPos = position.cpy();
 		moveTo = new Vector3(position.x, position.y - 1, position.z);
 		movement = new Vector3(0, -1, 0);
 		moving = true;
