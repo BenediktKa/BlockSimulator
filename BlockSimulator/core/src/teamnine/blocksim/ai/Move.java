@@ -21,7 +21,7 @@ public class Move {
 		this.obstacles=obstacles;
 		this.path=path;
 		this.robots= new ArrayList<RobotBlock>(robots);
-		pauseTime=300*robots.size();
+		pauseTime=350*robots.size();
 		for(int i=path.size()-1;i>0;i--)
 			decideMove(this.path.get(i));
 	}
@@ -143,6 +143,16 @@ public class Move {
 					}
 					if(right)
 					{
+						for(int l =0;l<obstacles.size();l++)
+						{
+							if(b.getPosition().x+1==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z==obstacles.get(l).getPosition().z)
+							{System.out.println("failed");
+								right=false;
+							}
+						}
+					}
+					if(right)
+					{
 						System.out.println("right"+" BLOCK: "+b);
 						bestMovement=v;
 						bestDistance=1;
@@ -162,6 +172,16 @@ public class Move {
 						if(b.getPosition().x-1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
 						{System.out.println("failed");
 							left=false;
+						}
+					}
+					if(left)
+					{
+						for(int l =0;l<obstacles.size();l++)
+						{
+							if(b.getPosition().x-1==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z==obstacles.get(l).getPosition().z)
+							{System.out.println("failed");
+								left=false;
+							}
 						}
 					}
 					if(left)
@@ -188,6 +208,16 @@ public class Move {
 					}
 					if(forw)
 					{
+						for(int l =0;l<obstacles.size();l++)
+						{
+							if(b.getPosition().x==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z+1==obstacles.get(l).getPosition().z)
+							{System.out.println("failed");
+								forw=false;
+							}
+						}
+					}
+					if(forw)
+					{
 						System.out.println("forward"+" BLOCK: "+b);
 						bestMovement=v;
 						bestDistance=1;
@@ -205,6 +235,16 @@ public class Move {
 						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z-1==robots.get(l).getPosition().z)
 						{System.out.println("failed");
 							back=false;
+						}
+					}
+					if(back)
+					{
+						for(int l =0;l<obstacles.size();l++)
+						{
+							if(b.getPosition().x==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z-1==obstacles.get(l).getPosition().z)
+							{System.out.println("failed");
+								back=false;
+							}
 						}
 					}
 					if(back)
