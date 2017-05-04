@@ -7,16 +7,21 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
 
 public class Move {
 	private ArrayList<Vector3> path;
 	private ArrayList<RobotBlock> robots;
+	private ArrayList<Block> obstacles;
+	private int pauseTime;
 	
-	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots)
+	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots, ArrayList<Block> obstacles)
 	{
+		this.obstacles=obstacles;
 		this.path=path;
 		this.robots= new ArrayList<RobotBlock>(robots);
+		pauseTime=300*robots.size();
 		for(int i=path.size()-1;i>0;i--)
 			decideMove(this.path.get(i));
 	}
@@ -94,7 +99,7 @@ public class Move {
 		while(!targetReached)
 		{
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(pauseTime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -130,9 +135,9 @@ public class Move {
 					boolean right=true;
 					for(int l =0;l<robots.size();l++)
 					{
-						System.out.println(robots.get(l).getPosition()+" ,  "+b.getPosition());
+						//System.out.println(robots.get(l).getPosition()+" ,  "+b.getPosition());
 						if(b.getPosition().x+1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
-						{
+						{	System.out.println("failed");
 							right=false;
 						}
 					}
@@ -155,7 +160,7 @@ public class Move {
 					for(int l =0;l<robots.size();l++)
 					{
 						if(b.getPosition().x-1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
-						{
+						{System.out.println("failed");
 							left=false;
 						}
 					}
@@ -177,7 +182,7 @@ public class Move {
 					for(int l =0;l<robots.size();l++)
 					{
 						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z+1==robots.get(l).getPosition().z)
-						{
+						{System.out.println("failed");
 							forw=false;
 						}
 					}
@@ -197,8 +202,8 @@ public class Move {
 					boolean back=true;
 					for(int l =0;l<robots.size();l++)
 					{
-						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z-1)
-						{
+						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z-1==robots.get(l).getPosition().z)
+						{System.out.println("failed");
 							back=false;
 						}
 					}
@@ -250,46 +255,16 @@ public class Move {
 					}
 				}
 			}
-			System.out.println("pms1 "+possibleMovements.size());
-			if(possibleMovements.size()>0)
-				System.out.println(" move: "+possibleMovements.get(0));
-			for(int i=0;i<possibleMovements.size();i++)
-			{
-				for(int j=0;j<robots.size();j++)
-				{
-					if(possibleMovements.get(i).x==robots.get(j).getPosition().x&&possibleMovements.get(i).y==robots.get(j).getPosition().y&&possibleMovements.get(i).z==robots.get(j).getPosition().z)
-					{
-						System.out.println("other robot "+robots.get(j));
-						possibleMovements.remove(i);
-						//System.out.println("size "+possibleMovements.size()+" i "+i);
-						if(possibleMovements.size()<=i)
-							break;
-					}
-					if(possibleMovements.size()<=i)
-						break;
-				}
-				if(possibleMovements.size()<=i)
-					break;
-			}
-			for(int i=0;i<possibleMovements.size();i++)
-			{
-				//System.out.println("search");
-				if(possibleMovements.get(i).x==b.getOriginalPos().x&&possibleMovements.get(i).y==b.getOriginalPos().y&&possibleMovements.get(i).z==b.getOriginalPos().z)
-					{
-					possibleMovements.remove(i);
-					//System.out.println("last removed");
-					}
-				
-			}
-			System.out.println("pms2 "+possibleMovements.size());
-			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
-			//System.out.println("possible movements "+possibleMovements.size());
+			removeRobots(possibleMovements);
+			removeObstacles(possibleMovements);
+			removeOrPos(possibleMovements,b);
 			
-			boolean reallyReached=false;
+			System.out.println("pms2 "+possibleMovements.size());
+				
 			if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
 			{
 				targetReached=true;
-				reallyReached=true;
+				
 			//	System.out.println("yaaaay");
 				break;
 			}
@@ -333,6 +308,10 @@ public class Move {
 					//b.setPosition(b.getPosition().x,b.getPosition().y+1,b.getPosition().z);
 					b.climb();
 					}
+					else
+					{
+						targetReached=true;
+					}
 					
 				}
 				else if(bestMovement.x<b.getPosition().x)
@@ -367,18 +346,66 @@ public class Move {
 			}
 			}
 			
-			
-			//System.out.println("moving startblock2: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 			none=true;
 			
-			/*while (b.getMoving()) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}*/
+			
 		}
 		System.out.println("next block");
+	}
+	
+	public void removeRobots(ArrayList<Vector3> pm)
+	{
+		for(int i=0;i<pm.size();i++)
+		{
+			for(int j=0;j<robots.size();j++)
+			{
+				if(pm.get(i).x==robots.get(j).getPosition().x&&pm.get(i).y==robots.get(j).getPosition().y&&pm.get(i).z==robots.get(j).getPosition().z)
+				{
+			
+					pm.remove(i);
+					//System.out.println("size "+possibleMovements.size()+" i "+i);
+					if(pm.size()<=i)
+						break;
+				}
+				if(pm.size()<=i)
+					break;
+			}
+			if(pm.size()<=i)
+				break;
+		}
+	}
+	public void removeObstacles(ArrayList<Vector3> pm)
+	{
+		for(int j=0;j<pm.size();j++)
+		{
+			for(int i =0;i<obstacles.size();i++)
+			{
+				if(pm.get(j).x==obstacles.get(i).getPosition().x&&pm.get(j).y==obstacles.get(i).getPosition().y&&pm.get(j).z==obstacles.get(i).getPosition().z)
+				{
+					
+					pm.remove(j);
+					//System.out.println("size "+possibleMovements.size()+" i "+i);
+					if(pm.size()<=j)
+						break;
+				}
+				if(pm.size()<=j)
+					break;
+			}
+			if(pm.size()<=j)
+				break;
+		}
+	}
+	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b)
+	{
+		for(int i=0;i<possibleMovements.size();i++)
+		{
+			//System.out.println("search");
+			if(possibleMovements.get(i).x==b.getOriginalPos().x&&possibleMovements.get(i).y==b.getOriginalPos().y&&possibleMovements.get(i).z==b.getOriginalPos().z)
+				{
+				possibleMovements.remove(i);
+				//System.out.println("last removed");
+				}
+			
+		}
 	}
 }

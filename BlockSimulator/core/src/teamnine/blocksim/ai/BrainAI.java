@@ -26,7 +26,7 @@ public class BrainAI
 		new Thread(new Runnable() {
 			   @Override
 			   public void run() {
-				  new Move(path.getFinalList(), robots);
+				  new Move(path.getFinalList(), robots,obstacles);
 			   }
 			}).start();
 	}

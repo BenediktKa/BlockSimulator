@@ -31,6 +31,7 @@ public class Bucket {
 	
 	public ArrayList<RobotBlock> getBloks()
 	{
+		
 		return bloks;
 	}
 }
