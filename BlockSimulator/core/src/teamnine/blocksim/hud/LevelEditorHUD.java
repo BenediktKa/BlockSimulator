@@ -25,15 +25,10 @@ import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.configs.Reader;
 
 public class LevelEditorHUD implements Disposable {
-
-	//Have a nice weekend
-	//Have an even better weekend
-	// Block Simulator
-	// Enjoy everything
-	// Test branching again and again and again
-	// New test
 	
 	private BlockSimulator blockSimulator;
+	
+	private boolean displaySpeedButtons = false;
 
 	// Stage
 	private Stage stage;
@@ -61,9 +56,18 @@ public class LevelEditorHUD implements Disposable {
 
 	// Load Simulation Button
 	private TextButton simulationButton;
+	
+	// Speed Up Button
+	private TextButton speedUpButton;
+	
+	// Slow Down Button
+	private TextButton slowDownButton;
 
 	// Block Dialog
 	private Label blockLabel;
+	
+	// Speed Label
+	private Label speedLabel;
 
 	// File Chooser
 	private JFileChooser fileChooser;
@@ -90,12 +94,15 @@ public class LevelEditorHUD implements Disposable {
 		redoButton = new TextButton("Redo", skin, "midnight");
 		startButton = new TextButton("Start", skin);
 		simulationButton = new TextButton("Load Simulation", skin);
+		speedUpButton = new TextButton(">>", skin);
+		slowDownButton = new TextButton("<<", skin);
 
 		// File Chooser
 		fileChooser = new JFileChooser();
 
 		// Create Labels
 		blockLabel = new Label("Selected: " + blockSimulator.cameraController.getBlockType(), skin);
+		speedLabel = new Label("Speed: " + blockSimulator.blockList.getSpeed(), skin);
 
 		// Import Button Listener
 		importButton.addListener(new ClickListener() {
@@ -202,11 +209,13 @@ public class LevelEditorHUD implements Disposable {
 				if (blockSimulator.cameraController.getModeType() == FPSControl.Type.SimulationMode) {
 					blockSimulator.cameraController.setModeType(FPSControl.Type.BuildMode);
 					startButton.setText("Start");
+					toggleSpeedSettings();
 					blockList.removeBlockType(Block.Type.Path);
 
 				} else {
 					blockSimulator.cameraController.setModeType(FPSControl.Type.SimulationMode);
 					startButton.setText("Stop");
+					toggleSpeedSettings();
 					// new Movement(blockSimulator.blockList);
 					new BrainAI(blockList);
 				}
@@ -234,6 +243,26 @@ public class LevelEditorHUD implements Disposable {
 			}
 
 		});
+		
+		// Speed Up Button Listener
+		speedUpButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				blockSimulator.blockList.setSpeed(true);
+				super.clicked(event, x, y);
+			}
+
+		});
+		
+		// Slow Down Button Listener
+		slowDownButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				blockSimulator.blockList.setSpeed(false);
+				super.clicked(event, x, y);
+			}
+
+		});		
 
 		// Add to Table
 		table.add(importButton).padRight(20);
@@ -243,7 +272,7 @@ public class LevelEditorHUD implements Disposable {
 		table.row().height(20);
 		table.add(undoButton).padRight(20);
 		table.add(redoButton).padRight(20);
-		table.add(startButton).padRight(20);
+		table.add(startButton);
 
 		// Add to Stage
 		stage.addActor(table);
@@ -253,6 +282,7 @@ public class LevelEditorHUD implements Disposable {
 
 	public void render() {
 		blockLabel.setText("Selected: " + blockSimulator.cameraController.getBlockType());
+		speedLabel.setText("Speed: " + blockSimulator.blockList.getSpeed());
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
@@ -262,6 +292,20 @@ public class LevelEditorHUD implements Disposable {
 			return true;
 		}
 		return false;
+	}
+	
+	public void toggleSpeedSettings() {
+		if(displaySpeedButtons) {
+			table.removeActor(speedUpButton);
+			table.removeActor(speedLabel);
+			table.removeActor(slowDownButton);
+			displaySpeedButtons = false;
+		} else {
+			table.add(slowDownButton).padRight(20);
+			table.add(speedLabel).padRight(20);
+			table.add(speedUpButton);
+			displaySpeedButtons = true;
+		}
 	}
 
 	@Override
