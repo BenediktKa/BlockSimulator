@@ -260,9 +260,20 @@ public class Move {
 					
 				}
 			}
-			
+			boolean floating =true;
+			if(!safe)
+			{
+				for(int p=0;p<obstacles.size();p++)
+				{
+					if(b.getPosition().x==obstacles.get(p).getPosition().x&&b.getPosition().z==obstacles.get(p).getPosition().z&&b.getPosition().y-1==obstacles.get(p).getPosition().y)
+					{
+						floating =false;
+						break;
+					}
+				}
+			}
 			/////////////////////////////////////////////////////////////
-			if(none){
+			if(none&&floating){
 			for(int i=0;i<robots.size();i++)
 			{
 			
