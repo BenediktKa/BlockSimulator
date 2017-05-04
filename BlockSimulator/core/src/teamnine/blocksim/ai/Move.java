@@ -308,7 +308,7 @@ public class Move {
 			}
 			removeRobots(possibleMovements);
 			removeObstacles(possibleMovements);
-			removeOrPos(possibleMovements,b);
+			removeOrPos(possibleMovements,b,v);
 			
 			System.out.println("pms2 "+possibleMovements.size());
 				
@@ -446,16 +446,21 @@ public class Move {
 				break;
 		}
 	}
-	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b)
+	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b, Vector3 v)
 	{
 		for(int i=0;i<possibleMovements.size();i++)
 		{
 			//System.out.println("search");
 			if(possibleMovements.get(i).x==b.getOriginalPos().x&&possibleMovements.get(i).y==b.getOriginalPos().y&&possibleMovements.get(i).z==b.getOriginalPos().z)
-				{
+			{
 				possibleMovements.remove(i);
 				//System.out.println("last removed");
-				}
+			}
+			 int newDistance=(int) (Math.abs(v.x-possibleMovements.get(i).x)+Math.abs(v.z-possibleMovements.get(i).z)+possibleMovements.get(i).y);
+			if(b.getDistanceToPath()<newDistance)
+			{
+				possibleMovements.remove(i);
+			}
 			
 		}
 	}
