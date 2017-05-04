@@ -7,18 +7,23 @@ import com.badlogic.gdx.math.Vector3;
 public class RobotBlock extends Block {
 
 	private Vector3 originalPos, moveTo, movement;
-	private float speed = 3;
+	private float speed;
 	private boolean moving = false;
 	private BlockList blockList;
 
-	public RobotBlock(Vector3 position, Type type, BlockList blockList) {
+	public RobotBlock(Vector3 position, Type type, float speed, BlockList blockList) {
 		super(position, type);
 		
+		this.speed = speed;
 		this.blockList = blockList;
 	}
 	public boolean getMoving()
 	{
 		return moving;
+	}
+	
+	public void setSpeed(float speed) {
+		this.speed = speed;
 	}
 
 	public void moveLeft() {
@@ -105,7 +110,7 @@ public class RobotBlock extends Block {
 			return;
 		}
 		
-		if (position.cpy().sub(moveTo).isZero(0.01f) || originalPos.dst(moveTo) > 1) {
+		if (position.cpy().sub(moveTo).isZero(0.01f) || originalPos.dst(moveTo) > 1 || originalPos.dst(moveTo) < -1) {
 			position.x = moveTo.x;
 			position.y = moveTo.y;
 			position.z = moveTo.z;
