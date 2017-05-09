@@ -281,32 +281,31 @@ public class Move {
 				}
 			}
 			/////////////////////////////////////////////////////////////
-			if(none&&floating){
-			for(int i=0;i<robots.size();i++)
+			if(none && floating){
+			for(int i = 0; i < robots.size(); i++)
 			{
-			
-				if(b.getOriginalPos().x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
+				if(robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}					
 				}
-				if(b.getOriginalPos().z!=b.getPosition().z+1&&robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z+1)
+				if(robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z+1)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}
 				}
-				if(b.getOriginalPos().x!=b.getPosition().x-1&&robots.get(i).getPosition().x==b.getPosition().x-1&&robots.get(i).getPosition().z==b.getPosition().z)
+				if(robots.get(i).getPosition().x==b.getPosition().x-1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
 						possibleMovements.add(new Vector3(robots.get(i).getPosition().x,robots.get(i).getPosition().y+1,robots.get(i).getPosition().z));
 					}
 				}
-				if(b.getOriginalPos().z!=b.getPosition().z-1&&robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z-1)
+				if(robots.get(i).getPosition().x==b.getPosition().x&&robots.get(i).getPosition().z==b.getPosition().z-1)
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
@@ -462,8 +461,9 @@ public class Move {
 			{
 				toRemove.add(possibleMovements.get(i));
 			}
-			else if(Math.abs(b.getPosition().dst(v)) < Math.abs(possibleMovements.get(i).dst(v)))
+			else if(b.getPosition().dst(v) <= possibleMovements.get(i).dst(v))
 			{
+				System.out.println(possibleMovements.get(i));
 				toRemove.add(possibleMovements.get(i));
 			}
 		}
