@@ -102,7 +102,7 @@ public class Move {
 			{
 				try 
 				{
-					Thread.sleep(50);
+					Thread.sleep(250);
 				}
 				catch (InterruptedException e)
 				{
@@ -411,7 +411,7 @@ public class Move {
 		{
 			try 
 			{
-				Thread.sleep(50);
+				Thread.sleep(250);
 			}
 			catch (InterruptedException e)
 			{
@@ -429,9 +429,9 @@ public class Move {
 			{
 				if(pm.get(i).x==robots.get(j).getPosition().x&&pm.get(i).y==robots.get(j).getPosition().y&&pm.get(i).z==robots.get(j).getPosition().z)
 				{
-			
 					pm.remove(i);
-					//System.out.println("size "+possibleMovements.size()+" i "+i);
+					if(i>0)
+						i--;
 					if(pm.size()<=i)
 						break;
 				}
