@@ -26,6 +26,8 @@ public class Move {
 			decideMove(this.path.get(i));
 		
 		decideMove(new Vector3(mt.getPosition().x,mt.getPosition().y,mt.getPosition().z));
+		
+		Thread.currentThread().interrupt();
 	}
 	//does all the prep work with finding and assigning distances
 	public void decideMove(Vector3 v)
