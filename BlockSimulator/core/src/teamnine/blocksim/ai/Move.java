@@ -10,8 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
 
-public class Move 
-{
+public class Move {
 	private ArrayList<Vector3> path;
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> obstacles;
@@ -285,12 +284,8 @@ public class Move
 			if(none&&floating){
 			for(int i=0;i<robots.size();i++)
 			{
-<<<<<<< Updated upstream
 			
 				if(b.getOriginalPos().x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
-=======
-				if(lastPosition.x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
->>>>>>> Stashed changes
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
@@ -319,7 +314,6 @@ public class Move
 					}
 				}
 			}
-<<<<<<< Updated upstream
 			removeRobots(possibleMovements);
 			removeObstacles(possibleMovements);
 			removeOrPos(possibleMovements,b,v);
@@ -331,12 +325,6 @@ public class Move
 			//	System.out.println("yaaaay");
 				break;
 			}
-=======
-			
-			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
-			System.out.println("possible movements "+possibleMovements.size());
-			boolean none=true;
->>>>>>> Stashed changes
 			if(possibleMovements.size()==0)
 			{
 				break;
@@ -448,28 +436,6 @@ public class Move
 		}
 		pm.removeAll(toRemove);
 	}
-	
-	/*public void removeObstacles(ArrayList<Vector3> pm)
-	{
-		for(int j=0;j<pm.size();j++)
-		{
-			for(int i =0;i<obstacles.size();i++)
-			{
-				if(pm.get(j).x==obstacles.get(i).getPosition().x&&pm.get(j).y==obstacles.get(i).getPosition().y&&pm.get(j).z==obstacles.get(i).getPosition().z)
-				{
-					
-					pm.remove(j);
-					//System.out.println("size "+possibleMovements.size()+" i "+i);
-					if(pm.size()<=j)
-						break;
-				}
-				if(pm.size()<=j)
-					break;
-			}
-			if(pm.size()<=j)
-				break;
-		}
-	}*/
 	
 	public void removeObstacles(ArrayList<Vector3> pm)
 	{
