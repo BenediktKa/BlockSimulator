@@ -144,7 +144,7 @@ public class RobotBlock extends Block
 			if(moveTo.y != originalPos.y + 1)
 			{
 				Block block = blockList.blockAtPoint(new Vector3(position.x, position.y - 1, position.z));
-				if(block == null || block.getType() == Block.Type.Path || block.getType() == Block.Type.Goal)
+				if(block == null || block.getType() == Block.Type.Path || block.getType() == Block.Type.Goal || block.getType() == Block.Type.Robot)
 				{
 					fall();
 				}
