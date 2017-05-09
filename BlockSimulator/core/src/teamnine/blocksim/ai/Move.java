@@ -44,11 +44,11 @@ public class Move {
 			orderToMove.add(robots.get(i));
 		}
 		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
-		/*for(int i=0;i<newOrderToMove.size();i++)
+		for(int i=0;i<newOrderToMove.size();i++)
 		{
 			System.out.println("block: "+newOrderToMove.get(i)+"x; "+newOrderToMove.get(i).getPosition().x+" z: "+newOrderToMove.get(i).getPosition().z+" height: "+newOrderToMove.get(i).getPosition().y+" dis "+newOrderToMove.get(i).getDistanceToPath()+" target: "+v);
 		}
-			System.out.println();*/
+			System.out.println();
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
 			moving(newOrderToMove.get(i),v);
@@ -98,25 +98,19 @@ public class Move {
 		//runs until target has been reached or no further movements are possible
 		while(!targetReached)
 		{
-			
 			while(b.getMoving())
 			{
 				try 
 				{
-					Thread.sleep(50);
+					Thread.sleep(250);
 				}
 				catch (InterruptedException e)
 				{
 					e.printStackTrace();
 				}
 			}
-			if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
-			{
-				targetReached=true;
-				
-			//	System.out.println("yaaaay");
-				break;
-			}
+	
+			
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			boolean safe =false;
@@ -151,7 +145,7 @@ public class Move {
 					{
 						//System.out.println(robots.get(l).getPosition()+" ,  "+b.getPosition());
 						if(b.getPosition().x+1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
-						{	//System.out.println("failed");
+						{	System.out.println("failed");
 							right=false;
 						}
 					}
@@ -160,7 +154,7 @@ public class Move {
 						for(int l =0;l<obstacles.size();l++)
 						{
 							if(b.getPosition().x+1==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z==obstacles.get(l).getPosition().z)
-							{//System.out.println("failed");
+							{System.out.println("failed");
 								right=false;
 							}
 						}
@@ -184,7 +178,7 @@ public class Move {
 					for(int l =0;l<robots.size();l++)
 					{
 						if(b.getPosition().x-1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
-						{//System.out.println("failed");
+						{System.out.println("failed");
 							left=false;
 						}
 					}
@@ -193,7 +187,7 @@ public class Move {
 						for(int l =0;l<obstacles.size();l++)
 						{
 							if(b.getPosition().x-1==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z==obstacles.get(l).getPosition().z)
-							{//System.out.println("failed");
+							{System.out.println("failed");
 								left=false;
 							}
 						}
@@ -216,7 +210,7 @@ public class Move {
 					for(int l =0;l<robots.size();l++)
 					{
 						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z+1==robots.get(l).getPosition().z)
-						{//System.out.println("failed");
+						{System.out.println("failed");
 							forw=false;
 						}
 					}
@@ -225,7 +219,7 @@ public class Move {
 						for(int l =0;l<obstacles.size();l++)
 						{
 							if(b.getPosition().x==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z+1==obstacles.get(l).getPosition().z)
-							{//System.out.println("failed");
+							{System.out.println("failed");
 								forw=false;
 							}
 						}
@@ -328,14 +322,11 @@ public class Move {
 				
 			if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
 			{
-				targetReached=true;
-				
 			//	System.out.println("yaaaay");
 				break;
 			}
 			if(possibleMovements.size()==0)
 			{
-				targetReached=true;
 				break;
 			}
 			
@@ -376,30 +367,34 @@ public class Move {
 					}
 					else
 					{
-						targetReached=true;
+						break;
 					}
 					
 				}
 				else if(bestMovement.x<b.getPosition().x)
 				{
+					
 					System.out.println("move left"+" BLOCK: "+b);
 					//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
 					b.moveLeft();
 				}
 				else if(bestMovement.x>b.getPosition().x)
 				{
+					
 					System.out.println("move right"+" BLOCK: "+b);
 					//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
 					b.moveRight();
 				}
 				else if(bestMovement.z<b.getPosition().z)
 				{
+					
 					System.out.println("move back"+" BLOCK: "+b);
 					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
 					b.moveBackwards();
 				}
 				else
 				{
+					
 					System.out.println("move forward"+" BLOCK: "+b);
 					b.moveForward();
 					//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);					
@@ -408,12 +403,15 @@ public class Move {
 			}
 			}
 			
+			none=true;
+			
+			
 		}
 		while(b.getMoving())
 		{
 			try 
 			{
-				Thread.sleep(50);
+				Thread.sleep(250);
 			}
 			catch (InterruptedException e)
 			{
@@ -444,6 +442,7 @@ public class Move {
 			}
 		}
 	}
+	
 	public void removeObstacles(ArrayList<Vector3> pm)
 	{
 		for(int j=0;j<pm.size();j++)
@@ -454,13 +453,10 @@ public class Move {
 				{
 					
 					pm.remove(j);
-					if(j>0)
-						j--;
 					//System.out.println("size "+possibleMovements.size()+" i "+i);
 					if(pm.size()<=j)
 						break;
 				}
-				
 				if(pm.size()<=j)
 					break;
 			}
@@ -473,26 +469,15 @@ public class Move {
 		for(int i=0;i<possibleMovements.size();i++)
 		{
 			//System.out.println("search");
-			int newDistance=(int) (Math.abs(v.x-possibleMovements.get(i).x)+Math.abs(v.z-possibleMovements.get(i).z)+possibleMovements.get(i).y);
-
 			if(possibleMovements.get(i).x==b.getOriginalPos().x&&possibleMovements.get(i).y==b.getOriginalPos().y&&possibleMovements.get(i).z==b.getOriginalPos().z)
 			{
 				possibleMovements.remove(i);
-				if(i>0)
-					i--;
 				//System.out.println("last removed");
 			}
-			else if(b.getDistanceToPath()<newDistance)
+			 int newDistance=(int) (Math.abs(v.x-possibleMovements.get(i).x)+Math.abs(v.z-possibleMovements.get(i).z)+possibleMovements.get(i).y);
+			if(b.getDistanceToPath()<newDistance)
 			{
 				possibleMovements.remove(i);
-				if(i>0)
-					i--;
-			}
-			else if(b.getPosition().y<possibleMovements.get(i).y)
-			{
-				possibleMovements.remove(i);
-				if(i>0)
-					i--;
 			}
 			
 		}
