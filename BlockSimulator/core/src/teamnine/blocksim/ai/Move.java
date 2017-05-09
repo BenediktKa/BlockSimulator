@@ -423,25 +423,21 @@ public class Move {
 	
 	public void removeRobots(ArrayList<Vector3> pm)
 	{
-		for(int i=0;i<pm.size();i++)
+		int i = 0;
+		while(i < pm.size())
 		{
-			for(int j=0;j<robots.size();j++)
+			for(int j = 0; j < robots.size(); j++)
 			{
 				if(pm.get(i).x==robots.get(j).getPosition().x&&pm.get(i).y==robots.get(j).getPosition().y&&pm.get(i).z==robots.get(j).getPosition().z)
 				{
 					pm.remove(i);
-					if(i>0)
-						i--;
-					if(pm.size()<=i)
-						break;
-				}
-				if(pm.size()<=i)
 					break;
+				}
 			}
-			if(pm.size()<=i)
-				break;
+			i++;
 		}
 	}
+	
 	public void removeObstacles(ArrayList<Vector3> pm)
 	{
 		for(int j=0;j<pm.size();j++)
