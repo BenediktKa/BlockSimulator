@@ -462,7 +462,7 @@ public class Move {
 			{
 				toRemove.add(possibleMovements.get(i));
 			}
-			else if(b.getDistanceToPath() < (int) (Math.abs(v.x-possibleMovements.get(i).x)+Math.abs(v.z-possibleMovements.get(i).z)+possibleMovements.get(i).y))
+			else if(Math.abs(b.getPosition().dst(v)) < Math.abs(possibleMovements.get(i).dst(v)))
 			{
 				toRemove.add(possibleMovements.get(i));
 			}
