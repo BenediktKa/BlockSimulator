@@ -423,27 +423,21 @@ public class Move {
 	
 	public void removeRobots(ArrayList<Vector3> pm)
 	{
-		int i = 0;
-		while(i < pm.size())
+		ArrayList<Vector3> toRemove = new ArrayList<Vector3>();
+		for(int i = 0; i < pm.size(); i++)
 		{
-			boolean increase = true;
 			for(int j = 0; j < robots.size(); j++)
 			{
 				if(pm.get(i).equals(robots.get(j).getPosition()))
 				{
-					pm.remove(i);
-					increase = false;
-					break;
+					toRemove.add(pm.get(i));
 				}
 			}
-			if(increase)
-			{
-				i++;
-			}
 		}
+		pm.removeAll(toRemove);
 	}
 	
-	public void removeObstacles(ArrayList<Vector3> pm)
+	/*public void removeObstacles(ArrayList<Vector3> pm)
 	{
 		for(int j=0;j<pm.size();j++)
 		{
@@ -463,25 +457,38 @@ public class Move {
 			if(pm.size()<=j)
 				break;
 		}
+	}*/
+	
+	public void removeObstacles(ArrayList<Vector3> pm)
+	{
+		ArrayList<Vector3> toRemove = new ArrayList<Vector3>();
+		for(int i = 0; i < pm.size(); i++)
+		{
+			for(int j = 0; j < obstacles.size(); j++)
+			{
+				if(pm.get(i).equals(obstacles.get(j).getPosition()))
+				{
+					toRemove.add(pm.get(i));
+				}
+			}
+		}
+		pm.removeAll(toRemove);
 	}
 	
 	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b, Vector3 v)
 	{
-		int i = 0;
-		while(i < possibleMovements.size())
+		ArrayList<Vector3> toRemove = new ArrayList<Vector3>();
+		for(int i = 0; i < possibleMovements.size(); i++)
 		{
 			if(possibleMovements.get(i).equals(b.getOriginalPos()))
 			{
-				possibleMovements.remove(i);
+				toRemove.add(possibleMovements.get(i));
 			}
 			else if(b.getDistanceToPath() < (int) (Math.abs(v.x-possibleMovements.get(i).x)+Math.abs(v.z-possibleMovements.get(i).z)+possibleMovements.get(i).y))
 			{
-				possibleMovements.remove(i);
-			}
-			else
-			{
-				i++;
+				toRemove.add(possibleMovements.get(i));
 			}
 		}
+		possibleMovements.removeAll(toRemove);
 	}
 }
