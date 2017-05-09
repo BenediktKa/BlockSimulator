@@ -19,9 +19,10 @@ public class BrainAI
 		this.robots=blockList.getRobotBlockList();
 		this.target=blockList.getTargetList();
 		this.gridSize=blockList.getGridSize();
-		Block maxTarget=findFurthestTarget();
-		RobotBlock maxRobot=findClosestRobot(maxTarget);
-		final PathFinder path = new PathFinder(blockList , maxRobot, maxTarget);
+		//Block maxTarget=findFurthestTarget();
+		Block minTarget=findClosestTarget();
+		RobotBlock maxRobot=findClosestRobot(minTarget);
+		final PathFinder path = new PathFinder(blockList , maxRobot, minTarget);
 		
 		new Thread(new Runnable() {
 			   @Override
@@ -45,6 +46,27 @@ public class BrainAI
 			}
 		}
 		return maxTarget;
+	}
+	public Block findClosestTarget()
+	{
+		RobotBlock first = robots.get(0);
+		int minDistance=-1;
+		Block minTarget=target.get(0);
+		for(int i=0; i<target.size();i++)
+		{
+			int distance = (int)(Math.abs(first.getPosition().x-target.get(i).getPosition().x)+Math.abs(first.getPosition().z-target.get(i).getPosition().z)+target.get(i).getPosition().y);
+			if(minDistance==-1)
+			{
+				minDistance=distance;
+				minTarget=target.get(i);
+			}
+			if(distance<minDistance)
+			{
+				minDistance=distance;
+				minTarget=target.get(i);
+			}
+		}
+		return minTarget;
 	}
 	public RobotBlock findClosestRobot(Block mt)
 	{
