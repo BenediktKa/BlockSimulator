@@ -97,10 +97,16 @@ public class Move {
 		//runs until target has been reached or no further movements are possible
 		while(!targetReached)
 		{
-			try {
-				Thread.sleep(pauseTime);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			while(b.getMoving())
+			{
+				try 
+				{
+					Thread.sleep(50);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
 			}
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
@@ -399,6 +405,17 @@ public class Move {
 			none=true;
 			
 			
+		}
+		while(b.getMoving())
+		{
+			try 
+			{
+				Thread.sleep(50);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		System.out.println("next block");
 	}
