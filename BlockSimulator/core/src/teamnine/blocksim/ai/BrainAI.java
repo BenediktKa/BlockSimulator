@@ -30,6 +30,8 @@ public class BrainAI
 				  new Move(path.getFinalList(), robots,obstacles,minTarget);
 			   }
 			}).start();
+		new Reconfiguration(robots,target,minTarget);
+		
 	}
 	public Block findFurthestTarget()
 	{

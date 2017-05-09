@@ -11,6 +11,7 @@ public class RobotBlock extends Block
 	private float speed;
 	private boolean moving = false;
 	private BlockList blockList;
+	private Block target;
 
 	public RobotBlock(Vector3 position, Type type, float speed, BlockList blockList)
 	{
@@ -28,6 +29,16 @@ public class RobotBlock extends Block
 	public void setSpeed(float speed)
 	{
 		this.speed = speed;
+	}
+	
+	public void setTarget(Block targetBlock)
+	{
+		target = targetBlock;
+	}
+	
+	public Block getTarget()
+	{
+		return target;
 	}
 
 	public void moveLeft()
