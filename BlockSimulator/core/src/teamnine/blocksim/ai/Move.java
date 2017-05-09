@@ -464,22 +464,24 @@ public class Move {
 				break;
 		}
 	}
+	
 	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b, Vector3 v)
 	{
-		for(int i=0;i<possibleMovements.size();i++)
+		int i = 0;
+		while(i < possibleMovements.size())
 		{
-			//System.out.println("search");
-			if(possibleMovements.get(i).x==b.getOriginalPos().x&&possibleMovements.get(i).y==b.getOriginalPos().y&&possibleMovements.get(i).z==b.getOriginalPos().z)
-			{
-				possibleMovements.remove(i);
-				//System.out.println("last removed");
-			}
-			 int newDistance=(int) (Math.abs(v.x-possibleMovements.get(i).x)+Math.abs(v.z-possibleMovements.get(i).z)+possibleMovements.get(i).y);
-			if(b.getDistanceToPath()<newDistance)
+			if(possibleMovements.get(i).equals(b.getOriginalPos()))
 			{
 				possibleMovements.remove(i);
 			}
-			
+			else if(b.getDistanceToPath() < (int) (Math.abs(v.x-possibleMovements.get(i).x)+Math.abs(v.z-possibleMovements.get(i).z)+possibleMovements.get(i).y))
+			{
+				possibleMovements.remove(i);
+			}
+			else
+			{
+				i++;
+			}
 		}
 	}
 }
