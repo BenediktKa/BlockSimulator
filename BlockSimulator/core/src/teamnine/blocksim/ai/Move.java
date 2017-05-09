@@ -10,7 +10,8 @@ import com.badlogic.gdx.math.Vector3;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
 
-public class Move {
+public class Move 
+{
 	private ArrayList<Vector3> path;
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> obstacles;
@@ -284,8 +285,12 @@ public class Move {
 			if(none&&floating){
 			for(int i=0;i<robots.size();i++)
 			{
+<<<<<<< Updated upstream
 			
 				if(b.getOriginalPos().x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
+=======
+				if(lastPosition.x!=b.getPosition().x+1&&robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
+>>>>>>> Stashed changes
 				{
 					if(robots.get(i).getPosition().y<=b.getPosition().y)
 					{
@@ -314,6 +319,7 @@ public class Move {
 					}
 				}
 			}
+<<<<<<< Updated upstream
 			removeRobots(possibleMovements);
 			removeObstacles(possibleMovements);
 			removeOrPos(possibleMovements,b,v);
@@ -325,6 +331,12 @@ public class Move {
 			//	System.out.println("yaaaay");
 				break;
 			}
+=======
+			
+			//checks if there is a movement to be made. if not this part is skipped. if yes movement will be performed
+			System.out.println("possible movements "+possibleMovements.size());
+			boolean none=true;
+>>>>>>> Stashed changes
 			if(possibleMovements.size()==0)
 			{
 				break;
