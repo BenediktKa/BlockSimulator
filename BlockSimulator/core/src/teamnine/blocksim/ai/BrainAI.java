@@ -20,16 +20,14 @@ public class BrainAI
 		this.target=blockList.getTargetList();
 		this.gridSize=blockList.getGridSize();
 		//Block maxTarget=findFurthestTarget();
-		Block minTarget=findClosestTarget();
+		final Block minTarget=findClosestTarget();
 		RobotBlock maxRobot=findClosestRobot(minTarget);
 		final PathFinder path = new PathFinder(blockList , maxRobot, minTarget);
 		
-		new Thread(new Runnable()
-			{
+		new Thread(new Runnable() {
 			   @Override
-			   public void run()
-			   {
-				  new Move(path.getFinalList(), robots,obstacles);
+			   public void run() {
+				  new Move(path.getFinalList(), robots,obstacles,minTarget);
 			   }
 			}).start();
 	}

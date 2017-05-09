@@ -16,7 +16,7 @@ public class Move {
 	private ArrayList<Block> obstacles;
 	private int pauseTime;
 	
-	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots, ArrayList<Block> obstacles)
+	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, Block mt)
 	{
 		this.obstacles=obstacles;
 		this.path=path;
@@ -24,14 +24,14 @@ public class Move {
 		pauseTime=350*robots.size();
 		for(int i=path.size()-1;i>0;i--)
 			decideMove(this.path.get(i));
+		
+		decideMove(new Vector3(mt.getPosition().x,mt.getPosition().y,mt.getPosition().z));
 	}
 	//does all the prep work with finding and assigning distances
 	public void decideMove(Vector3 v)
 	{	
-		
 		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
 		float targetX=v.x;
-		
 		float targetZ=v.z;
 		//finds distance from the block to the target assigns the value to the block 
 		
@@ -46,13 +46,11 @@ public class Move {
 		{
 			System.out.println("block: "+newOrderToMove.get(i)+"x; "+newOrderToMove.get(i).getPosition().x+" z: "+newOrderToMove.get(i).getPosition().z+" height: "+newOrderToMove.get(i).getPosition().y+" dis "+newOrderToMove.get(i).getDistanceToPath()+" target: "+v);
 		}
-		System.out.println();
+			System.out.println();
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
 			moving(newOrderToMove.get(i),v);
 		}
-		
-		
 	}
 	//orders the block based on their distance to the target using bucket sort. largest distance first.
 	public ArrayList<RobotBlock> order(ArrayList<RobotBlock> otm)
@@ -83,6 +81,7 @@ public class Move {
 		{
 			sorted.addAll(buckets.get(i).getBloks());
 		}
+		
 		return sorted;
 	}
 	//once the order has been made, the movements will go to try and place the block as close to the first step of 
