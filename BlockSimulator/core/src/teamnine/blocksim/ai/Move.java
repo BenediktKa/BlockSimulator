@@ -109,6 +109,8 @@ public class Move {
 					e.printStackTrace();
 				}
 			}
+	
+			
 			int bestDistance=-1;
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			boolean safe =false;
@@ -320,14 +322,12 @@ public class Move {
 				
 			if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
 			{
-				targetReached=true;
-				
 			//	System.out.println("yaaaay");
 				break;
 			}
 			if(possibleMovements.size()==0)
 			{
-				targetReached=true;
+				break;
 			}
 			
 			else
@@ -367,7 +367,7 @@ public class Move {
 					}
 					else
 					{
-						targetReached=true;
+						break;
 					}
 					
 				}
@@ -426,15 +426,20 @@ public class Move {
 		int i = 0;
 		while(i < pm.size())
 		{
+			boolean increase = true;
 			for(int j = 0; j < robots.size(); j++)
 			{
-				if(pm.get(i).x==robots.get(j).getPosition().x&&pm.get(i).y==robots.get(j).getPosition().y&&pm.get(i).z==robots.get(j).getPosition().z)
+				if(pm.get(i).equals(robots.get(j).getPosition()))
 				{
 					pm.remove(i);
+					increase = false;
 					break;
 				}
 			}
-			i++;
+			if(increase)
+			{
+				i++;
+			}
 		}
 	}
 	
