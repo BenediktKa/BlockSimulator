@@ -4,30 +4,36 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
-public class RobotBlock extends Block {
+public class RobotBlock extends Block
+{
 
 	private Vector3 originalPos, moveTo, movement;
 	private float speed;
 	private boolean moving = false;
 	private BlockList blockList;
 
-	public RobotBlock(Vector3 position, Type type, float speed, BlockList blockList) {
+	public RobotBlock(Vector3 position, Type type, float speed, BlockList blockList)
+	{
 		super(position, type);
 		
 		this.speed = speed;
 		this.blockList = blockList;
 	}
+	
 	public boolean getMoving()
 	{
 		return moving;
 	}
 	
-	public void setSpeed(float speed) {
+	public void setSpeed(float speed)
+	{
 		this.speed = speed;
 	}
 
-	public void moveLeft() {
-		if (moving) {
+	public void moveLeft()
+	{
+		if (moving)
+		{
 			return;
 		}
 
@@ -37,8 +43,10 @@ public class RobotBlock extends Block {
 		moving = true;
 	}
 
-	public void moveRight() {
-		if (moving) {
+	public void moveRight()
+	{
+		if (moving)
+		{
 			return;
 		}
 
@@ -48,8 +56,10 @@ public class RobotBlock extends Block {
 		moving = true;
 	}
 
-	public void moveForward() {
-		if (moving) {
+	public void moveForward()
+	{
+		if (moving)
+		{
 			return;
 		}
 
@@ -59,8 +69,10 @@ public class RobotBlock extends Block {
 		moving = true;
 	}
 
-	public void moveBackwards() {
-		if (moving) {
+	public void moveBackwards()
+	{
+		if (moving)
+		{
 			return;
 		}
 
@@ -70,8 +82,10 @@ public class RobotBlock extends Block {
 		moving = true;
 	}
 
-	public void climb() {
-		if (moving) {
+	public void climb()
+	{
+		if (moving)
+		{
 			return;
 		}
 
@@ -81,8 +95,10 @@ public class RobotBlock extends Block {
 		moving = true;
 	}
 
-	public void fall() {
-		if (moving) {
+	public void fall()
+	{
+		if (moving)
+		{
 			return;
 		}
 
@@ -92,39 +108,51 @@ public class RobotBlock extends Block {
 		moving = true;
 	}
 	
-	public Vector3 getOriginalPos() {
-		if(originalPos == null) {
+	public Vector3 getOriginalPos()
+	{
+		if(originalPos == null)
+		{
 			return position;
-		} else {
+		}
+		else
+		{
 			return originalPos;
 		}
 	}
 
-	public void moveModel() {
-		if (movement == null) {
+	public void moveModel()
+	{
+		if (movement == null)
+		{
 			modelInstance.transform = new Matrix4().translate(position.x, position.y, position.z);
 			return;
 		}
 
-		if (position.equals(moveTo)) {
+		if (position.equals(moveTo))
+		{
 			return;
 		}
 		
-		if (position.cpy().sub(moveTo).isZero(0.01f) || originalPos.dst(moveTo) > 1 || originalPos.dst(moveTo) < -1) {
+		if (position.cpy().sub(moveTo).isZero(0.01f) || originalPos.dst(position) > 1 || originalPos.dst(position) < -1)
+		{
 			position.x = moveTo.x;
 			position.y = moveTo.y;
 			position.z = moveTo.z;
 			moving = false;
 			
 			//Temporary Gravity
-			if(moveTo.y != originalPos.y + 1) {
+			if(moveTo.y != originalPos.y + 1)
+			{
 				Block block = blockList.blockAtPoint(new Vector3(position.x, position.y - 1, position.z));
-				if(block == null || block.getType() == Block.Type.Path || block.getType() == Block.Type.Goal) {
+				if(block == null || block.getType() == Block.Type.Path || block.getType() == Block.Type.Goal)
+				{
 					fall();
 				}
 			}
 			
-		} else {
+		}
+		else
+		{
 			position.x += movement.x * speed * Gdx.graphics.getDeltaTime();
 			position.y += movement.y * speed * Gdx.graphics.getDeltaTime();
 			position.z += movement.z * speed * Gdx.graphics.getDeltaTime();

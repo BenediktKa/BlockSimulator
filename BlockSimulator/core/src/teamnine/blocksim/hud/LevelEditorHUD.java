@@ -24,7 +24,8 @@ import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.configs.Reader;
 
-public class LevelEditorHUD implements Disposable {
+public class LevelEditorHUD implements Disposable
+{
 	
 	private BlockSimulator blockSimulator;
 	
@@ -75,7 +76,8 @@ public class LevelEditorHUD implements Disposable {
 	// Configuration Checker
 	//private ConfigurationChecker check;
 
-	public LevelEditorHUD(final BlockSimulator blockSimulator, final BlockList blockList) {
+	public LevelEditorHUD(final BlockSimulator blockSimulator, final BlockList blockList)
+	{
 		this.blockSimulator = blockSimulator;
 
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
@@ -105,26 +107,32 @@ public class LevelEditorHUD implements Disposable {
 		speedLabel = new Label("Speed: " + blockSimulator.blockList.getSpeed(), skin);
 
 		// Import Button Listener
-		importButton.addListener(new ClickListener() {
+		importButton.addListener(new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (isMenuMode()) {
+			public void clicked(InputEvent event, float x, float y)
+			{
+				if (isMenuMode())
+				{
 					fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
 					fileChooser.setDialogTitle("Open Start Robot Configuration");
 
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+					{
 						File selectedFile = fileChooser.getSelectedFile();
 						Reader reader = new Reader(selectedFile);
 						blockSimulator.blockList.createRobot(reader.getBlockData());
 					}
 					fileChooser.setDialogTitle("Open Target Configuration");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+					{
 						File selectedFile = fileChooser.getSelectedFile();
 						Reader reader = new Reader(selectedFile);
 						blockSimulator.blockList.createTarget(reader.getBlockData());
 					}
 					fileChooser.setDialogTitle("Open Obstacle Configuration");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+					{
 						File selectedFile = fileChooser.getSelectedFile();
 						Reader reader = new Reader(selectedFile);
 						blockSimulator.blockList.createObstacles(reader.getBlockData());
@@ -136,10 +144,13 @@ public class LevelEditorHUD implements Disposable {
 		});
 
 		// Export Button Listener
-		exportButton.addListener(new ClickListener() {
+		exportButton.addListener(new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (isMenuMode()) {
+			public void clicked(InputEvent event, float x, float y)
+			{
+				if (isMenuMode())
+				{
 					// check = new
 					// ConfigurationChecker(blockSimulator.blockList);
 
@@ -175,16 +186,18 @@ public class LevelEditorHUD implements Disposable {
 					 * JOptionPane.ERROR_MESSAGE); }
 					 */
 				}
-
 				super.clicked(event, x, y);
 			}
 		});
 
 		// Undo Button Listener
-		undoButton.addListener(new ClickListener() {
+		undoButton.addListener(new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (isMenuMode()) {
+			public void clicked(InputEvent event, float x, float y)
+			{
+				if (isMenuMode())
+				{
 					blockSimulator.blockList.undo();
 				}
 				super.clicked(event, x, y);
@@ -192,10 +205,13 @@ public class LevelEditorHUD implements Disposable {
 		});
 
 		// Redo Button Listener
-		redoButton.addListener(new ClickListener() {
+		redoButton.addListener(new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (isMenuMode()) {
+			public void clicked(InputEvent event, float x, float y)
+			{
+				if (isMenuMode())
+				{
 					blockSimulator.blockList.redo();
 				}
 				super.clicked(event, x, y);
@@ -203,16 +219,21 @@ public class LevelEditorHUD implements Disposable {
 		});
 
 		// Start Button Listener
-		startButton.addListener(new ClickListener() {
+		startButton.addListener(new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (blockSimulator.cameraController.getModeType() == FPSControl.Type.SimulationMode) {
+			public void clicked(InputEvent event, float x, float y)
+			{
+				if (blockSimulator.cameraController.getModeType() == FPSControl.Type.SimulationMode)
+				{
 					blockSimulator.cameraController.setModeType(FPSControl.Type.BuildMode);
 					startButton.setText("Start");
 					toggleSpeedSettings();
 					blockList.removeBlockType(Block.Type.Path);
 
-				} else {
+				}
+				else
+				{
 					blockSimulator.cameraController.setModeType(FPSControl.Type.SimulationMode);
 					startButton.setText("Stop");
 					toggleSpeedSettings();
@@ -225,43 +246,48 @@ public class LevelEditorHUD implements Disposable {
 		});
 
 		// Simulation Button Listener
-		simulationButton.addListener(new ClickListener() {
+		simulationButton.addListener(new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				if (isMenuMode()) {
+			public void clicked(InputEvent event, float x, float y)
+			{
+				if (isMenuMode())
+				{
 					fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
 					fileChooser.setDialogTitle("Load a simulation from file");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+					{
 						File selectedFile = fileChooser.getSelectedFile();
 						//Reader reader = new Reader(selectedFile);
 						// new simulationRunner(reader.getSimulationData(),
 						// blockSimulator);
 					}
 				}
-
 				super.clicked(event, x, y);
 			}
 
 		});
 		
 		// Speed Up Button Listener
-		speedUpButton.addListener(new ClickListener() {
+		speedUpButton.addListener(new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(InputEvent event, float x, float y)
+			{
 				blockSimulator.blockList.setSpeed(true);
 				super.clicked(event, x, y);
 			}
-
 		});
 		
 		// Slow Down Button Listener
-		slowDownButton.addListener(new ClickListener() {
+		slowDownButton.addListener(new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(InputEvent event, float x, float y)
+			{
 				blockSimulator.blockList.setSpeed(false);
 				super.clicked(event, x, y);
 			}
-
 		});		
 
 		// Add to Table
@@ -280,27 +306,34 @@ public class LevelEditorHUD implements Disposable {
 		blockSimulator.inputMultiplexer.addProcessor(stage);
 	}
 
-	public void render() {
+	public void render()
+	{
 		blockLabel.setText("Selected: " + blockSimulator.cameraController.getBlockType());
 		speedLabel.setText("Speed: " + blockSimulator.blockList.getSpeed());
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
 
-	public boolean isMenuMode() {
-		if (blockSimulator.cameraController.getModeType() == FPSControl.Type.MenuMode) {
+	public boolean isMenuMode()
+	{
+		if (blockSimulator.cameraController.getModeType() == FPSControl.Type.MenuMode)
+		{
 			return true;
 		}
 		return false;
 	}
 	
-	public void toggleSpeedSettings() {
-		if(displaySpeedButtons) {
+	public void toggleSpeedSettings()
+	{
+		if(displaySpeedButtons)
+		{
 			table.removeActor(speedUpButton);
 			table.removeActor(speedLabel);
 			table.removeActor(slowDownButton);
 			displaySpeedButtons = false;
-		} else {
+		}
+		else
+		{
 			table.add(slowDownButton).padRight(20);
 			table.add(speedLabel).padRight(20);
 			table.add(speedUpButton);
@@ -309,7 +342,8 @@ public class LevelEditorHUD implements Disposable {
 	}
 
 	@Override
-	public void dispose() {
+	public void dispose()
+	{
 		stage.dispose();
 	}
 

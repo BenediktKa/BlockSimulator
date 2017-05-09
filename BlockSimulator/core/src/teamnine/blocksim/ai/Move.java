@@ -46,7 +46,7 @@ public class Move {
 		{
 			System.out.println("block: "+newOrderToMove.get(i)+"x; "+newOrderToMove.get(i).getPosition().x+" z: "+newOrderToMove.get(i).getPosition().z+" height: "+newOrderToMove.get(i).getPosition().y+" dis "+newOrderToMove.get(i).getDistanceToPath()+" target: "+v);
 		}
-			System.out.println();
+		System.out.println();
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
 			moving(newOrderToMove.get(i),v);
@@ -83,7 +83,6 @@ public class Move {
 		{
 			sorted.addAll(buckets.get(i).getBloks());
 		}
-		
 		return sorted;
 	}
 	//once the order has been made, the movements will go to try and place the block as close to the first step of 

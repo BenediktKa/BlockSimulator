@@ -7,7 +7,8 @@ import teamnine.blocksim.block.Block;
 /**
  * Class that saves information of removed/added block for the undo/redo stacks
  */
-public class Action {
+public class Action
+{
 
 	/** Block Position. */
 	private Vector3 position;
@@ -29,7 +30,8 @@ public class Action {
 	 * @param ID | The Block's ID
 	 * @param removed | Was Block removed?
 	 */
-	public Action(Vector3 position, Block.Type type, double ID, boolean removed) {
+	public Action(Vector3 position, Block.Type type, double ID, boolean removed)
+	{
 		this.position = position;
 		this.type = type;
 		this.ID = ID;
@@ -41,7 +43,8 @@ public class Action {
 	 *
 	 * @return The saved position
 	 */
-	public Vector3 getPosition() {
+	public Vector3 getPosition()
+	{
 		return position;
 	}
 
@@ -50,7 +53,8 @@ public class Action {
 	 *
 	 * @return The saved block type
 	 */
-	public Block.Type getBlockType() {
+	public Block.Type getBlockType()
+	{
 		return type;
 	}
 
@@ -59,7 +63,8 @@ public class Action {
 	 *
 	 * @return The saved block id
 	 */
-	public double getID() {
+	public double getID()
+	{
 		return ID;
 	}
 
@@ -68,7 +73,8 @@ public class Action {
 	 *
 	 * @return true, if Block was removed
 	 */
-	public boolean wasRemoved() {
+	public boolean wasRemoved() 
+	{
 		return removed;
 	}
 }

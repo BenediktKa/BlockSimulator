@@ -13,7 +13,8 @@ import teamnine.blocksim.BlockSimulator;
 import teamnine.blocksim.hud.Notification;
 import teamnine.blocksim.hud.Notification.Type;
 
-public class BlockList implements Disposable {
+public class BlockList implements Disposable
+{
 
 	// Block Simulator
 	BlockSimulator blockSimulator;
@@ -42,7 +43,8 @@ public class BlockList implements Disposable {
 	// Speed for Robot Blocks
 	private float speed = 5;
 
-	public BlockList(int gridSize, BlockSimulator blockSimulator) {
+	public BlockList(int gridSize, BlockSimulator blockSimulator)
+	{
 		this.gridSize = gridSize;
 		this.blockSimulator = blockSimulator;
 		createFloor();
@@ -51,7 +53,8 @@ public class BlockList implements Disposable {
 		preconfig();
 	}
 	
-	public void preconfig() {
+	public void preconfig()
+	{
 		//Robots
 		createBlock(new Vector3(0, 1, 10), Block.Type.Robot);
 		createBlock(new Vector3(1, 1, 10), Block.Type.Robot);
@@ -64,21 +67,27 @@ public class BlockList implements Disposable {
 		createBlock(new Vector3(12, 1, 13), Block.Type.Goal);
 	}
 
-	public int size() {
+	public int size()
+	{
 		return blockList.size();
 	}
 
-	public ArrayList<Block> getBlockList() {
+	public ArrayList<Block> getBlockList()
+	{
 		return blockList;
 	}
 	
-	public float getSpeed() {
+	public float getSpeed()
+	{
 		return speed;
 	}
 	
-	public void setSpeed(boolean increase) {
-		for(RobotBlock block : robotList) {
-			if(!increase && speed - 1 <= 0) {
+	public void setSpeed(boolean increase)
+	{
+		for(RobotBlock block : robotList)
+		{
+			if(!increase && speed - 1 <= 0)
+			{
 				speed = 1;
 				block.setSpeed(speed);
 				continue;
@@ -87,14 +96,22 @@ public class BlockList implements Disposable {
 		}
 	}
 
-	public ArrayList<Block> getBlockList(Block.Type type) {
-		if (type == Block.Type.Floor) {
+	public ArrayList<Block> getBlockList(Block.Type type)
+	{
+		if (type == Block.Type.Floor)
+		{
 			return floorList;
-		} else if (type == Block.Type.Goal) {
+		}
+		else if (type == Block.Type.Goal)
+		{
 			return goalList;
-		} else if (type == Block.Type.Obstacle) {
+		}
+		else if (type == Block.Type.Obstacle)
+		{
 			return obstacleList;
-		} else if (type == Block.Type.Path) {
+		}
+		else if (type == Block.Type.Path)
+		{
 			return pathList;
 		}
 		return null;
@@ -103,38 +120,55 @@ public class BlockList implements Disposable {
 	{
 		return gridSize;
 	}
-	public ArrayList<RobotBlock> getRobotBlockList() {
+	public ArrayList<RobotBlock> getRobotBlockList()
+	{
 		return robotList;
 	}
-	public ArrayList<Block> getObstacleList() {
+	
+	public ArrayList<Block> getObstacleList()
+	{
 		return obstacleList;
 	}
-	public ArrayList<Block> getTargetList() {
+	
+	public ArrayList<Block> getTargetList()
+	{
 		return goalList;
 	}
-	public ArrayList<Block> getPathList() {
+	
+	public ArrayList<Block> getPathList()
+	{
 		return pathList;
 	}
-	public Block getBlock(int i) {
+	
+	public Block getBlock(int i)
+	{
 		return blockList.get(i);
 	}
 
-	public void addBlock(Block block) {
-
+	public void addBlock(Block block)
+	{
 		// Add Adder Action To Queue
-		if (registerAction) {
+		if (registerAction)
+		{
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), false));
 			redoQueue.clear();
 		}
 
 		// Add Block to different List
-		if (block.getType() == Block.Type.Floor) {
+		if (block.getType() == Block.Type.Floor)
+		{
 			floorList.add(block);
-		} else if (block.getType() == Block.Type.Goal) {
+		}
+		else if (block.getType() == Block.Type.Goal)
+		{
 			goalList.add(block);
-		} else if (block.getType() == Block.Type.Obstacle) {
+		}
+		else if (block.getType() == Block.Type.Obstacle)
+		{
 			obstacleList.add(block);
-		} else if (block.getType() == Block.Type.Path) {
+		}
+		else if (block.getType() == Block.Type.Path)
+		{
 			pathList.add(block);
 		}
 
@@ -142,27 +176,34 @@ public class BlockList implements Disposable {
 		blockList.add(block);
 	}
 
-	public Block createBlock(Vector3 vector, Block.Type type) {
-		if (type == Block.Type.Robot) {
+	public Block createBlock(Vector3 vector, Block.Type type)
+	{
+		if (type == Block.Type.Robot)
+		{
 			RobotBlock robotBlock = new RobotBlock(vector, type, speed, this);
 			robotList.add(robotBlock);
 			addBlock((Block) robotBlock);
 			return robotBlock;
-		} else {
+		}
+		else
+		{
 			Block block = new Block(vector, type);
 			addBlock(block);
 			return block;
 		}
 	}
 
-	public Block createBlock(Vector3 vector, Block.Type type, double ID) {
+	public Block createBlock(Vector3 vector, Block.Type type, double ID)
+	{
 		if (type == Block.Type.Robot) {
 			RobotBlock robotBlock = new RobotBlock(vector, type, speed, this);
 			robotList.add(robotBlock);
 			addBlock((Block) robotBlock);
 			robotBlock.setID(ID);
 			return robotBlock;
-		} else {
+		}
+		else
+		{
 			Block block = new Block(vector, type);
 			addBlock(block);
 			block.setID(ID);
@@ -170,25 +211,33 @@ public class BlockList implements Disposable {
 		}
 	}
 
-	public void removeBlock(Block block) {
+	public void removeBlock(Block block)
+	{
 
 		// Add Removal Action To Queue
-		if (registerAction) {
+		if (registerAction)
+		{
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
 			redoQueue.clear();
 		}
 
 		// Add Block to different List
-		if (block.getType() == Block.Type.Floor) {
+		if (block.getType() == Block.Type.Floor)
+		{
 			floorList.remove(block);
-		} else if (block.getType() == Block.Type.Goal) {
+		}
+		else if (block.getType() == Block.Type.Goal)
+		{
 			goalList.remove(block);
-		} else if (block.getType() == Block.Type.Obstacle) {
+		}
+		else if (block.getType() == Block.Type.Obstacle)
+		{
 			obstacleList.remove(block);
 		}
 
 		// If it's a robot block
-		if (block.getType() == Block.Type.Robot) {
+		if (block.getType() == Block.Type.Robot)
+		{
 			robotList.remove(block);
 		}
 
@@ -196,27 +245,37 @@ public class BlockList implements Disposable {
 		blockList.remove(block);
 	}
 	
-	public void removeBlockType(Block.Type type) {
-		if (type == Block.Type.Floor) {
+	public void removeBlockType(Block.Type type)
+	{
+		if (type == Block.Type.Floor)
+		{
 			blockList.removeAll(floorList);
 			floorList.clear();
-		} else if (type == Block.Type.Goal) {
+		}
+		else if (type == Block.Type.Goal)
+		{
 			blockList.removeAll(goalList);
 			goalList.clear();
-		} else if (type == Block.Type.Obstacle) {
+		}
+		else if (type == Block.Type.Obstacle)
+		{
 			blockList.removeAll(obstacleList);
 			obstacleList.clear();
-		} else if (type == Block.Type.Path) {
+		}
+		else if (type == Block.Type.Path)
+		{
 			blockList.removeAll(pathList);
 			pathList.clear();
 		}
 	}
 
-	public void removeBlock(int i) {
+	public void removeBlock(int i)
+	{
 		Block block = blockList.get(i);
 
 		// Add Removal Action To Queue
-		if (registerAction) {
+		if (registerAction)
+		{
 			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
 			redoQueue.clear();
 		}
@@ -224,22 +283,28 @@ public class BlockList implements Disposable {
 		blockList.remove(block);
 
 		// If it's a robot block
-		if (block.getType() == Block.Type.Robot) {
+		if (block.getType() == Block.Type.Robot)
+		{
 			robotList.remove(block);
 		}
 	}
 
-	public Block blockAtPoint(Vector3 point) {
-		for (int i = 0; i < blockList.size(); i++) {
-			if (blockList.get(i).getPosition().cpy().sub(point).isZero()) {
+	public Block blockAtPoint(Vector3 point)
+	{
+		for (int i = 0; i < blockList.size(); i++)
+		{
+			if (blockList.get(i).getPosition().cpy().sub(point).isZero())
+			{
 				return blockList.get(i);
 			}
 		}
 		return null;
 	}
 
-	public void resizeFloor(int gridSize) {
-		if (gridSize <= 0) {
+	public void resizeFloor(int gridSize)
+	{
+		if (gridSize <= 0)
+		{
 			blockSimulator.gridSize = 0;
 			return;
 		}
@@ -248,7 +313,8 @@ public class BlockList implements Disposable {
 
 		ArrayList<Block> floorBlocks = new ArrayList<Block>();
 		for (Block block : blockList) {
-			if (block.getType() == Block.Type.Floor) {
+			if (block.getType() == Block.Type.Floor)
+			{
 				floorBlocks.add(block);
 			}
 		}
@@ -257,8 +323,10 @@ public class BlockList implements Disposable {
 	}
 
 	public void createFloor() {
-		for (int x = 0; x < gridSize; x++) {
-			for (int z = 0; z < gridSize; z++) {
+		for (int x = 0; x < gridSize; x++)
+		{
+			for (int z = 0; z < gridSize; z++)
+			{
 				registerAction = false;
 				createBlock(new Vector3(x, 0, z), Block.Type.Floor);
 			}
@@ -270,14 +338,17 @@ public class BlockList implements Disposable {
 	 * this
 	 */
 	// TODO: IMPLEMENT ID RECOGNITION
-	public void createRobot(String[][] data) {
+	public void createRobot(String[][] data)
+	{
 
-		for (int i = 0; i < data.length; i++) {
+		for (int i = 0; i < data.length; i++)
+		{
 			// System.out.println(Float.parseFloat(data[i][1])+";
 			// "+Float.parseFloat(data[i][3])+";
 			// "+Float.parseFloat(data[i][2]));
 
-			try {
+			try
+			{
 				double newID = Double.parseDouble(data[i][0]);
 				createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), // WATCH
 																											// OUT:
@@ -285,7 +356,9 @@ public class BlockList implements Disposable {
 																											// BY
 																											// 1!!!!!!!!!!!!!!!!!!!!!!!!!
 						Float.parseFloat(data[i][2])), Block.Type.Robot, newID);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e)
+			{
 				System.out.println("Exception");
 				createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), // WATCH
 																											// OUT:
@@ -301,10 +374,13 @@ public class BlockList implements Disposable {
 	 * Please take into account that Y and Z are interchanged in this method
 	 */
 	// TODO: IMPLEMENT ID RECOGNITION/leave it out properly
-	public void createTarget(String[][] data) {
+	public void createTarget(String[][] data)
+	{
 
-		for (int i = 0; i < data.length; i++) {
-			try {
+		for (int i = 0; i < data.length; i++)
+		{
+			try
+			{
 				double newID = Double.parseDouble(data[i][0]);
 				createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), // WATCH
 																											// OUT:
@@ -312,7 +388,9 @@ public class BlockList implements Disposable {
 																											// BY
 																											// 1!!!!!!!!!!!!!!!!!!!!!!!!!
 						Float.parseFloat(data[i][2])), Block.Type.Goal, newID);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e)
+			{
 				System.out.println("Exception");
 				createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), // WATCH
 																											// OUT:
@@ -329,31 +407,38 @@ public class BlockList implements Disposable {
 	 * Obstacles don't have ID's ?????
 	 */
 	// TODO: IMPLEMENT ID RECOGNITION FOR OBSTACLES
-	public void createObstacles(String[][] data) {
+	public void createObstacles(String[][] data)
+	{
 
-		for (int i = 0; i < data.length; i++) {
+		for (int i = 0; i < data.length; i++)
+		{
 			createBlock(new Vector3(Float.parseFloat(data[i][0]), (Float.parseFloat(data[i][2]) + 1),
 					Float.parseFloat(data[i][1])), Block.Type.Obstacle);
 		}
 	}
 
-	public void render(ModelBatch modelBatch, Environment environment) {
-		for (int i = 0; i < blockList.size(); i++) {
+	public void render(ModelBatch modelBatch, Environment environment)
+	{
+		for (int i = 0; i < blockList.size(); i++)
+		{
 			Block block = blockList.get(i);
 			block.moveModel();
 			modelBatch.render(blockList.get(i).getModelInstance(), environment);
 		}
 	}
 
-	public void setSelectorBlock(Block selectorBlock) {
+	public void setSelectorBlock(Block selectorBlock)
+	{
 		this.selectorBlock = selectorBlock;
 	}
 
-	public void editBoxByRayCast(Vector3 start_point, Vector3 direction, Block.Type type) {
+	public void editBoxByRayCast(Vector3 start_point, Vector3 direction, Block.Type type)
+	{
 		int last_point_x = 0;
 		int last_point_y = 0;
 		int last_point_z = 0;
-		for (int i = 1; i < gridSize * 2; i++) {
+		for (int i = 1; i < gridSize * 2; i++)
+		{
 			Vector3 tmp_start = new Vector3(start_point);
 			Vector3 tmp_direction = new Vector3(direction);
 			tmp_direction.nor();
@@ -362,16 +447,22 @@ public class BlockList implements Disposable {
 			int x = Math.round(line.x);
 			int y = Math.round(line.y);
 			int z = Math.round(line.z);
-			if (x > (gridSize - 1) || y > (gridSize - 1) || z > (gridSize - 1) || x < 0 || y < 0 || z < 0) {
+			if (x > (gridSize - 1) || y > (gridSize - 1) || z > (gridSize - 1) || x < 0 || y < 0 || z < 0)
+			{
 				break;
 			}
-			if (blockAtPoint(new Vector3(x, y, z)) != null) {
-				if (type == null) {
+			if (blockAtPoint(new Vector3(x, y, z)) != null)
+			{
+				if (type == null)
+				{
 					if (blockAtPoint(new Vector3(x, y, z)) != null
-							&& blockAtPoint(new Vector3(x, y, z)).getType() != Block.Type.Floor) {
+							&& blockAtPoint(new Vector3(x, y, z)).getType() != Block.Type.Floor)
+					{
 						removeBlock(blockAtPoint(new Vector3(x, y, z)));
 					}
-				} else {
+				}
+				else
+				{
 					createBlock(new Vector3(last_point_x, last_point_y, last_point_z), type);
 					selectorBlock.setPosition(new Vector3(last_point_x, last_point_y, last_point_z));
 				}
@@ -383,7 +474,8 @@ public class BlockList implements Disposable {
 		}
 	}
 
-	public void moveSelectorBlock(Vector3 start_point, Vector3 direction) {
+	public void moveSelectorBlock(Vector3 start_point, Vector3 direction)
+	{
 		int last_point_x = 0;
 		int last_point_y = 0;
 		int last_point_z = 0;
@@ -396,10 +488,12 @@ public class BlockList implements Disposable {
 			int x = Math.round(line.x);
 			int y = Math.round(line.y);
 			int z = Math.round(line.z);
-			if (x > (gridSize - 1) || y > (gridSize - 1) || z > (gridSize - 1) || x < 0 || y < 0 || z < 0) {
+			if (x > (gridSize - 1) || y > (gridSize - 1) || z > (gridSize - 1) || x < 0 || y < 0 || z < 0)
+			{
 				break;
 			}
-			if (blockAtPoint(new Vector3(x, y, z)) != null) {
+			if (blockAtPoint(new Vector3(x, y, z)) != null)
+			{
 				selectorBlock.setPosition(new Vector3(last_point_x, last_point_y, last_point_z));
 				break;
 			}
@@ -410,21 +504,27 @@ public class BlockList implements Disposable {
 	}
 
 	// for collision detection...
-	public boolean hittingBox(Vector3 point) {
+	public boolean hittingBox(Vector3 point)
+	{
 		point.scl(1 / gridSize);
 		int x = Math.round(point.x);
 		int y = Math.round(point.y);
 		int z = Math.round(point.z);
 
-		if (blockAtPoint(new Vector3(x, y, z)) != null) {
+		if (blockAtPoint(new Vector3(x, y, z)) != null)
+		{
 			return true;
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
 
-	public void undo() {
-		if (undoQueue.isEmpty()) {
+	public void undo()
+	{
+		if (undoQueue.isEmpty())
+		{
 			blockSimulator.notification.setNotification("Can't Undo", Notification.Type.Error, 1);
 			return;
 		}
@@ -432,19 +532,24 @@ public class BlockList implements Disposable {
 		Action undoAction = undoQueue.pop();
 
 		// If it was removal Action
-		if (undoAction.wasRemoved()) {
+		if (undoAction.wasRemoved())
+		{
 			registerAction = false;
 			createBlock(undoAction.getPosition(), undoAction.getBlockType(), undoAction.getID());
 			redoQueue.push(new Action(undoAction.getPosition(), undoAction.getBlockType(), undoAction.getID(), false));
-		} else {
+		}
+		else
+		{
 			registerAction = false;
 			removeBlock(blockAtPoint(undoAction.getPosition()));
 			redoQueue.push(new Action(undoAction.getPosition(), undoAction.getBlockType(), undoAction.getID(), true));
 		}
 	}
 
-	public void redo() {
-		if (redoQueue.isEmpty()) {
+	public void redo()
+	{
+		if (redoQueue.isEmpty())
+		{
 			blockSimulator.notification.setNotification("Can't Redo", Notification.Type.Error, 1);
 			return;
 		}
@@ -452,17 +557,22 @@ public class BlockList implements Disposable {
 		Action redoAction = redoQueue.pop();
 
 		// If it was removal Action
-		if (redoAction.wasRemoved()) {
+		if (redoAction.wasRemoved())
+		{
 			createBlock(redoAction.getPosition(), redoAction.getBlockType(), redoAction.getID());
-		} else {
+		}
+		else
+		{
 			removeBlock(blockAtPoint(redoAction.getPosition()));
 		}
 	}
 
 	@Override
-	public void dispose() {
+	public void dispose()
+	{
 		// Dispose all Blocks
-		for (int i = 0; i < blockList.size(); i++) {
+		for (int i = 0; i < blockList.size(); i++)
+		{
 			blockList.get(i).dispose();
 		}
 	}

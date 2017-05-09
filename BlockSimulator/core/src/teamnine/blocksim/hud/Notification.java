@@ -9,7 +9,8 @@ import com.badlogic.gdx.utils.Disposable;
 /**
  * Class that allows to display Notification messages on screen
  */
-public class Notification implements Disposable {
+public class Notification implements Disposable
+{
 
 	/** Notification BitmapFont */
 	private BitmapFont font;
@@ -29,14 +30,16 @@ public class Notification implements Disposable {
 	/**
 	 * Notification Type List
 	 */
-	public enum Type {
+	public enum Type
+	{
 		ModeChange, Error;
 	}
 
 	/**
 	 * Instantiates a new notification.
 	 */
-	public Notification() {
+	public Notification()
+	{
 		font = new BitmapFont();
 		layout = new GlyphLayout();
 	}
@@ -46,23 +49,31 @@ public class Notification implements Disposable {
 	 *
 	 * @param spriteBatch
 	 */
-	public void render(SpriteBatch spriteBatch) {
+	public void render(SpriteBatch spriteBatch)
+	{
 		//Update Alpha
-		if (alpha <= 0) {
+		if (alpha <= 0)
+		{
 			return;
-		} else {
+		}
+		else
+		{
 			alpha -= 0.015;
 		}
 		
 		//If there is no Text
-		if (text == null) {
+		if (text == null)
+		{
 			return;
 		}
 		
 		//Change Text Color based on Type
-		if (type == Type.Error) {
+		if (type == Type.Error)
+		{
 			font.setColor(192f / 255f, 57f / 255f, 43f / 255f, alpha);
-		} else if (type == Type.ModeChange) {
+		}
+		else if (type == Type.ModeChange)
+		{
 			font.setColor(236f / 255f, 240f / 255f, 241f / 255f, alpha);
 		}
 		
@@ -76,7 +87,8 @@ public class Notification implements Disposable {
 	 * @param text to display
 	 * @param type of notification
 	 */
-	public void setNotification(String text, Type type, float scale) {
+	public void setNotification(String text, Type type, float scale)
+	{
 		this.text = text;
 		this.type = type;
 		
@@ -90,7 +102,8 @@ public class Notification implements Disposable {
 	 * Dispose of the font
 	 */
 	@Override
-	public void dispose() {
+	public void dispose()
+	{
 		font.dispose();
 	}
 }
