@@ -333,21 +333,15 @@ public class Move {
 					
 				}
 			}
-			boolean floating =true;
-			if(!safe)
-			{
-				for(int p=0;p<obstacles.size();p++)
-				{
-					if(b.getPosition().x==obstacles.get(p).getPosition().x&&b.getPosition().z==obstacles.get(p).getPosition().z&&b.getPosition().y-1==obstacles.get(p).getPosition().y)
-					{
-						floating =false;
-						break;
-					}
-				}
-			}
+			
 			/////////////////////////////////////////////////////////////
+<<<<<<< HEAD
 			if(none && floating){
 			for(int i = 0; i < robots.size(); i++)
+=======
+			if(none){
+			for(int i=0;i<robots.size();i++)
+>>>>>>> parent of 216cb00... i think its done now :)
 			{
 				if(robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
 				{
