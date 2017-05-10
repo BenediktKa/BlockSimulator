@@ -39,7 +39,7 @@ public class Reconfiguration
 		{
 			System.out.println("Reconfiguration Started");
 		}
-		start();
+		//start();
 		check();
 		
 	}
@@ -85,6 +85,11 @@ public class Reconfiguration
 		
 		sortedTargets = new ArrayList[floorLevels+nonFloorLevels];
 		
+		for(int i=0; i<sortedTargets.length; i++)
+		{
+			sortedTargets[i] = new ArrayList<Block>();
+		}
+		
 		if(DEBUG)
 		{
 			System.out.println("//RECONFIG: "+"floor: "+floorLevels);
@@ -114,9 +119,9 @@ public class Reconfiguration
 				int bucket = (int) (Math.abs(otherOrigin.x-target.get(i).getPosition().x) + Math.abs(otherOrigin.y-target.get(i).getPosition().y) + Math.abs(otherOrigin.z-target.get(i).getPosition().z));
 				if(DEBUG)
 				{
-					System.out.println("//RECONFIG: "+target.get(i).getID()+": "+bucket);
+					System.out.println("//RECONFIG: "+target.get(i).getID()+": "+(bucket+floorLevels));
 				}
-				sortedTargets[bucket+nonFloorLevels].add(target.get(i));
+				sortedTargets[bucket+floorLevels].add(target.get(i));
 			}
 		}
 	}
