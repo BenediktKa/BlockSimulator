@@ -1,5 +1,7 @@
 package teamnine.blocksim.block;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -12,6 +14,9 @@ public class RobotBlock extends Block
 	private boolean moving = false;
 	private BlockList blockList;
 	private Block target;
+	private boolean visited=false;
+	private int counter =0;
+	private ArrayList<RobotBlock> connections = new ArrayList<RobotBlock>();
 
 	public RobotBlock(Vector3 position, Type type, float speed, BlockList blockList)
 	{
@@ -19,6 +24,35 @@ public class RobotBlock extends Block
 		
 		this.speed = speed;
 		this.blockList = blockList;
+	}
+	public void setCounter(int c)
+	{
+		counter=c;
+	}
+	public int getCounter()
+	{
+		return counter;
+	}
+	public void addConnection(RobotBlock b)
+	{
+		connections.add(b);
+	}
+	public ArrayList<RobotBlock> getConnections()
+	{
+		return connections;
+	}
+	public void clearConnections()
+	{
+		connections=new ArrayList<RobotBlock>();
+	}
+	
+	public void setVisited(boolean v)
+	{
+		visited=v;
+	}
+	public boolean getVisited()
+	{
+		return visited;
 	}
 	
 	public boolean getMoving()
