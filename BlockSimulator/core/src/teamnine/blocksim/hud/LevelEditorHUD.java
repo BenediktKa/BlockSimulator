@@ -27,8 +27,6 @@ import teamnine.blocksim.configs.Reader;
 public class LevelEditorHUD implements Disposable {
 	
 	private BlockSimulator blockSimulator;
-	
-	private boolean displaySpeedButtons = false;
 
 	// Stage
 	private Stage stage;

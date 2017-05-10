@@ -11,14 +11,12 @@ public class BrainAI
 	private ArrayList<Block> obstacles;
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> target;
-	private int gridSize;
 
 	public BrainAI(BlockList blockList)
 	{
 		this.obstacles=blockList.getObstacleList();
 		this.robots=blockList.getRobotBlockList();
 		this.target=blockList.getTargetList();
-		this.gridSize=blockList.getGridSize();
 		//Block maxTarget=findFurthestTarget();
 		final Block minTarget=findClosestTarget();
 		RobotBlock maxRobot=findClosestRobot(minTarget);
