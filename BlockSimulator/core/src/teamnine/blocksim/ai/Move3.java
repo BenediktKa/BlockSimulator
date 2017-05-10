@@ -33,77 +33,31 @@ public class Move3
 	}
 	public void decideMove(Vector3 v)
 	{	
-		ArrayList<RobotBlock> order = new ArrayList<RobotBlock>();
+		
+		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
+		float targetX=v.x;
+		
+		float targetZ=v.z;
+		//finds distance from the block to the target assigns the value to the block 
+		
 		for(int i=0;i<robots.size();i++)
 		{
-			float distanceToPath=Math.abs(robots.get(i).getPosition().x-v.x)+Math.abs(robots.get(i).getPosition().z-v.z)+robots.get(i).getPosition().y;
+			float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y;
 			robots.get(i).setDistanceToPath(distanceToPath);
-			order.add(robots.get(i));
+			orderToMove.add(robots.get(i));
 		}
-		/*RobotBlock end = new RobotBlock(v,null,0,null);
-		robots.add(end);
-		for(int i=0;i<robots.size();i++)
+		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
+		for(int i=0;i<newOrderToMove.size();i++)
 		{
-			for(int j=0;j<robots.size();j++)
-			{
-				if(i!=j){
-					if(robots.get(i).getPosition().x==robots.get(j).getPosition().x&&robots.get(i).getPosition().z==robots.get(j).getPosition().z&&robots.get(i).getPosition().y-1==robots.get(j).getPosition().y)
-					{
-						robots.get(i).addConnection(robots.get(j));
-						robots.get(j).addConnection(robots.get(i));
-					}
-					else if(robots.get(i).getPosition().x==robots.get(j).getPosition().x&&robots.get(i).getPosition().z==robots.get(j).getPosition().z&&robots.get(i).getPosition().y+1==robots.get(j).getPosition().y)
-					{
-						robots.get(i).addConnection(robots.get(j));
-						robots.get(j).addConnection(robots.get(i));
-					}
-					else if(robots.get(i).getPosition().x+1==robots.get(j).getPosition().x&&robots.get(i).getPosition().z==robots.get(j).getPosition().z&&robots.get(i).getPosition().y==robots.get(j).getPosition().y)
-					{
-						robots.get(i).addConnection(robots.get(j));
-						robots.get(j).addConnection(robots.get(i));
-					}
-					else if(robots.get(i).getPosition().x-1==robots.get(j).getPosition().x&&robots.get(i).getPosition().z==robots.get(j).getPosition().z&&robots.get(i).getPosition().y==robots.get(j).getPosition().y)
-					{
-						robots.get(i).addConnection(robots.get(j));
-						robots.get(j).addConnection(robots.get(i));
-					}
-					else if(robots.get(i).getPosition().x==robots.get(j).getPosition().x&&robots.get(i).getPosition().z+1==robots.get(j).getPosition().z&&robots.get(i).getPosition().y==robots.get(j).getPosition().y)
-					{
-						robots.get(i).addConnection(robots.get(j));
-						robots.get(j).addConnection(robots.get(i));
-					}
-					else if(robots.get(i).getPosition().x==robots.get(j).getPosition().x&&robots.get(i).getPosition().z-1==robots.get(j).getPosition().z&&robots.get(i).getPosition().y==robots.get(j).getPosition().y)
-					{
-						robots.get(i).addConnection(robots.get(j));
-						robots.get(j).addConnection(robots.get(i));
-					}
-					}
-			}
+			System.out.println("block: "+newOrderToMove.get(i)+"x; "+newOrderToMove.get(i).getPosition().x+" z: "+newOrderToMove.get(i).getPosition().z+" height: "+newOrderToMove.get(i).getPosition().y+" dis "+newOrderToMove.get(i).getDistanceToPath()+" target: "+v);
 		}
-		System.out.println("linkedList is created");
+			System.out.println();
+		for(int i=0;i<newOrderToMove.size();i++)
+		{
+			moving(newOrderToMove.get(i),v);
+		}
 		
-		for(int i=0;i<robots.size();i++)
-		{
-			setDistances(robots.get(i),end);
-			for(int j=0;j<robots.size();j++)
-			{
-				robots.get(j).setVisited(false);
-				robots.get(j).setCounter(0);
-			}
-		}
-		robots.remove(robots.size()-1);
-		*/
 		
-		ArrayList<RobotBlock> newOrder=order(order);
-		for(int i=0;i<newOrder.size();i++)
-		{
-			System.out.println("poslolz "+newOrder.get(i).getPosition()+" dis "+newOrder.get(i).getDistanceToPath());
-		}
-		for(int k=0;k<newOrder.size();k++)
-		{
-			moving(newOrder.get(k),v);
-		}
-	
 	}
 	public void setDistances(RobotBlock b, RobotBlock end)
 	{
@@ -147,7 +101,6 @@ public class Move3
 	{	
 		ArrayList<RobotBlock> sorted = new ArrayList<RobotBlock>();
 		float maxDistance=0;
-		
 		for(int i=0; i<otm.size();i++)
 		{
 			if(otm.get(i).getDistanceToPath()>maxDistance)
@@ -155,7 +108,6 @@ public class Move3
 				maxDistance=otm.get(i).getDistanceToPath();
 			}
 		}
-		System.out.println("num of buckets "+maxDistance);
 		ArrayList<Bucket> buckets = new ArrayList<Bucket>();
 		buckets.add(new Bucket());
 		for(int i=0;i<maxDistance;i++)
@@ -173,14 +125,12 @@ public class Move3
 		{
 			sorted.addAll(buckets.get(i).getBloks());
 		}
-		for(int i=0;i<sorted.size();i++)
-		{
-			System.out.println("pos "+sorted.get(i).getPosition()+" dis "+sorted.get(i).getDistanceToPath());
-		}
+		
 		return sorted;
 	}
 	public void moving(RobotBlock b, Vector3 v)
 	{
+		System.out.println("Moving");
 		boolean targetReached=false;
 	
 		while(!targetReached)
@@ -229,7 +179,7 @@ public class Move3
 					}
 				}
 			}
-			
+			System.out.println("size "+possibleMovements.size());
 			for(int i = 0; i < floor.size(); i++)
 			{
 				if(floor.get(i).getPosition().x==b.getPosition().x+1&&floor.get(i).getPosition().z==b.getPosition().z)
@@ -249,11 +199,18 @@ public class Move3
 						possibleMovements.add(new Vector3(floor.get(i).getPosition().x,b.getPosition().y,floor.get(i).getPosition().z));
 				}
 			}
+			System.out.println("size2 "+possibleMovements.size());
+			for(int i=0;i<possibleMovements.size();i++)
+			{
+				System.out.print(possibleMovements.get(i)+" ");
+			}
+			System.out.print(b.getPosition()+" ");
+			System.out.println();
 			removeRobots(possibleMovements);
 			removeObstacles(possibleMovements);
 			removeImpossibleMovements(possibleMovements,b);
 			removeOrPos(possibleMovements,b,v);
-			
+			System.out.println("size checked "+possibleMovements.size());
 			for(int i=0; i<possibleMovements.size();i++)
 			System.out.print("pms "+possibleMovements.get(i)+"  ");
 			System.out.println();
@@ -385,13 +342,21 @@ public class Move3
 			if(possibleMovements.get(i).equals(b.getOriginalPos()))
 			{
 				toRemove.add(possibleMovements.get(i));
+				System.out.println("fail1");
 			}
-			else if(/*possibleMovements.size()>1&&*/b.getPosition().dst(v) <= possibleMovements.get(i).dst(v))
+			else if(/*possibleMovements.size()>1&&*/b.getPosition().dst(v) < possibleMovements.get(i).dst(v))
 			{
 				//System.out.println(possibleMovements.get(i));
+				System.out.println("fail2");
 				toRemove.add(possibleMovements.get(i));
 			}
 		}
+		System.out.println("teoremove1 "+toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.print(toRemove.get(i)+" ");
+		}
+		System.out.println();
 		possibleMovements.removeAll(toRemove);
 	}
 	public void removeRobots(ArrayList<Vector3> pm)
@@ -408,6 +373,12 @@ public class Move3
 				
 			}
 		}
+		System.out.println("teoremove2 "+toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.print(toRemove.get(i)+" ");
+		}
+		System.out.println();
 		pm.removeAll(toRemove);
 	}
 	
@@ -424,6 +395,12 @@ public class Move3
 				}
 			}
 		}
+		System.out.println("teoremove3 "+toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.print(toRemove.get(i)+" ");
+		}
+		System.out.println();
 		pm.removeAll(toRemove);
 	}
 	public void removeImpossibleMovements(ArrayList<Vector3> pm,RobotBlock b)
@@ -610,6 +587,12 @@ public class Move3
 			}
 			
 		}
+		System.out.println("teoremove5 "+toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.print(toRemove.get(i)+" ");
+		}
+		System.out.println();
 		pm.removeAll(toRemove);
 		}
 	}
