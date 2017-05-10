@@ -1,6 +1,3 @@
-//to do:
-//prioritize blocks who have the highest height
-//add safe to everything
 package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
@@ -12,18 +9,21 @@ import com.badlogic.gdx.math.Vector3;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
 
-public class Move {
+public class Move3 
+{
 	private ArrayList<Vector3> path;
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> obstacles;
-	private int pauseTime;
+	private ArrayList<Block> floor;
+
 	
-	public Move(ArrayList<Vector3> path, ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, Block mt)
+	public Move3(ArrayList<Vector3> path, ArrayList<RobotBlock> robots, ArrayList<Block> obstacles,ArrayList<Block> floor, Block mt)
 	{
 		this.obstacles=obstacles;
 		this.path=path;
 		this.robots= new ArrayList<RobotBlock>(robots);
-		pauseTime=350*robots.size();
+		this.floor=floor;
+	
 		for(int i=path.size()-1;i>0;i--)
 			decideMove(this.path.get(i));
 		
@@ -31,7 +31,6 @@ public class Move {
 		
 		Thread.currentThread().interrupt();
 	}
-	//does all the prep work with finding and assigning distances
 	public void decideMove(Vector3 v)
 	{	
 		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
@@ -121,8 +120,6 @@ public class Move {
 			//newOrderToMove.remove(0);
 			//orderToMove=newOrderToMove;
 		}
-	
-	//orders the block based on their distance to the target using bucket sort. largest distance first.
 	public ArrayList<RobotBlock> order(ArrayList<RobotBlock> otm)
 	{	
 		ArrayList<RobotBlock> sorted = new ArrayList<RobotBlock>();
@@ -154,15 +151,12 @@ public class Move {
 		
 		return sorted;
 	}
-	//once the order has been made, the movements will go to try and place the block as close to the first step of 
-	//the path as possible all the way to the target
 	public void moving(RobotBlock b, Vector3 v)
 	{
 		
 		//System.out.println("moving startblock: "+b+" b.vector: "+b.getPosition()+" "+" t.vector: "+v);
 		
 		boolean targetReached=false;
-		
 		//runs until target has been reached or no further movements are possible
 		while(!targetReached)
 		{
@@ -177,176 +171,10 @@ public class Move {
 					e.printStackTrace();
 				}
 			}
-	
-			
-			
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
-			boolean safe =false;
-			boolean none=true;
-
-			//checks which movements are possible
 			
-			for(int k=0;k<robots.size();k++)
-			{
-				
-				if(b.getPosition().z==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y+1&&b.getPosition().x==robots.get(k).getPosition().x)
-				{
-					safe=false;
-					break;
-				}
-		
-				if(b.getPosition().x+1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z||b.getPosition().x-1==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z
-				  ||b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z+1||b.getPosition().x==robots.get(k).getPosition().x&&robots.get(k).getPosition().y==b.getPosition().y&&robots.get(k).getPosition().z==b.getPosition().z-1
-				  ||b.getPosition().z==robots.get(k).getPosition().z&&robots.get(k).getPosition().y==b.getPosition().y-1&&b.getPosition().x==robots.get(k).getPosition().x)
-				{
-					safe= true;
-				}
-				
-				
-			}
-			System.out.println("lol"+" safe "+safe);
-			if(safe)
-			{
-				if(v.x==b.getPosition().x+1&&v.z==b.getPosition().z)
-				{
-					boolean right=true;
-					for(int l =0;l<robots.size();l++)
-					{
-						//System.out.println(robots.get(l).getPosition()+" ,  "+b.getPosition());
-						if(b.getPosition().x+1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
-						{	System.out.println("failed");
-							right=false;
-						}
-					}
-					if(right)
-					{
-						for(int l =0;l<obstacles.size();l++)
-						{
-							if(b.getPosition().x+1==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z==obstacles.get(l).getPosition().z)
-							{System.out.println("failed");
-								right=false;
-							}
-						}
-					}
-					if(right)
-					{
-						System.out.println("right"+" BLOCK: "+b);
-						
-						b.moveRight();
-						none=false;
-						//b.setPosition(b.getPosition().x+1,b.getPosition().y,b.getPosition().z);
-						break;
-					}
-					
-					
-				}
-				if(v.x==b.getPosition().x-1&&v.z==b.getPosition().z)
-				{	
-					boolean left=true;
-					for(int l =0;l<robots.size();l++)
-					{
-						if(b.getPosition().x-1==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z==robots.get(l).getPosition().z)
-						{System.out.println("failed");
-							left=false;
-						}
-					}
-					if(left)
-					{
-						for(int l =0;l<obstacles.size();l++)
-						{
-							if(b.getPosition().x-1==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z==obstacles.get(l).getPosition().z)
-							{System.out.println("failed");
-								left=false;
-							}
-						}
-					}
-					if(left)
-					{
-						System.out.println("left"+" BLOCK: "+b);
-						
-						b.moveLeft();
-						none=false;
-						//b.setPosition(b.getPosition().x-1,b.getPosition().y,b.getPosition().z);
-						break;
-					}
-					
-				}
-				if(v.z==b.getPosition().z+1&&v.x==b.getPosition().x)
-				{
-					boolean forw=true;
-					for(int l =0;l<robots.size();l++)
-					{
-						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z+1==robots.get(l).getPosition().z)
-						{System.out.println("failed");
-							forw=false;
-						}
-					}
-					if(forw)
-					{
-						for(int l =0;l<obstacles.size();l++)
-						{
-							if(b.getPosition().x==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z+1==obstacles.get(l).getPosition().z)
-							{System.out.println("failed");
-								forw=false;
-							}
-						}
-					}
-					if(forw)
-					{
-						System.out.println("forward"+" BLOCK: "+b);
-						
-						b.moveForward();
-						none=false;
-						//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z+1);
-						break;
-					}
-				}
-				if(v.z==b.getPosition().z-1&&v.x==b.getPosition().x)
-				{
-					boolean back=true;
-					for(int l =0;l<robots.size();l++)
-					{
-						if(b.getPosition().x==robots.get(l).getPosition().x&&b.getPosition().y==robots.get(l).getPosition().y&&b.getPosition().z-1==robots.get(l).getPosition().z)
-						{System.out.println("failed");
-							back=false;
-						}
-					}
-					if(back)
-					{
-						for(int l =0;l<obstacles.size();l++)
-						{
-							if(b.getPosition().x==obstacles.get(l).getPosition().x&&b.getPosition().y==obstacles.get(l).getPosition().y&&b.getPosition().z-1==obstacles.get(l).getPosition().z)
-							{System.out.println("failed");
-								back=false;
-							}
-						}
-					}
-					if(back)
-					{
-						System.out.println("back"+" BLOCK: "+b);
-						
-						b.moveBackwards();
-						none=false;
-						//b.setPosition(b.getPosition().x,b.getPosition().y,b.getPosition().z-1);
-						break;
-					}
-					
-				}
-			}
-			boolean floating =true;
-			if(!safe)
-			{
-				for(int p=0;p<obstacles.size();p++)
-				{
-					if(b.getPosition().x==obstacles.get(p).getPosition().x&&b.getPosition().z==obstacles.get(p).getPosition().z&&b.getPosition().y-1==obstacles.get(p).getPosition().y)
-					{
-						floating =false;
-						break;
-					}
-				}
-			}
 			/////////////////////////////////////////////////////////////
-			if(none && floating){
+		//ArrayList<Vector3> possibleMovements=new ArrayList<Vector3>();
 			for(int i = 0; i < robots.size(); i++)
 			{
 				if(robots.get(i).getPosition().x==b.getPosition().x+1&&robots.get(i).getPosition().z==b.getPosition().z)
@@ -378,52 +206,70 @@ public class Move {
 					}
 				}
 			}
+			
+			for(int i = 0; i < floor.size(); i++)
+			{
+				if(floor.get(i).getPosition().x==b.getPosition().x+1&&floor.get(i).getPosition().z==b.getPosition().z)
+				{
+						possibleMovements.add(new Vector3(floor.get(i).getPosition().x,b.getPosition().y,floor.get(i).getPosition().z));			
+				}
+				if(floor.get(i).getPosition().x==b.getPosition().x&&floor.get(i).getPosition().z==b.getPosition().z+1)
+				{
+						possibleMovements.add(new Vector3(floor.get(i).getPosition().x,b.getPosition().y,floor.get(i).getPosition().z));
+				}
+				if(floor.get(i).getPosition().x==b.getPosition().x-1&&floor.get(i).getPosition().z==b.getPosition().z)
+				{
+						possibleMovements.add(new Vector3(floor.get(i).getPosition().x,b.getPosition().y,floor.get(i).getPosition().z));
+				}
+				if(floor.get(i).getPosition().x==b.getPosition().x&&floor.get(i).getPosition().z==b.getPosition().z-1)
+				{
+						possibleMovements.add(new Vector3(floor.get(i).getPosition().x,b.getPosition().y,floor.get(i).getPosition().z));
+				}
+			}
 			removeRobots(possibleMovements);
 			removeObstacles(possibleMovements);
+			removeImpossibleMovements(possibleMovements,b);
 			removeOrPos(possibleMovements,b,v);
+			//removeOrPos(possibleMovements,b,v);
 			for(int i=0; i<possibleMovements.size();i++)
 			System.out.println("pms "+possibleMovements.get(i));
 				
 			if(b.getPosition().x==v.x&&b.getPosition().z==v.z)
 			{
-			//	System.out.println("yaaaay");
 				break;
 			}
 			if(possibleMovements.size()==0)
 			{
 				break;
 			}
-			
 			else
 			{
-				Vector3 bestMovement=null;
-				float bestDistance=-1;
-				boolean checkAgain=true;
-				while(checkAgain)
+				Vector3 bestMovement = null;
+				int bestDistance=-1;
+				if(possibleMovements.size()!=0)
 				{
-					checkAgain=false;
+					if(possibleMovements.size()==1)
+					{
+						bestMovement= possibleMovements.get(0);
+					}
 					for(int i=0;i<possibleMovements.size();i++)
 					{
 						if(bestDistance==-1)
 						{
 							bestMovement=possibleMovements.get(i);
-							bestDistance=(Math.abs(possibleMovements.get(i).x-v.x)+Math.abs(possibleMovements.get(i).z-v.z)+possibleMovements.get(i).y);
-							checkAgain=true;
+							bestDistance=(int) (Math.abs(possibleMovements.get(i).x-v.x)+Math.abs(possibleMovements.get(i).z-v.z)+possibleMovements.get(i).y);
 						}
 						else
 						{
-							if(possibleMovements.size()>1&&i<possibleMovements.size()-1)
+							if(bestDistance>((int) (Math.abs(possibleMovements.get(i).x-v.x)+Math.abs(possibleMovements.get(i).z-v.z)+possibleMovements.get(i).y)))
 							{
-								if(possibleMovements.get(i).dst(v)<bestDistance)
-								{
-									bestMovement=possibleMovements.get(i);
-									bestDistance=Math.abs(possibleMovements.get(i).x-v.x)+Math.abs(possibleMovements.get(i).z-v.z)+possibleMovements.get(i).y;
-									checkAgain=false;
-								}
+								bestMovement=possibleMovements.get(i);
+								bestDistance=(int) (Math.abs(possibleMovements.get(i).x-v.x)+Math.abs(possibleMovements.get(i).z-v.z)+possibleMovements.get(i).y);
 							}
 						}
 					}
 				}
+				System.out.println("bm "+bestMovement+" current "+b.getPosition()+" size "+possibleMovements.size() );
 				/*boolean changed=false;
 				while(!changed)
 				{
@@ -466,6 +312,17 @@ public class Move {
 					System.out.println("climb"+" BLOCK: "+b);
 					//b.setPosition(b.getPosition().x,b.getPosition().y+1,b.getPosition().z);
 					b.climb();
+					while(b.getMoving())
+					{
+						try 
+						{
+							Thread.sleep(250);
+						}
+						catch (InterruptedException e)
+						{
+							e.printStackTrace();
+						}
+					}
 					}
 					else
 					{
@@ -473,7 +330,7 @@ public class Move {
 					}
 					
 				}
-				else if(bestMovement.x<b.getPosition().x)
+				if(bestMovement.x<b.getPosition().x)
 				{
 					
 					System.out.println("move left"+" BLOCK: "+b);
@@ -504,11 +361,10 @@ public class Move {
 			
 			}
 			}
+		
 			
-			none=true;
 			
-			
-		}
+		
 		while(b.getMoving())
 		{
 			try 
@@ -522,7 +378,23 @@ public class Move {
 		}
 		System.out.println("next block");
 	}
-	
+	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b, Vector3 v)
+	{
+		ArrayList<Vector3> toRemove = new ArrayList<Vector3>();
+		for(int i = 0; i < possibleMovements.size(); i++)
+		{
+			if(possibleMovements.get(i).equals(b.getOriginalPos()))
+			{
+				toRemove.add(possibleMovements.get(i));
+			}
+			else if(/*possibleMovements.size()>1&&*/b.getPosition().dst(v) <= possibleMovements.get(i).dst(v))
+			{
+				System.out.println(possibleMovements.get(i));
+				toRemove.add(possibleMovements.get(i));
+			}
+		}
+		possibleMovements.removeAll(toRemove);
+	}
 	public void removeRobots(ArrayList<Vector3> pm)
 	{
 		ArrayList<Vector3> toRemove = new ArrayList<Vector3>();
@@ -555,67 +427,178 @@ public class Move {
 		}
 		pm.removeAll(toRemove);
 	}
-	
-	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b, Vector3 v)
+	public void removeImpossibleMovements(ArrayList<Vector3> pm,RobotBlock b)
 	{
 		ArrayList<Vector3> toRemove = new ArrayList<Vector3>();
-		for(int i = 0; i < possibleMovements.size(); i++)
+		for(int i=0;i<pm.size();i++)
 		{
-			if(possibleMovements.get(i).equals(b.getOriginalPos()))
+			if(pm.get(i).x<b.getPosition().x)
 			{
-				toRemove.add(possibleMovements.get(i));
-			}
-			else if(possibleMovements.size()>1&&b.getPosition().dst(v) <= possibleMovements.get(i).dst(v))
-			{
-				System.out.println(possibleMovements.get(i));
-				toRemove.add(possibleMovements.get(i));
-			}
-		}
-		possibleMovements.removeAll(toRemove);
-	}
-	public void computeDistance(RobotBlock b, RobotBlock end)
-	{
-		if(b.getPosition().equals(end.getPosition()))
-		{
-			b.setDistanceToPath(0);
-		}
-		else
-		{
-			Queue<RobotBlock> q=new LinkedList<RobotBlock>();
-			q.add(b);
-			while(q.peek()!=null)
-			{
-				RobotBlock w= q.poll();
-	
-				if(w.getVisited()==false)
+				boolean remove=true;
+				for(int j=0;j<robots.size();j++)
 				{
-					w.setVisited(true);
-					ArrayList<RobotBlock> connections= w.getConnections();
-					
-					for(int i=0;i<connections.size();i++)
+					if(robots.get(j).getPosition().x==b.getPosition().x-1&&robots.get(j).getPosition().z==b.getPosition().z&&robots.get(j).getPosition().y==b.getPosition().y)
 					{
-						if(connections.get(i).getCounter()>(w.getCounter()+1)||connections.get(i).getCounter()==0)
-							connections.get(i).setCounter(w.getCounter()+1);
-						if(connections.get(i).getVisited()==false)
-						{	
-							q.add(connections.get(i));
-							
-						} 
+						System.out.println("ok1");
+						remove=false;
+						break;
+					}
+					if(robots.get(j).getPosition().x==b.getPosition().x-1&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						for(int k=0;k<robots.size();k++)
+						{
+							if(robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+							{System.out.println("ok2");
+								remove=false;
+								break;
+							}	
+						}
+						
+					}
+					if(robots.get(j).getPosition().x==b.getPosition().x-1&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						for(int k=0;k<robots.size();k++)
+						{
+							if(robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+							{System.out.println("ok3");
+								remove=false;
+								break;
+							}
+						}
+						
+					}
+					if((robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z)&&(robots.get(j).getPosition().y!=b.getPosition().y))
+					{System.out.println("ok4");
+						remove=false;
+						break;
 					}
 				}
+				
+				if(remove)
+					toRemove.add(pm.get(i));
 			}
-			if(end.getCounter()>0)
-				b.setDistanceToPath(end.getCounter());
-			else
+			if(pm.get(i).x>b.getPosition().x)
 			{
-				for(int i=0;i<robots.size();i++)
+				boolean remove=true;
+				for(int j=0;j<robots.size();j++)
 				{
-					float distanceToPath=Math.abs(robots.get(i).getPosition().x-end.getPosition().x)+Math.abs(robots.get(i).getPosition().z-end.getPosition().z)+robots.get(i).getPosition().y;
-					robots.get(i).setDistanceToPath(distanceToPath);
-					
+					if(robots.get(j).getPosition().x==b.getPosition().x+1&&robots.get(j).getPosition().z==b.getPosition().z&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						remove=false;
+						break;
+					}
+					if(robots.get(j).getPosition().x==b.getPosition().x+1&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						for(int k=0;k<robots.size();k++)
+						{
+							if(robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+							{System.out.println("ok2");
+								remove=false;
+								break;
+							}	
+						}
+					}
+					if(robots.get(j).getPosition().x==b.getPosition().x+1&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						for(int k=0;k<robots.size();k++)
+						{
+							if(robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+							{System.out.println("ok2");
+								remove=false;
+								break;
+							}	
+						}
+					}
+					if((robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z)&&(robots.get(j).getPosition().y!=b.getPosition().y))
+					{
+						remove=false;
+						break;
+					}
 				}
+				
+				if(remove)
+					toRemove.add(pm.get(i));
 			}
-		}	
-		
+			if(pm.get(i).z<b.getPosition().z)
+			{
+				boolean remove=true;
+				for(int j=0;j<robots.size();j++)
+				{
+					if(robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						remove=false;
+						break;
+					}
+					if(robots.get(j).getPosition().x==b.getPosition().x+1&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						for(int k=0;k<robots.size();k++)
+						{
+							if(robots.get(j).getPosition().x==b.getPosition().x+1&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+							{System.out.println("ok2");
+								remove=false;
+								break;
+							}	
+						}
+					}
+					if(robots.get(j).getPosition().x==b.getPosition().x-1&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						for(int k=0;k<robots.size();k++)
+						{
+							if(robots.get(j).getPosition().x==b.getPosition().x+1&&robots.get(j).getPosition().z==b.getPosition().z-1&&robots.get(j).getPosition().y==b.getPosition().y)
+							{System.out.println("ok2");
+								remove=false;
+								break;
+							}	
+						}
+					}
+					if((robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z)&&(robots.get(j).getPosition().y!=b.getPosition().y))
+					{
+						remove=false;
+						break;
+					}
+				}
+			
+				if(remove)
+					toRemove.add(pm.get(i));
+			}
+			if(pm.get(i).z>b.getPosition().z)
+			{
+				boolean remove=true;
+				for(int j=0;j<robots.size();j++)
+				{
+					if(robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						remove=false;
+						break;
+					}
+					if(robots.get(j).getPosition().x==b.getPosition().x+1&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						if(robots.get(j).getPosition().x==b.getPosition().x+1&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+						{System.out.println("ok2");
+							remove=false;
+							break;
+						}
+					}
+					if(robots.get(j).getPosition().x==b.getPosition().x-1&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+					{
+						if(robots.get(j).getPosition().x==b.getPosition().x-1&&robots.get(j).getPosition().z==b.getPosition().z+1&&robots.get(j).getPosition().y==b.getPosition().y)
+						{System.out.println("ok2");
+							remove=false;
+							break;
+						}
+					}
+					if((robots.get(j).getPosition().x==b.getPosition().x&&robots.get(j).getPosition().z==b.getPosition().z)&&(robots.get(j).getPosition().y!=b.getPosition().y))
+					{
+						remove=false;
+						break;
+					}
+				}
+				
+				if(remove)
+					toRemove.add(pm.get(i));
+			}
+			
+		}
+		pm.removeAll(toRemove);
 	}
-	}
+}

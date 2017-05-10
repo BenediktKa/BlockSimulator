@@ -11,12 +11,13 @@ public class BrainAI
 	private ArrayList<Block> obstacles;
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> target;
-
+	private ArrayList<Block> floor;
 	public BrainAI(BlockList blockList)
 	{
 		this.obstacles=blockList.getObstacleList();
 		this.robots=blockList.getRobotBlockList();
 		this.target=blockList.getTargetList();
+		this.floor=blockList.getFloor();
 		//Block maxTarget=findFurthestTarget();
 		final Block minTarget=findClosestTarget();
 		RobotBlock maxRobot=findClosestRobot(minTarget);
@@ -25,10 +26,12 @@ public class BrainAI
 		new Thread(new Runnable() {
 			   @Override
 			   public void run() {
-				  new Move(path.getFinalList(), robots,obstacles,minTarget);
+				  //new Move(path.getFinalList(), robots,obstacles,minTarget);
+				   new Move3(path.getFinalList(), robots,obstacles,floor,minTarget);
+				 //  new Move2(path.getFinalList(),robots,obstacles,floor);
 			   }
 			}).start();
-		new Reconfiguration(robots,target,minTarget);
+		//new Reconfiguration(robots,target,minTarget);
 		
 	}
 	public Block findFurthestTarget()

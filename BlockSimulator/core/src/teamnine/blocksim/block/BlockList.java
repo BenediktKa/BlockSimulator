@@ -50,6 +50,10 @@ public class BlockList implements Disposable {
 		//Temporary
 		preconfig();
 	}
+	public ArrayList<Block> getFloor()
+	{
+		return floorList;
+	}
 	
 	public void preconfig() {
 		//Robots
