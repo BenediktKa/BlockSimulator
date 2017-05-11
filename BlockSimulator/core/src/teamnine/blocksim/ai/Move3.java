@@ -474,6 +474,7 @@ public class Move3
 		{
 			if(b.getPosition().x==robots.get(k).getPosition().x&&b.getPosition().z==robots.get(k).getPosition().z&&b.getPosition().y+1==robots.get(k).getPosition().y)
 			{
+				pm.clear();
 				locked=true;
 			}
 		}
