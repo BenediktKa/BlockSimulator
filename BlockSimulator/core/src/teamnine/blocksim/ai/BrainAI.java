@@ -26,9 +26,7 @@ public class BrainAI
 		new Thread(new Runnable() {
 			   @Override
 			   public void run() {
-				  //new Move(path.getFinalList(), robots,obstacles,minTarget);
 				   new Move3(path.getFinalList(), robots,obstacles,floor,minTarget);
-				 //  new Move2(path.getFinalList(),robots,obstacles,floor);
 			   }
 			}).start();
 		//new Reconfiguration(robots,target,minTarget);
