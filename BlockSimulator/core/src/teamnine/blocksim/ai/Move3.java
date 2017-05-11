@@ -310,7 +310,7 @@ public class Move3
 						{
 							try 
 							{
-								Thread.sleep(250);
+								Thread.sleep(50);
 							}
 							catch (InterruptedException e)
 							{
@@ -351,7 +351,7 @@ public class Move3
 		{
 			try 
 			{
-				Thread.sleep(250);
+				Thread.sleep(50);
 			}
 			catch (InterruptedException e)
 			{
