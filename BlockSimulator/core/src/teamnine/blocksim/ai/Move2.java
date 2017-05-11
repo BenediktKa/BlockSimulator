@@ -85,6 +85,11 @@ public class Move2
 		for(int i=0;i<robots.size();i++)
 		{
 			setDistances(robots.get(i),end);
+			for(int j=0;j<robots.size();j++)
+			{
+				robots.get(j).setVisited(false);
+				robots.get(j).setCounter(0);
+			}
 		}
 		
 		for(int i=0;i<robots.size();i++)

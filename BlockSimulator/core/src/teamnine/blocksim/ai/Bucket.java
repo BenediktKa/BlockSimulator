@@ -23,7 +23,7 @@ public class Bucket {
 				if(bloks.get(i).getPosition().y<bloks.get(i+1).getPosition().y)
 				{
 					Collections.swap(bloks, i, i+1);
-										
+					change=true;					
 				}
 			}
 		}
