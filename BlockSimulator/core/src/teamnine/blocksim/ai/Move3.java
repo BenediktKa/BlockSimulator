@@ -35,11 +35,11 @@ public class Move3
 	{	
 		
 		ArrayList<RobotBlock> orderToMove=new ArrayList<RobotBlock>();
-		/*float targetX=v.x;
+		float targetX=v.x;
 		
 		float targetZ=v.z;
 		//finds distance from the block to the target assigns the value to the block 
-		
+		/*
 		for(int i=0;i<robots.size();i++)
 		{
 			float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y;
@@ -47,6 +47,7 @@ public class Move3
 			orderToMove.add(robots.get(i));
 		}*/
 		////////////////////////////
+		
 		for(int i=0;i<robots.size();i++)
 		{
 			orderToMove.add(robots.get(i));
@@ -108,7 +109,8 @@ public class Move3
 			robots.get(i).setCounter(0);
 		}
 		robots.remove(robots.size()-1);
-		///////////////////////////
+		//////////////////////////
+		
 		ArrayList<RobotBlock> newOrderToMove=order(orderToMove);
 		for(int i=0;i<newOrderToMove.size();i++)
 		{
@@ -152,11 +154,12 @@ public class Move3
 				}
 			}
 		}
-		System.out.println("counter at end "+end.getCounter());
-		if(end.getCounter()!=0)
+		System.out.println("counter at end "+end.getCounter()+" weird "+(int)((Math.abs(b.getPosition().x-end.getPosition().x)+Math.abs(b.getPosition().z-end.getPosition().z)+b.getPosition().y)-1));
+		
+		if(end.getCounter()!=0&&end.getCounter()>(int)((Math.abs(b.getPosition().x-end.getPosition().x)+Math.abs(b.getPosition().z-end.getPosition().z)+b.getPosition().y)-1))
 			b.setDistanceToPath(end.getCounter());
 		else
-			b.setDistanceToPath((int)Math.abs(b.getPosition().x-end.getPosition().x)+Math.abs(b.getPosition().z-end.getPosition().z)+b.getPosition().y);
+			b.setDistanceToPath((int)((Math.abs(b.getPosition().x-end.getPosition().x)+Math.abs(b.getPosition().z-end.getPosition().z)+b.getPosition().y)-1));
 	}	
 	}
 	

@@ -147,7 +147,7 @@ public class RobotBlock extends Block
 			return;
 		}
 
-		originalPos = position.cpy();
+		//originalPos = position.cpy();
 		moveTo = new Vector3(position.x, position.y - 1, position.z);
 		movement = new Vector3(0, -1, 0);
 		moving = true;
@@ -167,6 +167,7 @@ public class RobotBlock extends Block
 
 	public void moveModel()
 	{
+		
 		if (movement == null)
 		{
 			modelInstance.transform = new Matrix4().translate(position.x, position.y, position.z);
