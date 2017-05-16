@@ -186,13 +186,13 @@ public class Reconfiguration
 							{
 								if(sortedTargets[currentLevel].get(j) == robot.get(0).getTarget()) //The Robot Block that is moved into the position, has to have the same ID
 								{
-									// TODO: Move the robotBlock from the end of the chain to its targetPosition
+									// TODO: Move the robotBlock from the end of the chain to its targetPosition, keep track of indexes in Robot!
 									sortedTargets[currentLevel].remove(j); // Remove in order to prevent from filling up again
 								}
 							}
 							catch (NullPointerException f) 
 							{
-								// TODO: Put Robot Block aside
+								// TODO: Put Robot Block aside, keep track of indexes in Robot!
 							}
 							
 						}
@@ -201,11 +201,11 @@ public class Reconfiguration
 							try
 							{
 								robot.get(0).getTarget(); //This should not be there
-								// TODO: Put Robot Block aside
+								// TODO: Put Robot Block aside, keep track of indexes in Robot!
 							}
 							catch (NullPointerException g)
 							{
-								// TODO: Move the robotBlock from the end of the chain to its targetPosition
+								// TODO: Move the robotBlock from the end of the chain to its targetPosition, keep track of indexes in Robot!
 								sortedTargets[currentLevel].remove(j); // Remove in order to prevent from filling up again
 							}
 						}
