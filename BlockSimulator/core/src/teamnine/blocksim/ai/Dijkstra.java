@@ -46,7 +46,7 @@ public class Dijkstra
                 if (listToReduce.contains(neighbour))
                 {
 	                if (neighbour.getDistance() > (position.getDistance() + weights[i]))
-	                {
+	                {//
 	                  	listToReduce.remove(neighbour);
 	                   	neighbour.setPrevious(position);
 	                   	neighbour.setDistance(position.getDistance() + weights[i]);

@@ -132,7 +132,7 @@ public class RobotBlock extends Block
 		if (moving)
 		{
 			return;
-		}
+		}//
 
 		originalPos = position.cpy();
 		moveTo = new Vector3(position.x, position.y + 1, position.z);

@@ -6,7 +6,7 @@ import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.block.RobotBlock;
 
-public class BrainAI 
+public class BrainAI //
 {
 	private ArrayList<Block> obstacles;
 	private ArrayList<RobotBlock> robots;

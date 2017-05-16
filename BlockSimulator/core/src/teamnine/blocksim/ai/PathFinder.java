@@ -41,7 +41,7 @@ public class PathFinder
 					j = disObstacles.size();
 				}
 			}
-		}
+		}//
 
 		disObstacles.add(new DistanceBlock(0, initialPosition.getPosition(), 0));
 

@@ -50,7 +50,7 @@ public class DistanceBlock
     public void setPrevious(DistanceBlock previous)
     {
         this.previous = previous;
-    }
+    }//
 
     public float getDistance()
     {

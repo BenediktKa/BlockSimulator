@@ -94,7 +94,7 @@ public class Move3
 		}
 		
 		for(int i=0;i<robots.size();i++)
-		{
+		{//
 			setDistances(robots.get(i),end);
 			for(int j=0;j<robots.size();j++)
 			{
