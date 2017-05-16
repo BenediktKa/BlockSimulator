@@ -11,21 +11,19 @@ public class Dijkstra
     ArrayList finalList = new ArrayList();
     Comparator blockComparator = new BlockComparator();
     DistanceBlock target;
-    int numRoboBlocks;
-    int numTargetBlocks;
 
-    public Dijkstra(ArrayList<DistanceBlock> list, DistanceBlock target, int numRoboBlocks, int numTargetBlocks)
+    public Dijkstra(ArrayList<DistanceBlock> list, DistanceBlock target)
     {
     	this.target = target;
-    	this.numRoboBlocks = numRoboBlocks;
-    	this.numTargetBlocks = numTargetBlocks;
         originalList = new PriorityQueue<DistanceBlock>(list.size(), blockComparator);
+
         for (int i = 0; i < list.size(); i++)
         {
             originalList.add(list.get(i));
         }
 
         completeFinalList(originalList);
+        System.out.println(target.getData() + "dijk");
     }
 
     public void completeFinalList(PriorityQueue<DistanceBlock> listToReduce)
@@ -37,6 +35,7 @@ public class Dijkstra
         
         if(position.getData().equals(target.getData()))
         {
+        	System.out.println("called");
         	return;
         }
         else if (neighbours != null)
@@ -48,14 +47,10 @@ public class Dijkstra
                 {
 	                if (neighbour.getDistance() > (position.getDistance() + weights[i]))
 	                {
-	                	if(numRoboBlocks - weights[i] >= numTargetBlocks)
-	                	{
-	                		numRoboBlocks = numRoboBlocks - weights[i];
-		                  	listToReduce.remove(neighbour);
-		                   	neighbour.setPrevious(position);
-		                   	neighbour.setDistance(position.getDistance() + weights[i]);
-		                   	listToReduce.add(neighbour);
-	                	}
+	                  	listToReduce.remove(neighbour);
+	                   	neighbour.setPrevious(position);
+	                   	neighbour.setDistance(position.getDistance() + weights[i]);
+	                   	listToReduce.add(neighbour);
 	                }
 	            } 		
             }
@@ -63,7 +58,6 @@ public class Dijkstra
             {
             	completeFinalList(listToReduce);
             }
-            
         }
     }
 

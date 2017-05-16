@@ -13,17 +13,15 @@ import teamnine.blocksim.block.BlockList;
 public class PathFinder
 {
 	BlockList blockList;
-	int numRoboBlocks;
-    int numTargetBlocks;
+	
 	ArrayList<DistanceBlock> initialList = new ArrayList<DistanceBlock>();
 	ArrayList<DistanceBlock> list = new ArrayList<DistanceBlock>();
 	ArrayList<Vector3> finalList = new ArrayList<Vector3>();
 
-	public PathFinder(BlockList blockList, Block initialPosition, Block target, int numRoboBlocks, int numTargetBlocks)
+	public PathFinder(BlockList blockList, Block initialPosition, Block target)
 	{
 		this.blockList = blockList;
-		this.numRoboBlocks = numRoboBlocks;
-    	this.numTargetBlocks = numTargetBlocks;
+		
 		AbstractList<Block> obstacles = blockList.getObstacleList();
 		int maxX = blockList.getGridSize();
 		int maxZ = maxX;
@@ -103,7 +101,7 @@ public class PathFinder
 
 		// implement Dijkstra's algorithm
 		DistanceBlock tar = new DistanceBlock(MAX_VALUE, target.getPosition(), 0);
-		Dijkstra dijkstra = new Dijkstra(initialList, tar, numRoboBlocks, numTargetBlocks);
+		Dijkstra dijkstra = new Dijkstra(initialList, tar);
 		list = dijkstra.getFinalList();
 		
 		if (list.get(list.size() - 1).getData().equals(target.getPosition())) {

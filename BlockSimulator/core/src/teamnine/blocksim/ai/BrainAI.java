@@ -21,7 +21,7 @@ public class BrainAI
 		//Block maxTarget=findFurthestTarget();
 		final Block minTarget=findClosestTarget();
 		RobotBlock maxRobot=findClosestRobot(minTarget);
-		final PathFinder path = new PathFinder(blockList , maxRobot, minTarget, robots.size(), target.size());
+		final PathFinder path = new PathFinder(blockList , maxRobot, minTarget);
 		
 		new Thread(new Runnable() {
 			   @Override
