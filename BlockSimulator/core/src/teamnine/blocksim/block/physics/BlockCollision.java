@@ -1,6 +1,10 @@
-package teamnine.blocksim.block;
+package teamnine.blocksim.block.physics;
 
 import com.badlogic.gdx.math.Vector3;
+
+import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.block.Block.Type;
 
 public class BlockCollision extends Block
 {

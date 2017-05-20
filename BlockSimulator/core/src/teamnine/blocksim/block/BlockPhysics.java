@@ -3,6 +3,8 @@ package teamnine.blocksim.block;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.block.physics.BlockCollision;
+
 public class BlockPhysics extends BlockCollision
 {
 

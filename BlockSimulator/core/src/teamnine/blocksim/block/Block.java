@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
+import teamnine.blocksim.block.physics.BlockHitbox;
+
 public class Block implements Disposable
 {
 
