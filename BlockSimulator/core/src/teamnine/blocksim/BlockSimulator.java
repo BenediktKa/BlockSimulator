@@ -21,7 +21,8 @@ import teamnine.blocksim.block.SelectorBlock;
 import teamnine.blocksim.hud.LevelEditorHUD;
 import teamnine.blocksim.hud.Notification;
 
-public class BlockSimulator implements ApplicationListener {
+public class BlockSimulator implements ApplicationListener
+{
 
 	// Camera variables
 	public final float FIELDOFVIEW = 67;
@@ -58,7 +59,8 @@ public class BlockSimulator implements ApplicationListener {
 	public SelectorBlock selectorBlock;
 
 	@Override
-	public void create() {
+	public void create()
+	{
 
 		// Create Environment
 		environment = new Environment();
@@ -83,8 +85,8 @@ public class BlockSimulator implements ApplicationListener {
 
 		// Crosshair
 		crosshair = new Texture(Gdx.files.internal("interface/Crosshair.png"));
-		
-		//Font
+
+		// Font
 		font = new BitmapFont();
 
 		// Create Camera
@@ -107,7 +109,8 @@ public class BlockSimulator implements ApplicationListener {
 	}
 
 	@Override
-	public void render() {
+	public void render()
+	{
 
 		// Set Background Color
 		Gdx.gl.glClearColor(44f / 255f, 62f / 255f, 80f / 255f, 1);
@@ -128,31 +131,35 @@ public class BlockSimulator implements ApplicationListener {
 
 		// Rendering Sprites
 		spriteBatch.begin();
-		
+
 		font.draw(spriteBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 5, 20);
-		
+
 		notification.render(spriteBatch);
 		spriteBatch.draw(crosshair, crosshair_x, crosshair_y, 25, 25);
 		spriteBatch.end();
-		
+
 		// Camera Update
 		cameraController.update();
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(int width, int height)
+	{
 	}
 
 	@Override
-	public void pause() {
+	public void pause()
+	{
 	}
 
 	@Override
-	public void resume() {
+	public void resume()
+	{
 	}
 
 	@Override
-	public void dispose() {
+	public void dispose()
+	{
 		blockList.dispose();
 		notification.dispose();
 	}
