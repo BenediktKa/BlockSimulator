@@ -25,14 +25,10 @@ public class Action
 	/**
 	 * Instantiates a new action.
 	 *
-	 * @param position
-	 *            | The Block's Position
-	 * @param type
-	 *            | The Block's Type
-	 * @param ID
-	 *            | The Block's ID
-	 * @param removed
-	 *            | Was Block removed?
+	 * @param position | The Block's Position
+	 * @param type | The Block's Type
+	 * @param ID | The Block's ID
+	 * @param removed | Was Block removed?
 	 */
 	public Action(Vector3 position, Block.Type type, double ID, boolean removed)
 	{

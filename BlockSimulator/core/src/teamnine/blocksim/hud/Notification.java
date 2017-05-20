@@ -84,10 +84,8 @@ public class Notification implements Disposable
 	/**
 	 * Sets the notification.
 	 *
-	 * @param text
-	 *            to display
-	 * @param type
-	 *            of notification
+	 * @param text to display
+	 * @param type of notification
 	 */
 	public void setNotification(String text, Type type, float scale)
 	{
