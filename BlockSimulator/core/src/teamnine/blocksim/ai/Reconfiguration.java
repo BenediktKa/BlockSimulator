@@ -6,13 +6,27 @@ import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
+import teamnine.blocksim.block.BlockList;
 
+/**
+ * Responsible for managing the reconfiguration
+ * > Defining the order in which targets should be filled
+ * > Appointing matching robot and target block
+ * > Initializing movement of robot to target position
+ * Issues:
+ * > ID's not fully implemented
+ * > Possibly problems with target-blocks that are not on the floor, since the PathFinding is only 2D
+ * @author Jurriaan
+ *
+ */
 public class Reconfiguration
 {
 	private ArrayList<RobotBlock> robot;
 	private ArrayList<Block> target;
 	private ArrayList<Block>[] sortedTargets;
+	private ArrayList<Block> easySortedTargets;
 	private Block targetOrigin;
+	private BlockList blockList;
 
 	private final boolean DEBUG = true;
 
@@ -33,8 +47,7 @@ public class Reconfiguration
 	{
 		if (robot.size() != target.size())
 		{
-			// throw new IllegalArgumentException("The number of robot blocks is
-			// not equal to the number of target blocks!");
+			throw new IllegalArgumentException("The number of robot blocks is not equal to the number of target blocks!");
 		}
 
 		this.robot = robot;
@@ -50,6 +63,27 @@ public class Reconfiguration
 		check();
 
 	}
+	
+	public Reconfiguration(BlockList blockList, ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget)
+	{
+		if (robot.size() != target.size())
+		{
+			throw new IllegalArgumentException("The number of robot blocks is not equal to the number of target blocks!");
+		}
+
+		this.robot = robot;
+		this.target = target;
+		this.blockList = blockList;
+		targetOrigin = minTarget;
+
+		prepare();
+		if (DEBUG)
+		{
+			System.out.println("Reconfiguration Started");
+		}
+		// startEasy();
+		//check();
+	}
 
 	/**
 	 * 1) Sort the targets in a specific way (how?) to avoid deadlocks 2) Figure
@@ -59,7 +93,7 @@ public class Reconfiguration
 	private void prepare()
 	{
 		sortTarget(); // Sort the targetblocks in a specific way, to fill them
-		findTarget(); // Check if there is an Target Block with the same ID
+		//findTarget(); // Check if there is an Target Block with the same ID, not taken into account now
 	}
 
 	/**
@@ -85,38 +119,11 @@ public class Reconfiguration
 
 		for (int i = 0; i < target.size(); i++)
 		{
-			targetWidth = (int) Math.max(targetWidth, Math.abs(target.get(i).getPosition().x - layer0Origin.x + 1)); // +1:
-																														// if
-																														// there
-																														// was
-																														// only
-																														// one
-																														// block,
-																														// the
-																														// abs
-																														// distance
-																														// would
-																														// be
-																														// 0,
-																														// but
-																														// should
-																														// be
-																														// 1
+			targetWidth = (int) Math.max(targetWidth, Math.abs(target.get(i).getPosition().x - layer0Origin.x + 1)); // +1:if there
+			// was only one block, the abs distance would be 0, but should be 1
 			targetLength = (int) Math.max(targetLength, Math.abs(target.get(i).getPosition().z - layer0Origin.z + 1));
-			targetHeight = (int) Math.max(targetHeight, target.get(i).getPosition().y - 1); // robot
-																							// blocks
-																							// on
-																							// the
-																							// floor
-																							// are
-																							// not
-																							// taken
-																							// into
-																							// account
-																							// for
-																							// height;
-																							// so
-																							// -1
+			targetHeight = (int) Math.max(targetHeight, target.get(i).getPosition().y - 1); 
+			// Robot blocks on the first level are not taken into account for height; so -1
 		}
 
 		// The size of these arraylists depend on the dimension of the target
@@ -164,6 +171,16 @@ public class Reconfiguration
 					System.out.println("//RECONFIG: " + target.get(i).getID() + ": " + (bucket + floorLevels));
 				}
 				sortedTargets[bucket + floorLevels].add(target.get(i));
+			}
+		}
+		
+		//Easy sorting targets
+		easySortedTargets = new ArrayList<Block>();
+		for(int i=0; i<sortedTargets.length; i++)
+		{
+			for(int j=0; j<sortedTargets[i].size(); j++)
+			{
+				easySortedTargets.add(sortedTargets[i].get(j));
 			}
 		}
 	}
@@ -214,7 +231,7 @@ public class Reconfiguration
 	{
 		// Get last robotblock from 'chain'
 		// Check if it can be moved to one of the next targets (i.e. target ID
-		// matches
+		// matches) --> Not done for now
 		// IF so THEN move the block to that position
 		// IF not THEN move the block to another chain
 
@@ -235,44 +252,18 @@ public class Reconfiguration
 					{
 						try
 						{
-							sortedTargets[currentLevel].get(j).getID(); // The
-																		// ID
-																		// for
-																		// this
-																		// Target
-																		// Position
-																		// IS
-																		// specified
+							// The ID for this Target Position IS specified
+							sortedTargets[currentLevel].get(j).getID(); 
 							try
 							{
 								if (sortedTargets[currentLevel].get(j) == robot.get(0).getTarget()) // The
-																									// Robot
-																									// Block
-																									// that
-																									// is
-																									// moved
-																									// into
-																									// the
-																									// position,
-																									// has
-																									// to
-																									// have
-																									// the
-																									// same
-																									// ID
+								// Robot Block that is moved into the position, has to have the same ID
 								{
 									// TODO: Move the robotBlock from the end of
 									// the chain to its targetPosition, keep
 									// track of indexes in Robot!
-									sortedTargets[currentLevel].remove(j); // Remove
-																			// in
-																			// order
-																			// to
-																			// prevent
-																			// from
-																			// filling
-																			// up
-																			// again
+									sortedTargets[currentLevel].remove(j); // Remove in
+									// order to prevent from filling up again
 								}
 							} catch (NullPointerException f)
 							{
@@ -280,14 +271,11 @@ public class Reconfiguration
 								// indexes in Robot!
 							}
 
-						} catch (NullPointerException e) // The ID WAS NOT
-															// specified for the
-															// target block, so
-															// if the robot
-															// block doesn't
-															// have an assigned
-															// target, it can
-															// move into it
+						} 
+						// The ID WAS NOT specified for the Target block, 
+						// so if the robot block doesn't have an assigned target, 
+						// it can move into it.
+						catch (NullPointerException e) 
 						{
 							try
 							{
@@ -295,20 +283,14 @@ public class Reconfiguration
 															// there
 								// TODO: Put Robot Block aside, keep track of
 								// indexes in Robot!
-							} catch (NullPointerException g)
+							} 
+							catch (NullPointerException g)
 							{
 								// TODO: Move the robotBlock from the end of the
 								// chain to its targetPosition, keep track of
 								// indexes in Robot!
 								sortedTargets[currentLevel].remove(j); // Remove
-																		// in
-																		// order
-																		// to
-																		// prevent
-																		// from
-																		// filling
-																		// up
-																		// again
+								// Remove in order to prevent from filling up again
 							}
 						}
 						if (DEBUG)
@@ -321,6 +303,54 @@ public class Reconfiguration
 				}
 			}
 		}
+	}
+	
+	private void startEasy()
+	{
+		
+		int cntr = 0;
+		while(cntr!=robot.size()-1) 
+		{
+			// 1) Select last robot block to move, i.e. robot.get(0)
+			RobotBlock blockToMove = robot.get(0);
+			
+			// 2) Select the target position where it has to go to, there should not be a robot block on it
+			Block targetBlock = easySortedTargets.get(cntr);
+			cntr++; 
+			
+			// Check if there is not already a robot block on this position
+			//TODO: Improve implementation
+			for(int i=0; i<robot.size(); i++)
+			{
+				if(blockToMove.getPosition().x==targetBlock.getPosition().x&&blockToMove.getPosition().y==targetBlock.getPosition().y&&blockToMove.getPosition().z==targetBlock.getPosition().z)
+				{
+					targetBlock = easySortedTargets.get(cntr);
+					cntr++;
+					i=0;
+				}
+			}
+			// 3) Find path from position of robotBlock to target position
+			// TODO: BAD IMPLEMENTATION (I DONT WANT THE BLOCKLIST, I DONT WANT n PATHFINDERS)
+			// TODO: Fix Pathfinder in 3D and make sure it takes a route not disconnecting
+			// TODO: Check if it works with only 1 block
+			final PathFinder pathFinder = new PathFinder(blockList, blockToMove,targetBlock,1,1);
+			
+			// 4) Perform actual movement
+			// TODO: If this works with threading?
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					// TODO: Fully implement this (prob by refactoring constructors), Run & Debug this.
+					//new Move3(pathFinder.getFinalList(), robots, obstacles, floor, targetBlock);
+				}
+			}).start();
+			
+			
+		}
+		
+
 	}
 
 	private boolean check()
@@ -349,7 +379,8 @@ public class Reconfiguration
 							{
 								correctPositions++;
 							}
-						} catch (NullPointerException d)
+						} 
+						catch (NullPointerException d)
 						{
 							return false;
 						}
