@@ -1,7 +1,9 @@
 package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
+
 import com.badlogic.gdx.math.Vector3;
+
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
 

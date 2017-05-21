@@ -29,9 +29,4 @@ public class BlockHitbox
 	{
 		return (posMinX < hitbox.posMaxX && posMaxX > hitbox.posMinX) && (posMinY < hitbox.posMaxY && posMaxY > hitbox.posMinY) && (posMinZ < hitbox.posMaxZ && posMaxZ > hitbox.posMinZ);
 	}
-
-	public boolean intersectY(BlockHitbox hitbox)
-	{
-		return (posMinX <= hitbox.posMaxX && posMaxX >= hitbox.posMinX) && (posMinZ <= hitbox.posMaxZ && posMaxZ >= hitbox.posMinZ);
-	}
 }

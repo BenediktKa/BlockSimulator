@@ -18,8 +18,7 @@ public class Block implements Disposable
 {
 
 	// Model
-	protected Model model;
-	protected ModelInstance modelInstance;
+	private BlockModel blockModel;
 
 	// Block Variables
 	protected Vector3 position;
@@ -32,7 +31,8 @@ public class Block implements Disposable
 	{
 		this.position = position;
 		this.type = type;
-		createModel();
+		blockModel = new BlockModel(type);
+		hitbox = new BlockHitbox(position);
 	}
 
 	public void setDistanceToPath(float p)
@@ -45,56 +45,9 @@ public class Block implements Disposable
 		return distanceToPath;
 	}
 
-	public void createModel()
-	{
-		// Robot Block
-		if (type == Type.Robot)
-		{
-			ModelBuilder modelBuilder = new ModelBuilder();
-			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(142f / 255f, 68f / 255f, 173f / 255f, 1.0f))), Usage.Position | Usage.Normal);
-			modelInstance = new ModelInstance(model);
-			// Floor Block
-		}
-		else if (type == Type.Floor)
-		{
-			ModelBuilder modelBuilder = new ModelBuilder();
-			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(149f / 255f, 165f / 255f, 166f / 255f, 1.0f))), Usage.Position | Usage.Normal);
-			modelInstance = new ModelInstance(model);
-			// Obstacle Block
-		}
-		else if (type == Type.Obstacle)
-		{
-			ModelBuilder modelBuilder = new ModelBuilder();
-			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(231f / 255f, 76f / 255f, 60f / 255f, 1.0f))), Usage.Position | Usage.Normal);
-			modelInstance = new ModelInstance(model);
-			// Goal Block
-		}
-		else if (type == Type.Goal)
-		{
-			ModelBuilder modelBuilder = new ModelBuilder();
-			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(26f / 255f, 188f / 255f, 156f / 255f, 1.0f)), new BlendingAttribute(0.4f)), Usage.Position | Usage.Normal);
-			modelInstance = new ModelInstance(model);
-			// Selector Block
-		}
-		else if (type == Type.Selector)
-		{
-			ModelBuilder modelBuilder = new ModelBuilder();
-			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(1.0f, 1.0f, 1.0f, 1.0f)), new BlendingAttribute(0.4f)), Usage.Position | Usage.Normal);
-			modelInstance = new ModelInstance(model);
-			// Path Block
-		}
-		else if (type == Type.Path)
-		{
-			ModelBuilder modelBuilder = new ModelBuilder();
-			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(0.0f, 0.0f, 1.0f, 1.0f)), new BlendingAttribute(0.1f)), Usage.Position | Usage.Normal);
-			modelInstance = new ModelInstance(model);
-		}
-		hitbox = new BlockHitbox(position);
-	}
-
 	public Model getModel()
 	{
-		return this.model;
+		return blockModel.getModel();
 	}
 
 	public BlockHitbox getHitbox()
@@ -104,12 +57,12 @@ public class Block implements Disposable
 
 	public ModelInstance getModelInstance()
 	{
-		return this.modelInstance;
+		return blockModel.getModelInstance();
 	}
 
 	public void moveModel()
 	{
-		modelInstance.transform = new Matrix4().translate(position.x, position.y, position.z);
+		getModelInstance().transform = new Matrix4().translate(position.x, position.y, position.z);
 		hitbox = new BlockHitbox(position);
 	}
 
@@ -138,9 +91,8 @@ public class Block implements Disposable
 			int ordinal = this.ordinal();
 			ordinal = ++ordinal % types.length;
 			if (types[ordinal] == Selector)
-			{
 				return types[0];
-			}
+			
 			return types[ordinal];
 		}
 	}
@@ -163,6 +115,6 @@ public class Block implements Disposable
 	@Override
 	public void dispose()
 	{
-		model.dispose();
+		getModel().dispose();
 	}
 }

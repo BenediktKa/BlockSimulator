@@ -6,7 +6,8 @@ import java.util.Queue;
 
 import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.block.*;
+import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.RobotBlock;
 
 public class Move2
 {

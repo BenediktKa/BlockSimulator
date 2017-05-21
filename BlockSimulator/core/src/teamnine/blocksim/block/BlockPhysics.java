@@ -49,6 +49,7 @@ public class BlockPhysics extends BlockCollision
 	{
 		if (gravity)
 		{
+			// This will add to a timer, which once it hits 1 will increase gravity
 			gravityTimer += Gdx.graphics.getDeltaTime();
 			if (gravityTimer >= 1)
 			{
@@ -56,11 +57,11 @@ public class BlockPhysics extends BlockCollision
 				calcFallVel();
 			}
 
+			//Check if the next update downwards will lead to a collision
 			if (isColliding(this, new Vector3(position.x, position.y - fallVel, position.z)))
 			{
+				position = new Vector3(Math.round(position.x), Math.round(position.y), Math.round(position.z));
 				setGravity(false);
-				Vector3 newPos = new Vector3(Math.round(position.x), Math.round(position.y), Math.round(position.z));
-				position = newPos;
 			}
 			else
 				position.y -= fallVel;
