@@ -169,8 +169,6 @@ public class RobotBlock extends BlockPhysics
 		if ((position.equals(moveTo) && getOriginalPos().y + 1 != moveTo.y && !gravity) || gravity)
 		{
 			movement = null;
-			if (isColliding(this, new Vector3(position.x, position.y - 0.1f, position.z)))
-				;
 			setGravity(true);
 		}
 		else if ((position.cpy().sub(moveTo).isZero(0.01f) || getOriginalPos().dst(position) > 1 || getOriginalPos().dst(position) < -1) && moving)
