@@ -60,18 +60,22 @@ public class FPSControl extends FirstPersonCameraController
 			if (mouseY < screenY)
 			{
 				if (camera.direction.y > -0.965)
+				{
 					camera.rotate(camera.direction.cpy().crs(Vector3.Y), -1 * magY * rotSpeed);
-				camera.update();
+					camera.update();
+				}
 			}
 
 			if (mouseY > screenY)
 			{
 
 				if (camera.direction.y < 0.965)
+				{
 					camera.rotate(camera.direction.cpy().crs(Vector3.Y), 1 * magY * rotSpeed);
-				camera.update();
+					camera.update();
+				}
 			}
-			blockSimulator.blockList.moveSelectorBlock(camera.position, camera.direction);
+			blockSimulator.blockList.editBoxByRayCast(camera.position, camera.direction, null, false);
 		}
 		mouseX = screenX;
 		mouseY = screenY;
@@ -96,17 +100,16 @@ public class FPSControl extends FirstPersonCameraController
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		if (modeType != Type.BuildMode)
+		if (modeType == Type.BuildMode)
 		{
-			return super.touchDown(screenX, screenY, pointer, button);
-		}
-		if (button == 0)
-		{
-			blockSimulator.blockList.editBoxByRayCast(camera.position, camera.direction, blockType);
-		}
-		else if (button == 1)
-		{
-			blockSimulator.blockList.editBoxByRayCast(camera.position, camera.direction, null);
+			if (button == 0)
+			{
+				blockSimulator.blockList.editBoxByRayCast(camera.position, camera.direction, blockType, true);
+			}
+			else if (button == 1)
+			{
+				blockSimulator.blockList.editBoxByRayCast(camera.position, camera.direction, null, true);
+			}
 		}
 		return super.touchDown(screenX, screenY, pointer, button);
 	}
@@ -121,44 +124,32 @@ public class FPSControl extends FirstPersonCameraController
 		if (keycode == Keys.UP)
 		{
 			if (inGrid(blockSimulator.selectorBlock.getPosition().x + 1))
-			{
 				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(1, 0, 0));
-			}
 		}
 		else if (keycode == Keys.DOWN)
 		{
 			if (inGrid(blockSimulator.selectorBlock.getPosition().x - 1))
-			{
 				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(-1, 0, 0));
-			}
 		}
 		else if (keycode == Keys.LEFT)
 		{
 			if (inGrid(blockSimulator.selectorBlock.getPosition().z + 1))
-			{
 				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(0, 0, 1));
-			}
 		}
 		else if (keycode == Keys.RIGHT)
 		{
 			if (inGrid(blockSimulator.selectorBlock.getPosition().z - 1))
-			{
 				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(0, 0, -1));
-			}
 		}
 		else if (keycode == Keys.X)
 		{
 			if (inGrid(blockSimulator.selectorBlock.getPosition().y + 1))
-			{
 				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(0, 1, 0));
-			}
 		}
 		else if (keycode == Keys.Z)
 		{
 			if (inGrid(blockSimulator.selectorBlock.getPosition().y - 1))
-			{
 				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(0, -1, 0));
-			}
 		}
 		else if (keycode == Keys.PLUS)
 		{
@@ -170,34 +161,18 @@ public class FPSControl extends FirstPersonCameraController
 		}
 		else if (keycode == Keys.DEL)
 		{
-			Block blockToDelete = blockSimulator.blockList.blockAtPoint(new Vector3(blockSimulator.selectorBlock.getPosition().x, blockSimulator.selectorBlock.getPosition().y, blockSimulator.selectorBlock.getPosition().z));
+			Block blockToDelete = blockSimulator.blockList.blockAtPoint(blockSimulator.selectorBlock.getPosition());
 			if (blockToDelete != null && blockToDelete.getType() != Block.Type.Floor)
-			{
 				blockSimulator.blockList.removeBlock(blockToDelete);
-			}
 			else if (blockToDelete == null)
-			{
 				blockSimulator.notification.setNotification("Block doesn't exist", Notification.Type.Error, 1);
-			}
 			else
-			{
 				blockSimulator.notification.setNotification("Can't delete the floor", Notification.Type.Error, 1);
-			}
 		}
 		else if (keycode == Keys.SPACE)
 		{
-			if (blockSimulator.blockList.blockAtPoint(new Vector3(blockSimulator.selectorBlock.getPosition().x, blockSimulator.selectorBlock.getPosition().y, blockSimulator.selectorBlock.getPosition().z)) == null)
-			{
-				blockSimulator.blockList.createBlock(new Vector3(blockSimulator.selectorBlock.getPosition().x, blockSimulator.selectorBlock.getPosition().y, blockSimulator.selectorBlock.getPosition().z), blockType);
-			}
-		}
-		else if (keycode == Keys.P)
-		{
-			ArrayList<RobotBlock> robotBlockList = blockSimulator.blockList.getRobotBlockList();
-			for (RobotBlock rb : robotBlockList)
-			{
-				rb.fall();
-			}
+			if (blockSimulator.blockList.blockAtPoint(blockSimulator.selectorBlock.getPosition()) == null)
+				blockSimulator.blockList.createBlock(blockSimulator.selectorBlock.getPosition().cpy(), blockType);
 		}
 		else if (keycode == Keys.C)
 		{

@@ -84,11 +84,6 @@ public class BlockList implements Disposable
 		return blockList.size();
 	}
 
-	public ArrayList<Block> getBlockList()
-	{
-		return blockList;
-	}
-
 	public float getSpeed()
 	{
 		return speed;
@@ -107,9 +102,18 @@ public class BlockList implements Disposable
 			block.setSpeed(increase ? (speed = speed + 1) : (speed = speed - 1));
 		}
 	}
+	
+	public ArrayList<RobotBlock> getRobotBlockList()
+	{
+		return robotList;
+	}
 
 	public ArrayList<Block> getBlockList(Block.Type type)
 	{
+		if(type == null)
+		{
+			return blockList;
+		}
 		if (type == Block.Type.Floor)
 		{
 			return floorList;
@@ -132,26 +136,6 @@ public class BlockList implements Disposable
 	public int getGridSize()
 	{
 		return gridSize;
-	}
-
-	public ArrayList<RobotBlock> getRobotBlockList()
-	{
-		return robotList;
-	}
-
-	public ArrayList<Block> getObstacleList()
-	{
-		return obstacleList;
-	}
-
-	public ArrayList<Block> getTargetList()
-	{
-		return goalList;
-	}
-
-	public ArrayList<Block> getPathList()
-	{
-		return pathList;
 	}
 
 	public Block getBlock(int i)
@@ -447,7 +431,7 @@ public class BlockList implements Disposable
 		this.selectorBlock = selectorBlock;
 	}
 
-	public void editBoxByRayCast(Vector3 start_point, Vector3 direction, Block.Type type)
+	public void editBoxByRayCast(Vector3 start_point, Vector3 direction, Block.Type type, boolean blockAction)
 	{
 		int last_point_x = 0;
 		int last_point_y = 0;
@@ -468,47 +452,18 @@ public class BlockList implements Disposable
 			}
 			if (blockAtPoint(new Vector3(x, y, z)) != null)
 			{
-				if (type == null)
+				if (type == null && blockAction)
 				{
 					if (blockAtPoint(new Vector3(x, y, z)) != null && blockAtPoint(new Vector3(x, y, z)).getType() != Block.Type.Floor)
 					{
 						removeBlock(blockAtPoint(new Vector3(x, y, z)));
 					}
 				}
-				else
+				else if(blockAction)
 				{
 					createBlock(new Vector3(last_point_x, last_point_y, last_point_z), type);
-					selectorBlock.setPosition(new Vector3(last_point_x, last_point_y, last_point_z));
 				}
-				break;
-			}
-			last_point_x = x;
-			last_point_y = y;
-			last_point_z = z;
-		}
-	}
-
-	public void moveSelectorBlock(Vector3 start_point, Vector3 direction)
-	{
-		int last_point_x = 0;
-		int last_point_y = 0;
-		int last_point_z = 0;
-		for (int i = 1; i < gridSize * 2; i++)
-		{
-			Vector3 tmp_start = new Vector3(start_point);
-			Vector3 tmp_direction = new Vector3(direction);
-			tmp_direction.nor();
-			tmp_direction.scl(i);
-			Vector3 line = tmp_start.add(tmp_direction);
-			int x = Math.round(line.x);
-			int y = Math.round(line.y);
-			int z = Math.round(line.z);
-			if (x > (gridSize - 1) || y > (gridSize - 1) || z > (gridSize - 1) || x < 0 || y < 0 || z < 0)
-			{
-				break;
-			}
-			if (blockAtPoint(new Vector3(x, y, z)) != null)
-			{
+				
 				selectorBlock.setPosition(new Vector3(last_point_x, last_point_y, last_point_z));
 				break;
 			}
@@ -527,13 +482,9 @@ public class BlockList implements Disposable
 		int z = Math.round(point.z);
 
 		if (blockAtPoint(new Vector3(x, y, z)) != null)
-		{
 			return true;
-		}
 		else
-		{
 			return false;
-		}
 	}
 
 	public void undo()
@@ -586,9 +537,9 @@ public class BlockList implements Disposable
 	public void dispose()
 	{
 		// Dispose all Blocks
-		for (int i = 0; i < blockList.size(); i++)
+		for (Block block : blockList)
 		{
-			blockList.get(i).dispose();
+			block.dispose();
 		}
 	}
 

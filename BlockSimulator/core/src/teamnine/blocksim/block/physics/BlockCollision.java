@@ -18,7 +18,7 @@ public class BlockCollision extends Block
 	public boolean isColliding(Block blockNotToCheck, Vector3 position)
 	{
 		BlockHitbox hitbox = new BlockHitbox(position);
-		for (Block block : blockList.getBlockList())
+		for (Block block : blockList.getBlockList(null))
 		{
 			if (block.getType() == Block.Type.Path || block.getType() == Block.Type.Goal)
 				continue;

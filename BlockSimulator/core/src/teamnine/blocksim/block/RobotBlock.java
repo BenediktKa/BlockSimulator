@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.block.physics.BlockPhysics;
+
 public class RobotBlock extends BlockPhysics
 {
 
@@ -83,9 +85,7 @@ public class RobotBlock extends BlockPhysics
 	public void moveLeft()
 	{
 		if (moving)
-		{
 			return;
-		}
 
 		setOriginalPos(position.cpy());
 		moveTo = new Vector3(position.x - 1, position.y, position.z);
@@ -96,9 +96,7 @@ public class RobotBlock extends BlockPhysics
 	public void moveRight()
 	{
 		if (moving)
-		{
 			return;
-		}
 
 		setOriginalPos(position.cpy());
 		moveTo = new Vector3(position.x + 1, position.y, position.z);
@@ -109,9 +107,7 @@ public class RobotBlock extends BlockPhysics
 	public void moveForward()
 	{
 		if (moving)
-		{
 			return;
-		}
 
 		setOriginalPos(position.cpy());
 		moveTo = new Vector3(position.x, position.y, position.z + 1);
@@ -122,9 +118,7 @@ public class RobotBlock extends BlockPhysics
 	public void moveBackwards()
 	{
 		if (moving)
-		{
 			return;
-		}
 
 		setOriginalPos(position.cpy());
 		moveTo = new Vector3(position.x, position.y, position.z - 1);
@@ -135,9 +129,7 @@ public class RobotBlock extends BlockPhysics
 	public void climb()
 	{
 		if (moving)
-		{
 			return;
-		}
 
 		setOriginalPos(position.cpy());
 		moveTo = new Vector3(position.x, position.y + 1, position.z);
@@ -148,9 +140,7 @@ public class RobotBlock extends BlockPhysics
 	public void fall()
 	{
 		if (moving)
-		{
 			return;
-		}
 
 		moveTo = new Vector3(position.x, position.y - 1, position.z);
 		movement = new Vector3(0, -1, 0);
@@ -159,7 +149,6 @@ public class RobotBlock extends BlockPhysics
 
 	public void moveModel()
 	{
-
 		if (movement == null)
 		{
 			super.moveModel();

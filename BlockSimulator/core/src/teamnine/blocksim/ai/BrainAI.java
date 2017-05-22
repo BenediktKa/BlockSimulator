@@ -15,10 +15,10 @@ public class BrainAI //
 
 	public BrainAI(BlockList blockList)
 	{
-		this.obstacles = blockList.getObstacleList();
+		this.obstacles = blockList.getBlockList(Block.Type.Obstacle);
 		this.robots = blockList.getRobotBlockList();
-		this.target = blockList.getTargetList();
-		this.floor = blockList.getFloor();
+		this.target = blockList.getBlockList(Block.Type.Goal);
+		this.floor = blockList.getBlockList(Block.Type.Floor);
 		// Block maxTarget=findFurthestTarget();
 		final Block minTarget = findClosestTarget();
 		RobotBlock maxRobot = findClosestRobot(minTarget);

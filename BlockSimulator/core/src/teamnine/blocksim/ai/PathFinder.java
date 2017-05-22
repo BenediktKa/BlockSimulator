@@ -24,7 +24,7 @@ public class PathFinder
 		this.blockList = blockList;
 		this.numRoboBlocks = numRoboBlocks;
 		this.numTargetBlocks = numTargetBlocks;
-		AbstractList<Block> obstacles = blockList.getObstacleList();
+		AbstractList<Block> obstacles = blockList.getBlockList(Block.Type.Obstacle);
 		int maxX = blockList.getGridSize();
 		int maxZ = maxX;
 		// create a List with the obstacles and the initial position
