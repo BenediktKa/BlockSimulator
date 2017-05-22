@@ -15,6 +15,7 @@ public class Move3
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> obstacles;
 	private ArrayList<Block> floor;
+	private int timestep=0;
 
 	public Move3(ArrayList<Vector3> path, ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, ArrayList<Block> floor, Block mt)
 	{
@@ -306,6 +307,7 @@ public class Move3
 					if (possible)
 					{
 						System.out.println("climb");
+						timestep++;
 						b.climb();
 						while (b.getMoving())
 						{
@@ -327,21 +329,25 @@ public class Move3
 				if (bestMovement.x < b.getPosition().x)
 				{
 					System.out.println("move left");
+					timestep++;
 					b.moveLeft();
 				}
 				else if (bestMovement.x > b.getPosition().x)
 				{
 					System.out.println("move right");
+					timestep++;
 					b.moveRight();
 				}
 				else if (bestMovement.z < b.getPosition().z)
 				{
 					System.out.println("move back");
+					timestep++;
 					b.moveBackwards();
 				}
 				else
 				{
 					System.out.println("move forward");
+					timestep++;
 					b.moveForward();
 				}
 
@@ -591,5 +597,9 @@ public class Move3
 			}
 			pm.removeAll(toRemove);
 		}
+	}
+	public int getTimestep()
+	{
+		return timestep;
 	}
 }
