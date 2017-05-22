@@ -24,7 +24,7 @@ public class configurationLoader {
 	{
 		this.blockList=blockList;
 		chooseFiles();
-		//blockList.disposeExceptFloor();
+		blockList.disposeExceptFloor();
 		Reader reader = new Reader();
 		
 		try

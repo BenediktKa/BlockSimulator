@@ -59,9 +59,6 @@ public class LevelEditorHUD implements Disposable
 	private Label blockLabel;
 	private Block.Type selectedBlock = Block.Type.Obstacle;
 
-	// File Chooser
-	private JFileChooser fileChooser;
-
 	// Configuration Checker
 	// private ConfigurationChecker check;
 
@@ -83,9 +80,6 @@ public class LevelEditorHUD implements Disposable
 		redoButton = new TextButton("Redo", skin, "midnight");
 		startButton = new TextButton("Start", skin);
 		simulationButton = new TextButton("Load Simulation", skin);
-
-		// File Chooser
-		fileChooser = new JFileChooser();
 
 		// Create Labels
 		blockLabel = new Label("Selected: " + selectedBlock, skin);

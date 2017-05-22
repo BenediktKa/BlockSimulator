@@ -7,11 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import teamnine.blocksim.block.BlockList;
-
 public class Reader
 {	
 	private ArrayList<String> text;
@@ -52,9 +47,6 @@ public class Reader
 				cntr++;
 			}
 			text.remove(cntr);
-
-			//blockData = new String[text.size()][];
-			//simulationData = new String[text.size()][];
 			String[][] data = new String[text.size()][];
 			
 			for (int i = 0; i < text.size(); i++)
@@ -62,14 +54,6 @@ public class Reader
 
 				String[] test = text.get(i).split(",\\s+");
 				data[i] = test;
-				/*if (test.length <= 4)
-				{ // For reading start configurations
-					blockData[i] = test;
-				}
-				else
-				{ // For reading start
-					simulationData[i] = test;
-				}*/
 			}
 			return data;
 		}

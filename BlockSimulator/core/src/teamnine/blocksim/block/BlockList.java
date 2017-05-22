@@ -457,9 +457,14 @@ public class BlockList implements Disposable
 	public void disposeExceptFloor()
 	{
 		//Dispose all Blocks, except the floor
-		for (Block block : blockList)
+		for (int i=0; i<blockList.size();i++)
 		{
-			if(block.type!=Block.Type.Floor) block.dispose();
+			Block block = blockList.get(i); 
+			if(block.type!=Block.Type.Floor)
+			{
+				blockList.remove(block);
+				i--;
+			}
 		}
 	}
 
