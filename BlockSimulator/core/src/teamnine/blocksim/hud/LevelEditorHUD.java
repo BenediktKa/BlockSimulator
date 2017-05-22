@@ -23,6 +23,8 @@ import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.ai.BrainAI;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.configs.Reader;
+import teamnine.blocksim.configs.configurationLoader;
+import teamnine.blocksim.configs.simulationLoader;
 
 public class LevelEditorHUD implements Disposable
 {
@@ -96,30 +98,7 @@ public class LevelEditorHUD implements Disposable
 			{
 				if (StateManager.state == SimulationState.MENU)
 				{
-					fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
-					fileChooser.setDialogTitle("Open Start Robot Configuration");
-
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						File selectedFile = fileChooser.getSelectedFile();
-						Reader reader = new Reader(selectedFile);
-						blockSimulator.blockList.createRobot(reader.getBlockData());
-					}
-					fileChooser.setDialogTitle("Open Target Configuration");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						File selectedFile = fileChooser.getSelectedFile();
-						Reader reader = new Reader(selectedFile);
-						blockSimulator.blockList.createTarget(reader.getBlockData());
-					}
-					fileChooser.setDialogTitle("Open Obstacle Configuration");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						File selectedFile = fileChooser.getSelectedFile();
-						Reader reader = new Reader(selectedFile);
-						blockSimulator.blockList.createObstacles(reader.getBlockData());
-					}
-
+					new configurationLoader(blockSimulator.blockList);
 				}
 				super.clicked(event, x, y);
 			}
@@ -234,15 +213,7 @@ public class LevelEditorHUD implements Disposable
 			{
 				if (StateManager.state == StateManager.SimulationState.MENU)
 				{
-					fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
-					fileChooser.setDialogTitle("Load a simulation from file");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						File selectedFile = fileChooser.getSelectedFile();
-						// Reader reader = new Reader(selectedFile);
-						// new simulationRunner(reader.getSimulationData(),
-						// blockSimulator);
-					}
+					new simulationLoader();
 				}
 
 				super.clicked(event, x, y);

@@ -332,87 +332,6 @@ public class BlockList implements Disposable
 		}
 	}
 
-	/**
-	 * Please take into account that Y and Z coordinates are interchanged in
-	 * this
-	 */
-	// TODO: IMPLEMENT ID RECOGNITION
-	public void createRobot(String[][] data)
-	{
-
-		for (int i = 0; i < data.length; i++)
-		{
-			// System.out.println(Float.parseFloat(data[i][1])+";
-			// "+Float.parseFloat(data[i][3])+";
-			// "+Float.parseFloat(data[i][2]));
-
-			try
-			{
-				double newID = Double.parseDouble(data[i][0]);
-				createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), // WATCH
-																											// OUT:
-																											// INCREASED
-																											// BY
-																											// 1!!!!!!!!!!!!!!!!!!!!!!!!!
-						Float.parseFloat(data[i][2])), Block.Type.Robot, newID);
-			} catch (NumberFormatException e)
-			{
-				System.out.println("Exception");
-				createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), // WATCH
-																											// OUT:
-																											// INCREASED
-																											// BY
-																											// 1!!!!!!!!!!!!!!!!!!!!!!!!!
-						Float.parseFloat(data[i][2])), Block.Type.Robot);
-			}
-		}
-	}
-
-	/**
-	 * Please take into account that Y and Z are interchanged in this method
-	 */
-	// TODO: IMPLEMENT ID RECOGNITION/leave it out properly
-	public void createTarget(String[][] data)
-	{
-
-		for (int i = 0; i < data.length; i++)
-		{
-			try
-			{
-				double newID = Double.parseDouble(data[i][0]);
-				createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), // WATCH
-																											// OUT:
-																											// INCREASED
-																											// BY
-																											// 1!!!!!!!!!!!!!!!!!!!!!!!!!
-						Float.parseFloat(data[i][2])), Block.Type.Goal, newID);
-			} catch (NumberFormatException e)
-			{
-				System.out.println("Exception");
-				createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), // WATCH
-																											// OUT:
-																											// INCREASED
-																											// BY
-																											// 1!!!!!!!!!!!!!!!!!!!!!!!!!
-						Float.parseFloat(data[i][2])), Block.Type.Goal);
-			}
-		}
-	}
-
-	/**
-	 * Please take into account that Y and Z are interchanged in this method
-	 * Obstacles don't have ID's ?????
-	 */
-	// TODO: IMPLEMENT ID RECOGNITION FOR OBSTACLES
-	public void createObstacles(String[][] data)
-	{
-
-		for (int i = 0; i < data.length; i++)
-		{
-			createBlock(new Vector3(Float.parseFloat(data[i][0]), (Float.parseFloat(data[i][2]) + 1), Float.parseFloat(data[i][1])), Block.Type.Obstacle);
-		}
-	}
-
 	public void render(ModelBatch modelBatch, Environment environment)
 	{
 		for (int i = 0; i < blockList.size(); i++)
@@ -532,6 +451,15 @@ public class BlockList implements Disposable
 		for (Block block : blockList)
 		{
 			block.dispose();
+		}
+	}
+	
+	public void disposeExceptFloor()
+	{
+		//Dispose all Blocks, except the floor
+		for (Block block : blockList)
+		{
+			if(block.type!=Block.Type.Floor) block.dispose();
 		}
 	}
 
