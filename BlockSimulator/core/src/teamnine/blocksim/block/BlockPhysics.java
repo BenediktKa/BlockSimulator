@@ -17,7 +17,7 @@ public class BlockPhysics extends BlockCollision
 	protected boolean gravity = false;
 
 	// Timer to recalculate gravity
-	private float gravityTimer = 0;
+	private float gravityTime = 0;
 
 	private BlockList blockList;
 	private Vector3 originalPos;
@@ -33,12 +33,15 @@ public class BlockPhysics extends BlockCollision
 		// Reset Gravity
 		fallVel = GRAVITY;
 
+		// Reset Time
+		gravityTime = 0;
+
 		this.gravity = gravity;
 	}
 
 	public void calcFallVel()
 	{
-		fallVel += GRAVITY;
+		fallVel += GRAVITY * gravityTime;
 
 		// Can't go faster than terminal velocity
 		if (fallVel > TERMINALVELOCITY)
@@ -49,15 +52,13 @@ public class BlockPhysics extends BlockCollision
 	{
 		if (gravity)
 		{
-			// This will add to a timer, which once it hits 1 will increase gravity
-			gravityTimer += Gdx.graphics.getDeltaTime();
-			if (gravityTimer >= 1)
-			{
-				gravityTimer -= 1;
-				calcFallVel();
-			}
+			// This will add to a timer, which once it hits 1 will increase
+			// gravity
+			gravityTime += Gdx.graphics.getDeltaTime();
 
-			//Check if the next update downwards will lead to a collision
+			calcFallVel();
+
+			// Check if the next update downwards will lead to a collision
 			if (isColliding(this, new Vector3(position.x, position.y - fallVel, position.z)))
 			{
 				position = new Vector3(Math.round(position.x), Math.round(position.y), Math.round(position.z));

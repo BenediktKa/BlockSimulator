@@ -86,7 +86,7 @@ public class Block implements Disposable
 			ordinal = ++ordinal % types.length;
 			if (types[ordinal] == Selector)
 				return types[0];
-			
+
 			return types[ordinal];
 		}
 	}

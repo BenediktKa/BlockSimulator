@@ -15,7 +15,7 @@ public class BlockModel
 {
 	private Model model;
 	private ModelInstance modelInstance;
-	
+
 	public BlockModel(Block.Type type)
 	{
 		if (type == Type.Robot)
@@ -60,7 +60,7 @@ public class BlockModel
 	{
 		return modelInstance;
 	}
-	
+
 	public Model getModel()
 	{
 		return model;

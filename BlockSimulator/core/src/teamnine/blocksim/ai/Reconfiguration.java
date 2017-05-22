@@ -21,13 +21,10 @@ public class Reconfiguration
 	 * blocks == number of target blocks Not yet implemented: check if the ID's
 	 * correspond
 	 * 
-	 * @param robot
-	 *            list with all robot blocks in the neighborhood (how do we know
-	 *            where they are exactly)
-	 * @param target
-	 *            list with all target blocks
-	 * @param minTarget
-	 *            the target block in the corner, closest to the robot
+	 * @param robot list with all robot blocks in the neighborhood (how do we
+	 *            know where they are exactly)
+	 * @param target list with all target blocks
+	 * @param minTarget the target block in the corner, closest to the robot
 	 */
 	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget)
 	{

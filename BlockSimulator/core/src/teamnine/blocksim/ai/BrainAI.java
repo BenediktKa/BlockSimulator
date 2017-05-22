@@ -37,7 +37,8 @@ public class BrainAI //
 	}
 
 	/*
-	 * Does not take the y-coordinates into account, since PathFinding fails with targetblocks that are not on the floor
+	 * Does not take the y-coordinates into account, since PathFinding fails
+	 * with targetblocks that are not on the floor
 	 */
 	public Block findFurthestTarget()
 	{
@@ -46,12 +47,13 @@ public class BrainAI //
 		Block maxTarget = target.get(0);
 		for (int i = 0; i < target.size(); i++)
 		{
-			int distance = (int) (Math.abs(first.getPosition().x - target.get(i).getPosition().x) + Math.abs(first.getPosition().z - target.get(i).getPosition().z)/* + (target.get(i).getPosition().y-1)*/);
+			int distance = (int) (Math.abs(first.getPosition().x - target.get(i).getPosition().x) + Math.abs(first.getPosition().z - target.get(i)
+					.getPosition().z)/* + (target.get(i).getPosition().y-1) */);
 			if (distance > maxDistance)
 			{
 				maxDistance = distance;
 				maxTarget = target.get(i);
-				System.out.println((first.getPosition().x - maxTarget.getPosition().x)+ " "+(first.getPosition().z - maxTarget.getPosition().z)+" "+(target.get(i).getPosition().y-1));
+				System.out.println((first.getPosition().x - maxTarget.getPosition().x) + " " + (first.getPosition().z - maxTarget.getPosition().z) + " " + (target.get(i).getPosition().y - 1));
 			}
 		}
 		return maxTarget;
@@ -64,7 +66,7 @@ public class BrainAI //
 		Block minTarget = target.get(0);
 		for (int i = 0; i < target.size(); i++)
 		{
-			int distance = (int) (Math.abs(first.getPosition().x - target.get(i).getPosition().x) + Math.abs(first.getPosition().z - target.get(i).getPosition().z) + (target.get(i).getPosition().y-1));
+			int distance = (int) (Math.abs(first.getPosition().x - target.get(i).getPosition().x) + Math.abs(first.getPosition().z - target.get(i).getPosition().z) + (target.get(i).getPosition().y - 1));
 			if (minDistance == -1)
 			{
 				minDistance = distance;
