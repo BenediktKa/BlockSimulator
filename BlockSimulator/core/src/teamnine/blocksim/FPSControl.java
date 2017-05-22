@@ -166,10 +166,6 @@ public class FPSControl extends FirstPersonCameraController
 			if (blockSimulator.blockList.blockAtPoint(blockSimulator.selectorBlock.getPosition()) == null)
 				blockSimulator.blockList.createBlock(blockSimulator.selectorBlock.getPosition().cpy(), blockType);
 		}
-		else if (keycode == Keys.C)
-		{
-			camera.lookAt(blockSimulator.selectorBlock.getPosition());
-		}
 		else if (keycode == Keys.ESCAPE)
 		{
 			if (StateManager.state == SimulationState.BUILD)
@@ -178,7 +174,7 @@ public class FPSControl extends FirstPersonCameraController
 				StateManager.state = SimulationState.MENU;
 				Gdx.input.setCursorCatched(false);
 			}
-			else
+			else if (StateManager.state == SimulationState.MENU)
 			{
 				blockSimulator.notification.setNotification("Build Mode", Notification.Type.ModeChange, 2);
 				StateManager.state = SimulationState.BUILD;

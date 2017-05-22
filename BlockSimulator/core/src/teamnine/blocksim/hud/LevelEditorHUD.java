@@ -26,9 +26,6 @@ import teamnine.blocksim.configs.Reader;
 
 public class LevelEditorHUD implements Disposable
 {
-
-	private BlockSimulator blockSimulator;
-
 	// Stage
 	private Stage stage;
 
@@ -68,8 +65,6 @@ public class LevelEditorHUD implements Disposable
 
 	public LevelEditorHUD(final BlockSimulator blockSimulator)
 	{
-		this.blockSimulator = blockSimulator;
-
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
 		stage = new Stage(new ScreenViewport());
 
