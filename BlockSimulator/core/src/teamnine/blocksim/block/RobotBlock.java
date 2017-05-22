@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.block.physics.BlockPhysics;
+import teamnine.blocksim.block.Block.Type;
+import teamnine.blocksim.block.physics.BlockGravity;
 
-public class RobotBlock extends BlockPhysics
+public class RobotBlock extends BlockGravity
 {
 
 	private Vector3 moveTo, movement;
@@ -84,7 +85,7 @@ public class RobotBlock extends BlockPhysics
 
 	public void moveLeft()
 	{
-		if (moving)
+		if (getMoving())
 			return;
 
 		setOriginalPos(position.cpy());
@@ -95,7 +96,7 @@ public class RobotBlock extends BlockPhysics
 
 	public void moveRight()
 	{
-		if (moving)
+		if (getMoving())
 			return;
 
 		setOriginalPos(position.cpy());
@@ -106,7 +107,7 @@ public class RobotBlock extends BlockPhysics
 
 	public void moveForward()
 	{
-		if (moving)
+		if (getMoving())
 			return;
 
 		setOriginalPos(position.cpy());
@@ -117,7 +118,7 @@ public class RobotBlock extends BlockPhysics
 
 	public void moveBackwards()
 	{
-		if (moving)
+		if (getMoving())
 			return;
 
 		setOriginalPos(position.cpy());
@@ -128,7 +129,7 @@ public class RobotBlock extends BlockPhysics
 
 	public void climb()
 	{
-		if (moving)
+		if (getMoving())
 			return;
 
 		setOriginalPos(position.cpy());
@@ -139,7 +140,7 @@ public class RobotBlock extends BlockPhysics
 
 	public void fall()
 	{
-		if (moving)
+		if (getMoving())
 			return;
 
 		moveTo = new Vector3(position.x, position.y - 1, position.z);

@@ -5,8 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -18,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.block.SelectorBlock;
+import teamnine.blocksim.hud.Crosshair;
+import teamnine.blocksim.hud.FPSCounter;
 import teamnine.blocksim.hud.LevelEditorHUD;
 import teamnine.blocksim.hud.Notification;
 
@@ -31,11 +31,16 @@ public class BlockSimulator implements ApplicationListener
 
 	public Environment environment;
 	public PerspectiveCamera camera;
-	public FPSControl cameraController;
+	public FPSControl fpsController;
 	public ExtendViewport viewport;
 	public SpriteBatch spriteBatch;
 	public ModelBatch modelBatch;
-	public BitmapFont font;
+
+	// Selector Block
+	public SelectorBlock selectorBlock;
+
+	// State Manager
+	public StateManager stateManager;
 
 	// Input Multiplexer
 	public InputMultiplexer inputMultiplexer;
@@ -53,14 +58,17 @@ public class BlockSimulator implements ApplicationListener
 	public Notification notification;
 
 	// Crosshair
-	public Texture crosshair;
+	private Crosshair crosshair;
 
-	// Loading
-	public SelectorBlock selectorBlock;
+	// FPS Counter
+	private FPSCounter fpsText;
 
 	@Override
 	public void create()
 	{
+
+		// Create State Manager
+		stateManager = new StateManager();
 
 		// Create Environment
 		environment = new Environment();
@@ -77,17 +85,14 @@ public class BlockSimulator implements ApplicationListener
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-		// BlockList
-		blockList = new BlockList(gridSize, this);
+		// Selector Block
 		selectorBlock = new SelectorBlock(new Vector3(0, 0, 0), Block.Type.Selector);
-		selectorBlock.moveModel();
-		blockList.setSelectorBlock(selectorBlock);
 
 		// Crosshair
-		crosshair = new Texture(Gdx.files.internal("interface/Crosshair.png"));
+		crosshair = new Crosshair();
 
-		// Font
-		font = new BitmapFont();
+		// FPS Counter
+		fpsText = new FPSCounter();
 
 		// Create Camera
 		camera = new PerspectiveCamera(FIELDOFVIEW, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -97,49 +102,46 @@ public class BlockSimulator implements ApplicationListener
 		camera.far = CAMERA_FAR;
 
 		// Camera Control
-		cameraController = new FPSControl(camera, this);
+		fpsController = new FPSControl(camera, this);
 
 		// Interface
-		levelHUD = new LevelEditorHUD(this, blockList);
+		levelHUD = new LevelEditorHUD(this);
 
 		// Input
-		inputMultiplexer.addProcessor(cameraController);
+		inputMultiplexer.addProcessor(fpsController);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		Gdx.input.setCursorCatched(true);
+		
+		// BlockList
+		blockList = new BlockList(gridSize, this);
 	}
 
 	@Override
 	public void render()
 	{
-
 		// Set Background Color
 		Gdx.gl.glClearColor(44f / 255f, 62f / 255f, 80f / 255f, 1);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+		// Camera Update
+		fpsController.update();
+		
 		// Rendering Models
 		modelBatch.begin(camera);
-		modelBatch.render(selectorBlock.getModelInstance(), environment);
 		blockList.render(modelBatch, environment);
+		modelBatch.render(selectorBlock.getModelInstance(), environment);
 		modelBatch.end();
-
-		float crosshair_x = (Gdx.graphics.getWidth() - 25) / 2;
-		float crosshair_y = (Gdx.graphics.getHeight() - 25) / 2;
 
 		// Render LevelHUD
 		levelHUD.render();
 
-		// Rendering Sprites
+		// Rendering Sprite
 		spriteBatch.begin();
-
-		font.draw(spriteBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 5, 20);
-
 		notification.render(spriteBatch);
-		spriteBatch.draw(crosshair, crosshair_x, crosshair_y, 25, 25);
+		crosshair.render(spriteBatch);
+		fpsText.render(spriteBatch);
 		spriteBatch.end();
-
-		// Camera Update
-		cameraController.update();
 	}
 
 	@Override
@@ -160,6 +162,8 @@ public class BlockSimulator implements ApplicationListener
 	@Override
 	public void dispose()
 	{
+		crosshair.dispose();
+		fpsText.dispose();
 		blockList.dispose();
 		notification.dispose();
 	}

@@ -29,9 +29,6 @@ public class BlockList implements Disposable
 	private ArrayList<Block> pathList = new ArrayList<Block>();
 	private ArrayList<RobotBlock> robotList = new ArrayList<RobotBlock>();
 
-	// Selector Block
-	private Block selectorBlock;
-
 	// Stacks
 	private Stack<Action> undoQueue = new Stack<Action>();
 	private Stack<Action> redoQueue = new Stack<Action>();
@@ -426,11 +423,6 @@ public class BlockList implements Disposable
 		}
 	}
 
-	public void setSelectorBlock(Block selectorBlock)
-	{
-		this.selectorBlock = selectorBlock;
-	}
-
 	public void editBoxByRayCast(Vector3 start_point, Vector3 direction, Block.Type type, boolean blockAction)
 	{
 		int last_point_x = 0;
@@ -464,7 +456,7 @@ public class BlockList implements Disposable
 					createBlock(new Vector3(last_point_x, last_point_y, last_point_z), type);
 				}
 				
-				selectorBlock.setPosition(new Vector3(last_point_x, last_point_y, last_point_z));
+				blockSimulator.selectorBlock.setPosition(new Vector3(last_point_x, last_point_y, last_point_z));
 				break;
 			}
 			last_point_x = x;
