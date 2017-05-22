@@ -23,12 +23,17 @@ public class Move3
 		this.path = path;
 		this.robots = new ArrayList<RobotBlock>(robots);
 		this.floor = floor;
-
+		/*
 		for (int i = path.size() - 1; i > 0; i--)
+			decideMove(this.path.get(i));
+		*/System.out.println("poep "+path.size());
+		for (int i = 0; i < path.size(); i++)
+			System.out.println(this.path.get(i));
+		for (int i = 0; i < path.size(); i++)
 			decideMove(this.path.get(i));
 
 		decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y, mt.getPosition().z));
-
+		System.out.println("Timestep: "+timestep);
 		Thread.currentThread().interrupt();
 	}
 
