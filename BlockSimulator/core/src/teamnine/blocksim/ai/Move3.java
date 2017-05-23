@@ -6,6 +6,8 @@ import java.util.Queue;
 
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.StateManager;
+import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
 
@@ -199,7 +201,17 @@ public class Move3
 		boolean targetReached = false;
 		while (!targetReached)
 		{
-			while (b.getMoving())
+			if(StateManager.state == SimulationState.BUILD)
+			{
+				try
+				{
+					Thread.currentThread().join();
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			while (b.getMoving() || StateManager.state == SimulationState.PAUSE)
 			{
 				try
 				{
@@ -314,7 +326,7 @@ public class Move3
 						System.out.println("climb");
 						timestep++;
 						b.climb();
-						while (b.getMoving())
+						while (b.getMoving() || StateManager.state == SimulationState.PAUSE)
 						{
 							try
 							{
@@ -358,7 +370,7 @@ public class Move3
 
 			}
 		}
-		while (b.getMoving())
+		while (b.getMoving() || StateManager.state == SimulationState.PAUSE)
 		{
 			try
 			{
