@@ -3,14 +3,11 @@ package teamnine.blocksim.block.physics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.block.Block.Type;
 import teamnine.blocksim.block.BlockList;
 
-public class BlockGravity extends BlockCollision
+public class BlockGravity extends BlockFriction
 {
-
-	// Physic constants
-	private final float GRAVITY = 0.098f;
-	private final float TERMINALVELOCITY = 10;
 
 	// Fall velocity
 	private float fallVel = GRAVITY;

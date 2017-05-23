@@ -170,9 +170,9 @@ public class RobotBlock extends BlockGravity
 		}
 		else if (moving)
 		{
-			position.x += movement.x * speed * Gdx.graphics.getDeltaTime();
+			position.x += movement.x * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.x);
 			position.y += movement.y * speed * Gdx.graphics.getDeltaTime();
-			position.z += movement.z * speed * Gdx.graphics.getDeltaTime();
+			position.z += movement.z * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.z);
 		}
 		super.moveModel();
 	}
