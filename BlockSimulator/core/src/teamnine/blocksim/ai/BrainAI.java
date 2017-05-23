@@ -24,13 +24,16 @@ public class BrainAI //
 		RobotBlock maxRobot = findClosestRobot(minTarget);
 		final PathFinder path = new PathFinder(blockList, robots.size(), target.size());
 		path.startPathFinder(maxRobot, minTarget);
+		
+		
 
 		new Thread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				new Move3(path.getFinalList(), robots, obstacles, floor, minTarget);
+				Move3 movement = new Move3(robots, obstacles, floor);
+				movement.startMove3(path.getFinalList(), minTarget);
 			}
 		}).start();
 		// new Reconfiguration(robots,target,minTarget);
