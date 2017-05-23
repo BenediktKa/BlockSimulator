@@ -27,7 +27,7 @@ public class BlockGravity extends BlockFriction
 	public void setGravity(boolean gravity)
 	{
 		// Reset Gravity
-		fallVel = getGravity();
+		fallVel = 0;
 
 		// Reset Time
 		gravityTime = 0;
