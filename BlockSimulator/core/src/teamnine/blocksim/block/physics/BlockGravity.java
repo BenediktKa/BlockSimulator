@@ -34,6 +34,8 @@ public class BlockGravity extends BlockFriction
 		
 		// Set Gravity Boolean
 		this.gravity = gravity;
+		
+		rbText.setGravityText(fallVel);
 	}
 
 	public void calcFallVel()
@@ -43,6 +45,8 @@ public class BlockGravity extends BlockFriction
 		// Can't go faster than terminal velocity
 		if (fallVel > getTerminalVelocity())
 			fallVel = getTerminalVelocity();
+		
+		rbText.setGravityText(fallVel);
 	}
 
 	public void moveModel()

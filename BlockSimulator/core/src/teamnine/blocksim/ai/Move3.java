@@ -35,7 +35,7 @@ public class Move3
 		for (int i = 0; i < path.size(); i++)
 			decideMove(this.path.get(i));
 
-		decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y, mt.getPosition().z));
+		//decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y, mt.getPosition().z));
 		System.out.println("Timestep: " + timestep);
 		Thread.currentThread().interrupt();
 	}

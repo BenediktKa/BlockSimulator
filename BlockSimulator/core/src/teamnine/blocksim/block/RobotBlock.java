@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.StateManager;
 import teamnine.blocksim.block.physics.BlockGravity;
+import teamnine.blocksim.hud.RobotBlockText;
 
 public class RobotBlock extends BlockGravity
 {
@@ -138,20 +139,13 @@ public class RobotBlock extends BlockGravity
 		moving = true;
 	}
 
-	public void fall()
-	{
-		if (getMoving())
-			return;
-
-		moveTo = new Vector3(position.x, position.y - 1, position.z);
-		movement = new Vector3(0, -1, 0);
-		moving = true;
-	}
-
 	public void moveModel()
 	{
 		if(StateManager.state == StateManager.SimulationState.PAUSE)
+		{
+			rbText.render();
 			return;
+		}
 		
 		if (movement == null)
 		{
@@ -163,6 +157,7 @@ public class RobotBlock extends BlockGravity
 		{
 			movement = null;
 			setGravity(true);
+			System.out.println("Called");
 		}
 		else if ((position.cpy().sub(moveTo).isZero(0.01f) || getOriginalPos().dst(position) > 1 || getOriginalPos().dst(position) < -1) && moving)
 		{
@@ -170,13 +165,19 @@ public class RobotBlock extends BlockGravity
 			position.y = moveTo.y;
 			position.z = moveTo.z;
 			moving = false;
+			rbText.setTotalSpeedText(new Vector3());
 		}
 		else if (moving)
 		{
-			position.x += movement.x * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.x);
+			Vector3 vector = new Vector3(movement.x * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.x), 0, movement.z * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.z));
+			position.x += vector.x;
 			position.y += movement.y * speed * Gdx.graphics.getDeltaTime();
-			position.z += movement.z * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.z);
+			position.z += vector.z;
+			
+			rbText.setFrictionText(calcFriction(movement.x) + calcFriction(movement.z));
+			rbText.setTotalSpeedText(vector);
 		}
+		rbText.setSpeedText(speed);
 		super.moveModel();
 	}
 }
