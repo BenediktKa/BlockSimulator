@@ -118,7 +118,7 @@ public class PathFinder
 
 		// implement Dijkstra's algorithm
 		DistanceBlock tar = new DistanceBlock(MAX_VALUE, target.getPosition(), 0);
-		Dijkstra dijkstra = new Dijkstra(initialList, tar);
+		Dijkstra dijkstra = new Dijkstra(initialList, tar,numRoboBlocks,numTargetBlocks);
 		list = dijkstra.getFinalList();
 
 		if (list.get(list.size() - 1).getData().equals(target.getPosition()))

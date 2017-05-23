@@ -75,7 +75,14 @@ public class BlockList implements Disposable
 		createBlock(new Vector3(12, 1, 12), Block.Type.Goal);
 		createBlock(new Vector3(12, 1, 13), Block.Type.Goal);
 	}
-
+	public  ArrayList<Block> getObstacleList()
+	{
+		return obstacleList;
+	}
+	public  ArrayList<Block> getGoalList()
+	{
+		return goalList;
+	}
 	public int size()
 	{
 		return blockList.size();

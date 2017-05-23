@@ -17,22 +17,23 @@ public class Move3
 	private ArrayList<Block> floor;
 	private int timestep=0;
 
-	public Move3(ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, ArrayList<Block> floor)
+	public Move3(ArrayList<Vector3> path, ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, ArrayList<Block> floor, Block mt)
 	{
 		this.obstacles = obstacles;
+		this.path = path;
 		this.robots = new ArrayList<RobotBlock>(robots);
 		this.floor = floor;
-	}
-	
-	public void startMove3 (ArrayList<Vector3> path, Block mt)
-	{
-		this.path = path;
 		
 		for (int i = path.size() - 1; i > 0; i--)
 			decideMove(this.path.get(i));
-
+		System.out.println("poep "+path.size());
+		for (int i = 0; i < path.size(); i++)
+			System.out.println(this.path.get(i));
+		/*for (int i = 0; i < path.size(); i++)
+			decideMove(this.path.get(i));
+*/
 		decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y, mt.getPosition().z));
-
+		System.out.println("Timestep: "+timestep);
 		Thread.currentThread().interrupt();
 	}
 
