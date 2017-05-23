@@ -17,7 +17,7 @@ public class Move3
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> obstacles;
 	private ArrayList<Block> floor;
-	private int timestep=0;
+	private int timestep = 0;
 
 	public Move3(ArrayList<Vector3> path, ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, ArrayList<Block> floor, Block mt)
 	{
@@ -26,16 +26,17 @@ public class Move3
 		this.robots = new ArrayList<RobotBlock>(robots);
 		this.floor = floor;
 		/*
-		for (int i = path.size() - 1; i > 0; i--)
-			decideMove(this.path.get(i));*/
-		System.out.println("poep "+path.size());
+		 * for (int i = path.size() - 1; i > 0; i--)
+		 * decideMove(this.path.get(i));
+		 */
+		System.out.println("poep " + path.size());
 		for (int i = 0; i < path.size(); i++)
 			System.out.println(this.path.get(i));
 		for (int i = 0; i < path.size(); i++)
 			decideMove(this.path.get(i));
 
 		decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y, mt.getPosition().z));
-		System.out.println("Timestep: "+timestep);
+		System.out.println("Timestep: " + timestep);
 		Thread.currentThread().interrupt();
 	}
 
@@ -55,7 +56,7 @@ public class Move3
 		 */
 		////////////////////////////
 
-		for (int i = 0; i < robots.size(); i++) 
+		for (int i = 0; i < robots.size(); i++)
 		{
 			orderToMove.add(robots.get(i));
 		}
@@ -201,26 +202,8 @@ public class Move3
 		boolean targetReached = false;
 		while (!targetReached)
 		{
-			if(StateManager.state == SimulationState.BUILD)
-			{
-				try
-				{
-					Thread.currentThread().join();
-				} catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
-			while (b.getMoving() || StateManager.state == SimulationState.PAUSE)
-			{
-				try
-				{
-					Thread.sleep(250);
-				} catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
+			checkIfCanMove(b);
+
 			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 			for (int i = 0; i < robots.size(); i++)
 			{
@@ -326,16 +309,7 @@ public class Move3
 						System.out.println("climb");
 						timestep++;
 						b.climb();
-						while (b.getMoving() || StateManager.state == SimulationState.PAUSE)
-						{
-							try
-							{
-								Thread.sleep(250);
-							} catch (InterruptedException e)
-							{
-								e.printStackTrace();
-							}
-						}
+						checkIfCanMove(b);
 					}
 					else
 					{
@@ -370,16 +344,7 @@ public class Move3
 
 			}
 		}
-		while (b.getMoving() || StateManager.state == SimulationState.PAUSE)
-		{
-			try
-			{
-				Thread.sleep(250);
-			} catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
-		}
+		checkIfCanMove(b);
 	}
 
 	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b, Vector3 v)
@@ -615,8 +580,34 @@ public class Move3
 			pm.removeAll(toRemove);
 		}
 	}
+
 	public int getTimestep()
 	{
 		return timestep;
+	}
+
+	public void checkIfCanMove(RobotBlock b)
+	{
+		if (StateManager.state == SimulationState.BUILD)
+		{
+			try
+			{
+				Thread.currentThread().join();
+			} catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		while (b.getMoving() || StateManager.state == SimulationState.PAUSE)
+		{
+			try
+			{
+				Thread.sleep(250);
+			} catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 }
