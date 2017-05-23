@@ -165,19 +165,20 @@ public class RobotBlock extends BlockGravity
 			position.y = moveTo.y;
 			position.z = moveTo.z;
 			moving = false;
-			rbText.setTotalSpeedText(new Vector3());
+			rbText.setHorizontalText(0);
 		}
 		else if (moving)
 		{
-			Vector3 vector = new Vector3(movement.x * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.x), 0, movement.z * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.z));
-			position.x += vector.x;
-			position.y += movement.y * speed * Gdx.graphics.getDeltaTime();
-			position.z += vector.z;
+			float speedX = movement.x * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.x);
+			float speedY = movement.y * speed * Gdx.graphics.getDeltaTime();
+			float speedZ = movement.z * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.z);
+			position.x += speedX;
+			position.y += speedY;
+			position.z += speedZ;
 			
 			rbText.setFrictionText(calcFriction(movement.x) + calcFriction(movement.z));
-			rbText.setTotalSpeedText(vector);
+			rbText.setHorizontalText(speedX + speedZ);
 		}
-		rbText.setSpeedText(speed);
 		super.moveModel();
 	}
 }

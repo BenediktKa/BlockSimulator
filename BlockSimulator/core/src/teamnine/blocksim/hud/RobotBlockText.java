@@ -18,10 +18,9 @@ public class RobotBlockText implements Disposable
 	
 	private Stage stage;
 	
-	private Label speedLabel;
 	private Label frictionLabel;
-	private Label gravityLabel;
-	private Label totalSpeedLabel;
+	private Label horizontalSpeedLabel;
+	private Label verticalSpeedLabel;
 
 	public RobotBlockText()
 	{
@@ -33,15 +32,13 @@ public class RobotBlockText implements Disposable
 		
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
 		
-		speedLabel = new Label("Speed: ",skin);
 		frictionLabel = new Label("Friction: ",skin);
-		gravityLabel = new Label("Gravity: ",skin);
-		totalSpeedLabel = new Label("Speed X: Speed Z: ", skin);
+		horizontalSpeedLabel = new Label("Horizontal Speed: ",skin);
+		verticalSpeedLabel = new Label("Vertical Speed: ", skin);
 		
-		table.add(speedLabel).row();
 		table.add(frictionLabel).row();
-		table.add(gravityLabel).row();
-		table.add(totalSpeedLabel);
+		table.add(horizontalSpeedLabel).row();
+		table.add(verticalSpeedLabel);
 		
 		
 		stage.addActor(table);
@@ -52,24 +49,19 @@ public class RobotBlockText implements Disposable
 		stage.draw();
 	}
 	
-	public void setSpeedText(float value)
-	{
-		speedLabel.setText(String.format("Speed: %.3f", value));
-	}
-	
 	public void setFrictionText(float value)
 	{
 		frictionLabel.setText(String.format("Friction: %.3f", value));
 	}
 	
-	public void setGravityText(float value)
+	public void setHorizontalText(float value)
 	{
-		gravityLabel.setText(String.format("Gravity: %.3f", value));
+		horizontalSpeedLabel.setText(String.format("Horizontal Speed: %.3f", value));
 	}
 	
-	public void setTotalSpeedText(Vector3 vector)
+	public void setVerticalText(float value)
 	{
-		totalSpeedLabel.setText(String.format("Speed X: %.3f Speed Z: %.3f", vector.x, vector.z));
+		verticalSpeedLabel.setText(String.format("Vertical Speed: %.3f", value));
 	}
 
 	@Override
