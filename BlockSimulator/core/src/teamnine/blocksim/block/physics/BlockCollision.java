@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
 
-public class BlockCollision extends Block
+public class BlockCollision extends BlockPhysics
 {
 	private BlockList blockList;
 

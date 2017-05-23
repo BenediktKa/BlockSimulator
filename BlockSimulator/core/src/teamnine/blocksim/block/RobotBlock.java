@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.block.Block.Type;
 import teamnine.blocksim.block.physics.BlockGravity;
 
 public class RobotBlock extends BlockGravity

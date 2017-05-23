@@ -6,10 +6,6 @@ import teamnine.blocksim.block.BlockList;
 
 public class BlockFriction extends BlockCollision
 {
-	// Physic constants
-	protected final float GRAVITY = 0.098f;
-	protected final float TERMINALVELOCITY = 10;
-	protected final float FRICTIONCONSTANT = 0.5f;
 	
 	public BlockFriction(Vector3 position, Type type, BlockList blockList)
 	{
@@ -21,8 +17,8 @@ public class BlockFriction extends BlockCollision
 		if(speed == 0)
 			return 0;
 		else if(speed > 0)
-			return FRICTIONCONSTANT * -GRAVITY;
+			return getFrictionConstant() * -getGravity();
 		else
-			return FRICTIONCONSTANT * GRAVITY;
+			return getFrictionConstant() * getGravity();
 	}
 }

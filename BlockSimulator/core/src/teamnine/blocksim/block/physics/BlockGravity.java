@@ -3,14 +3,13 @@ package teamnine.blocksim.block.physics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.block.Block.Type;
 import teamnine.blocksim.block.BlockList;
 
 public class BlockGravity extends BlockFriction
 {
 
 	// Fall velocity
-	private float fallVel = GRAVITY;
+	private float fallVel;
 	protected boolean gravity = false;
 
 	// Timer to recalculate gravity
@@ -28,7 +27,7 @@ public class BlockGravity extends BlockFriction
 	public void setGravity(boolean gravity)
 	{
 		// Reset Gravity
-		fallVel = GRAVITY;
+		fallVel = getGravity();
 
 		// Reset Time
 		gravityTime = 0;
@@ -39,11 +38,11 @@ public class BlockGravity extends BlockFriction
 
 	public void calcFallVel()
 	{
-		fallVel += GRAVITY * gravityTime;
+		fallVel += getGravity() * gravityTime;
 
 		// Can't go faster than terminal velocity
-		if (fallVel > TERMINALVELOCITY)
-			fallVel = TERMINALVELOCITY;
+		if (fallVel > getTerminalVelocity())
+			fallVel = getTerminalVelocity();
 	}
 
 	public void moveModel()
