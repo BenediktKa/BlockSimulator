@@ -22,7 +22,7 @@ public class BrainAI //
 		// Block maxTarget=findFurthestTarget();
 		final Block minTarget = findClosestTarget();
 		RobotBlock maxRobot = findClosestRobot(minTarget);
-		//final PathFinder path = new PathFinder(blockList, maxRobot, minTarget, robots.size(), target.size());
+		final PathFinder path = new PathFinder(blockList, robots.size(), target.size());
 		final Path p2=new Path(blockList, maxRobot,minTarget, robots.size(),target.size());
 		new Thread(new Runnable()
 		{
