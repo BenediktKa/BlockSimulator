@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.BlockList;
 
-public class BlockPhysics extends BlockCollision
+public class BlockGravity extends BlockCollision
 {
 
 	// Physic constants
@@ -22,7 +22,7 @@ public class BlockPhysics extends BlockCollision
 	private BlockList blockList;
 	private Vector3 originalPos;
 
-	public BlockPhysics(Vector3 position, Type type, BlockList blockList)
+	public BlockGravity(Vector3 position, Type type, BlockList blockList)
 	{
 		super(position, type, blockList);
 		this.blockList = blockList;

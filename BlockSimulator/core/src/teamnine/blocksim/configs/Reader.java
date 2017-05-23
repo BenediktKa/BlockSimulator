@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Reader
-{
+{	
 	private ArrayList<String> text;
 	private String[][] blockData;
 	private String[][] simulationData;
@@ -25,8 +25,10 @@ public class Reader
 		nom = text.toArray(nom);
 		return nom;
 	}
+	
+	public Reader(){}
 
-	public Reader(File file)
+	public String[][] readFiles(File file)
 	{
 		try
 		{
@@ -37,6 +39,7 @@ public class Reader
 			text = new ArrayList<String>();
 			text.add(br.readLine());
 			int cntr = 0;
+			System.out.println(cntr);
 
 			while (text.get(cntr) != null)
 			{
@@ -44,29 +47,21 @@ public class Reader
 				cntr++;
 			}
 			text.remove(cntr);
-
-			blockData = new String[text.size()][];
-			simulationData = new String[text.size()][];
-
+			String[][] data = new String[text.size()][];
+			
 			for (int i = 0; i < text.size(); i++)
 			{
 
 				String[] test = text.get(i).split(",\\s+");
-
-				if (test.length <= 4)
-				{ // For reading start configurations
-					blockData[i] = test;
-				}
-				else
-				{ // For reading start
-					simulationData[i] = test;
-				}
+				data[i] = test;
 			}
-
-		} catch (IOException e)
+			return data;
+		}
+		catch(IOException e)
 		{
 			System.out.println("IO Exception");
 		}
+		return null;
 	}
 
 	public String[][] getBlockData()

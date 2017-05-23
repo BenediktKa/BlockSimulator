@@ -1,22 +1,19 @@
 package teamnine.blocksim;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.RobotBlock;
 import teamnine.blocksim.hud.Notification;
 
 public class FPSControl extends FirstPersonCameraController
 {
 	private BlockSimulator blockSimulator;
 	private Camera camera;
-	private Type modeType;
 	private Block.Type blockType = Block.Type.Obstacle;
 
 	// Mouse Variables
@@ -24,23 +21,17 @@ public class FPSControl extends FirstPersonCameraController
 	private int mouseY = 100;
 	private float rotSpeed = 0.2f;
 
-	public enum Type
-	{
-		BuildMode, MenuMode, SimulationMode;
-	}
-
 	public FPSControl(Camera camera, BlockSimulator blockSimulator)
 	{
 		super(camera);
 		this.blockSimulator = blockSimulator;
 		this.camera = camera;
-		this.modeType = Type.BuildMode;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY)
 	{
-		if (modeType == Type.BuildMode)
+		if (StateManager.state == SimulationState.BUILD)
 		{
 			int magX = Math.abs(mouseX - screenX);
 			int magY = Math.abs(mouseY - screenY);
@@ -85,7 +76,7 @@ public class FPSControl extends FirstPersonCameraController
 	@Override
 	public boolean scrolled(int amount)
 	{
-		if (modeType == Type.SimulationMode)
+		if (StateManager.state == SimulationState.SIMULATION)
 		{
 			return false;
 		}
@@ -93,6 +84,7 @@ public class FPSControl extends FirstPersonCameraController
 		if (amount == 1)
 		{
 			blockType = blockType.next();
+			blockSimulator.levelHUD.setSelectedBlock(blockType);
 		}
 		return false;
 	}
@@ -100,7 +92,7 @@ public class FPSControl extends FirstPersonCameraController
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		if (modeType == Type.BuildMode)
+		if (StateManager.state == SimulationState.BUILD)
 		{
 			if (button == 0)
 			{
@@ -117,7 +109,7 @@ public class FPSControl extends FirstPersonCameraController
 	@Override
 	public boolean keyDown(int keycode)
 	{
-		if (modeType == Type.SimulationMode)
+		if (StateManager.state == SimulationState.SIMULATION)
 		{
 			return super.keyDown(keycode);
 		}
@@ -174,22 +166,18 @@ public class FPSControl extends FirstPersonCameraController
 			if (blockSimulator.blockList.blockAtPoint(blockSimulator.selectorBlock.getPosition()) == null)
 				blockSimulator.blockList.createBlock(blockSimulator.selectorBlock.getPosition().cpy(), blockType);
 		}
-		else if (keycode == Keys.C)
-		{
-			camera.lookAt(blockSimulator.selectorBlock.getPosition());
-		}
 		else if (keycode == Keys.ESCAPE)
 		{
-			if (modeType == Type.BuildMode)
+			if (StateManager.state == SimulationState.BUILD)
 			{
 				blockSimulator.notification.setNotification("Menu Mode", Notification.Type.ModeChange, 2);
-				modeType = Type.MenuMode;
+				StateManager.state = SimulationState.MENU;
 				Gdx.input.setCursorCatched(false);
 			}
-			else
+			else if (StateManager.state == SimulationState.MENU)
 			{
 				blockSimulator.notification.setNotification("Build Mode", Notification.Type.ModeChange, 2);
-				modeType = Type.BuildMode;
+				StateManager.state = SimulationState.BUILD;
 				Gdx.input.setCursorCatched(true);
 			}
 		}
@@ -204,20 +192,5 @@ public class FPSControl extends FirstPersonCameraController
 			return false;
 		}
 		return true;
-	}
-
-	public Block.Type getBlockType()
-	{
-		return blockType;
-	}
-
-	public Type getModeType()
-	{
-		return modeType;
-	}
-
-	public void setModeType(Type modeType)
-	{
-		this.modeType = modeType;
 	}
 }

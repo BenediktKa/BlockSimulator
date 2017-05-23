@@ -18,17 +18,16 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import teamnine.blocksim.BlockSimulator;
-import teamnine.blocksim.FPSControl;
+import teamnine.blocksim.StateManager;
+import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.ai.BrainAI;
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.configs.Reader;
+import teamnine.blocksim.configs.configurationLoader;
+import teamnine.blocksim.configs.simulationLoader;
 
 public class LevelEditorHUD implements Disposable
 {
-
-	private BlockSimulator blockSimulator;
-
 	// Stage
 	private Stage stage;
 
@@ -58,17 +57,13 @@ public class LevelEditorHUD implements Disposable
 
 	// Block Dialog
 	private Label blockLabel;
-
-	// File Chooser
-	private JFileChooser fileChooser;
+	private Block.Type selectedBlock = Block.Type.Obstacle;
 
 	// Configuration Checker
 	// private ConfigurationChecker check;
 
-	public LevelEditorHUD(final BlockSimulator blockSimulator, final BlockList blockList)
+	public LevelEditorHUD(final BlockSimulator blockSimulator)
 	{
-		this.blockSimulator = blockSimulator;
-
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
 		stage = new Stage(new ScreenViewport());
 
@@ -86,11 +81,8 @@ public class LevelEditorHUD implements Disposable
 		startButton = new TextButton("Start", skin);
 		simulationButton = new TextButton("Load Simulation", skin);
 
-		// File Chooser
-		fileChooser = new JFileChooser();
-
 		// Create Labels
-		blockLabel = new Label("Selected: " + blockSimulator.cameraController.getBlockType(), skin);
+		blockLabel = new Label("Selected: " + selectedBlock, skin);
 
 		// Import Button Listener
 		importButton.addListener(new ClickListener()
@@ -98,32 +90,9 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if (isMenuMode())
+				if (StateManager.state == SimulationState.MENU)
 				{
-					fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
-					fileChooser.setDialogTitle("Open Start Robot Configuration");
-
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						File selectedFile = fileChooser.getSelectedFile();
-						Reader reader = new Reader(selectedFile);
-						blockSimulator.blockList.createRobot(reader.getBlockData());
-					}
-					fileChooser.setDialogTitle("Open Target Configuration");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						File selectedFile = fileChooser.getSelectedFile();
-						Reader reader = new Reader(selectedFile);
-						blockSimulator.blockList.createTarget(reader.getBlockData());
-					}
-					fileChooser.setDialogTitle("Open Obstacle Configuration");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						File selectedFile = fileChooser.getSelectedFile();
-						Reader reader = new Reader(selectedFile);
-						blockSimulator.blockList.createObstacles(reader.getBlockData());
-					}
-
+					new configurationLoader(blockSimulator.blockList);
 				}
 				super.clicked(event, x, y);
 			}
@@ -135,7 +104,7 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if (isMenuMode())
+				if (StateManager.state == StateManager.SimulationState.MENU)
 				{
 					// check = new
 					// ConfigurationChecker(blockSimulator.blockList);
@@ -183,7 +152,7 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if (isMenuMode())
+				if (StateManager.state == StateManager.SimulationState.MENU)
 				{
 					blockSimulator.blockList.undo();
 				}
@@ -197,7 +166,7 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if (isMenuMode())
+				if (StateManager.state == StateManager.SimulationState.MENU)
 				{
 					blockSimulator.blockList.redo();
 				}
@@ -211,19 +180,19 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if (blockSimulator.cameraController.getModeType() == FPSControl.Type.SimulationMode)
+				if (StateManager.state == SimulationState.SIMULATION)
 				{
-					blockSimulator.cameraController.setModeType(FPSControl.Type.BuildMode);
+					StateManager.state = SimulationState.BUILD;
 					startButton.setText("Start");
-					blockList.removeBlockType(Block.Type.Path);
+					blockSimulator.blockList.removeBlockType(Block.Type.Path);
 
 				}
 				else
 				{
-					blockSimulator.cameraController.setModeType(FPSControl.Type.SimulationMode);
+					StateManager.state = SimulationState.SIMULATION;
 					startButton.setText("Stop");
 					// new Movement(blockSimulator.blockList);
-					new BrainAI(blockList);
+					new BrainAI(blockSimulator.blockList);
 				}
 
 				super.clicked(event, x, y);
@@ -236,17 +205,9 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if (isMenuMode())
+				if (StateManager.state == StateManager.SimulationState.MENU)
 				{
-					fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
-					fileChooser.setDialogTitle("Load a simulation from file");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					{
-						File selectedFile = fileChooser.getSelectedFile();
-						// Reader reader = new Reader(selectedFile);
-						// new simulationRunner(reader.getSimulationData(),
-						// blockSimulator);
-					}
+					new simulationLoader();
 				}
 
 				super.clicked(event, x, y);
@@ -272,18 +233,19 @@ public class LevelEditorHUD implements Disposable
 
 	public void render()
 	{
-		blockLabel.setText("Selected: " + blockSimulator.cameraController.getBlockType());
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
 
-	public boolean isMenuMode()
+	public Block.Type getSelectedBlock()
 	{
-		if (blockSimulator.cameraController.getModeType() == FPSControl.Type.MenuMode)
-		{
-			return true;
-		}
-		return false;
+		return selectedBlock;
+	}
+
+	public void setSelectedBlock(Block.Type selectedBlock)
+	{
+		blockLabel.setText("Selected: " + selectedBlock);
+		this.selectedBlock = selectedBlock;
 	}
 
 	@Override
