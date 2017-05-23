@@ -1,13 +1,9 @@
 package teamnine.blocksim.hud;
 
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,7 +18,6 @@ import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.ai.BrainAI;
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.configs.Reader;
 import teamnine.blocksim.configs.configurationLoader;
 import teamnine.blocksim.configs.simulationLoader;
 
@@ -52,6 +47,9 @@ public class LevelEditorHUD implements Disposable
 	// Start Button
 	private TextButton startButton;
 
+	// Pause Button
+	private TextButton pauseButton;
+
 	// Load Simulation Button
 	private TextButton simulationButton;
 
@@ -79,10 +77,24 @@ public class LevelEditorHUD implements Disposable
 		undoButton = new TextButton("Undo", skin, "midnight");
 		redoButton = new TextButton("Redo", skin, "midnight");
 		startButton = new TextButton("Start", skin);
+		pauseButton = new TextButton("Pause", skin);
+		pauseButton.setVisible(false);
+		pauseButton.setTouchable(Touchable.disabled);
 		simulationButton = new TextButton("Load Simulation", skin);
 
 		// Create Labels
 		blockLabel = new Label("Selected: " + selectedBlock, skin);
+
+		// Add to Table
+		table.add(importButton).padRight(20);
+		table.add(exportButton).padRight(20);
+		table.add(simulationButton).padRight(20);
+		table.add(blockLabel);
+		table.row().height(20);
+		table.add(undoButton).padRight(20);
+		table.add(redoButton).padRight(20);
+		table.add(startButton).padRight(20);
+		table.add(pauseButton);
 
 		// Import Button Listener
 		importButton.addListener(new ClickListener()
@@ -184,8 +196,11 @@ public class LevelEditorHUD implements Disposable
 				{
 					StateManager.state = SimulationState.BUILD;
 					startButton.setText("Start");
+					// Remove Path
 					blockSimulator.blockList.removeBlockType(Block.Type.Path);
-
+					// Hide Pause Button
+					pauseButton.setVisible(false);
+					pauseButton.setTouchable(Touchable.disabled);
 				}
 				else
 				{
@@ -193,8 +208,22 @@ public class LevelEditorHUD implements Disposable
 					startButton.setText("Stop");
 					// new Movement(blockSimulator.blockList);
 					new BrainAI(blockSimulator.blockList);
+
+					// Display Pause Button
+					pauseButton.setVisible(true);
+					pauseButton.setTouchable(Touchable.enabled);
 				}
 
+				super.clicked(event, x, y);
+			}
+		});
+
+		// Pause Button Listener
+		pauseButton.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
 				super.clicked(event, x, y);
 			}
 		});
@@ -214,16 +243,6 @@ public class LevelEditorHUD implements Disposable
 			}
 
 		});
-
-		// Add to Table
-		table.add(importButton).padRight(20);
-		table.add(exportButton).padRight(20);
-		table.add(simulationButton).padRight(20);
-		table.add(blockLabel);
-		table.row().height(20);
-		table.add(undoButton).padRight(20);
-		table.add(redoButton).padRight(20);
-		table.add(startButton);
 
 		// Add to Stage
 		stage.addActor(table);
