@@ -26,7 +26,9 @@ public class Reconfiguration
 	private ArrayList<Block>[] sortedTargets;
 	private ArrayList<Block> easySortedTargets;
 	private Block targetOrigin;
+	
 	private PathFinder pathFinder;
+	private final Move3 movement;
 
 	private final boolean DEBUG = true;
 
@@ -39,8 +41,9 @@ public class Reconfiguration
 	 *            know where they are exactly)
 	 * @param target list with all target blocks
 	 * @param minTarget the target block in the corner, closest to the robot
+	 * @param movement 
 	 */
-	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget, PathFinder pathFinder)
+	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget, PathFinder pathFinder, Move3 movement)
 	{
 		if (robot.size() != target.size())
 		{
@@ -51,6 +54,7 @@ public class Reconfiguration
 		this.target = target;
 		targetOrigin = minTarget;
 		this.pathFinder = pathFinder;
+		this.movement = movement;
 
 		prepare();
 		if (DEBUG)
@@ -313,6 +317,7 @@ public class Reconfiguration
 			// Change y-coordinate to make PF work, doesn't take 3D into account right now
 			// TODO: Check if it works with only 1 block
 			Block targetBlockForPF = new Block(new Vector3(targetBlock.getPosition().x, 1, targetBlock.getPosition().z), Block.Type.Goal);
+			final Block targetBlockForMove = new Block(new Vector3(targetBlock.getPosition().x, targetBlock.getPosition().y, targetBlock.getPosition().z), Block.Type.Goal);
 			pathFinder.startPathFinder(blockToMove, targetBlock);
 			
 			// 4) Perform actual movement
@@ -322,8 +327,8 @@ public class Reconfiguration
 				@Override
 				public void run()
 				{
-					// TODO: Fully implement this (prob by refactoring constructors), Run & Debug this.
-					// new Move3(pathFinder.getFinalList(), robots, obstacles, floor, targetBlock);
+					// TODO: Run & Debug this.
+					movement.startMove3(pathFinder.getFinalList(), targetBlockForMove);;
 				}
 			}).start();
 			
