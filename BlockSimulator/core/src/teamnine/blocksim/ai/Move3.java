@@ -588,7 +588,7 @@ public class Move3
 
 	public void checkIfCanMove(RobotBlock b)
 	{
-		if (StateManager.state == SimulationState.BUILD)
+		if (StateManager.state == SimulationState.MENU || StateManager.state == SimulationState.BUILD)
 		{
 			try
 			{

@@ -194,14 +194,13 @@ public class LevelEditorHUD implements Disposable
 			{
 				if (StateManager.state == SimulationState.SIMULATION || StateManager.state == SimulationState.PAUSE)
 				{
-					StateManager.state = SimulationState.BUILD;
+					StateManager.state = SimulationState.MENU;
 					startButton.setText("Start");
 					// Remove Path
 					blockSimulator.blockList.removeBlockType(Block.Type.Path);
 					// Hide Pause Button
 					pauseButton.setVisible(false);
 					pauseButton.setTouchable(Touchable.disabled);
-					Gdx.input.setCursorCatched(true);
 				}
 				else
 				{
