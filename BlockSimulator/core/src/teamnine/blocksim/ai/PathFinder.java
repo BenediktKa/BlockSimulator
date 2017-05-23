@@ -13,22 +13,26 @@ import teamnine.blocksim.block.BlockList;
 public class PathFinder
 {
 	BlockList blockList;
-	int numRoboBlocks;
-	int numTargetBlocks;
+	final int numRoboBlocks;
+	final int numTargetBlocks;
+	final int maxX;
+	final int maxZ;
 	ArrayList<DistanceBlock> initialList = new ArrayList<DistanceBlock>();
 	ArrayList<DistanceBlock> list = new ArrayList<DistanceBlock>();
+	AbstractList<Block> obstacles;
+	ArrayList<DistanceBlock> disObstacles;
 	ArrayList<Vector3> finalList = new ArrayList<Vector3>();
 
-	public PathFinder(BlockList blockList, Block initialPosition, Block target, int numRoboBlocks, int numTargetBlocks)
-	{
+	public PathFinder(BlockList blockList, int numRoboBlocks, int numTargetBlocks){
 		this.blockList = blockList;
 		this.numRoboBlocks = numRoboBlocks;
 		this.numTargetBlocks = numTargetBlocks;
-		AbstractList<Block> obstacles = blockList.getBlockList(Block.Type.Obstacle);
-		int maxX = blockList.getGridSize();
-		int maxZ = maxX;
+		obstacles = blockList.getBlockList(Block.Type.Obstacle);
+		maxX = blockList.getGridSize();
+		maxZ = maxX;
+		
 		// create a List with the obstacles and the initial position
-		ArrayList<DistanceBlock> disObstacles = new ArrayList<DistanceBlock>();
+		disObstacles = new ArrayList<DistanceBlock>();
 		for (int i = 0; i < obstacles.size(); i++)
 		{
 			float x = obstacles.get(i).getPosition().x;
@@ -43,9 +47,13 @@ public class PathFinder
 				}
 			}
 		} //
-
+	}
+	
+	public void startPathFinder(Block initialPosition, Block target)
+	{
 		disObstacles.add(new DistanceBlock(0, initialPosition.getPosition(), 0));
-
+		if (!finalList.isEmpty()) finalList.clear();
+		
 		// create a list with all the possible positions
 		for (int i = 0; i < maxX; i++)
 		{

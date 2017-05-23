@@ -26,7 +26,7 @@ public class Reconfiguration
 	private ArrayList<Block>[] sortedTargets;
 	private ArrayList<Block> easySortedTargets;
 	private Block targetOrigin;
-	private BlockList blockList;
+	private PathFinder pathFinder;
 
 	private final boolean DEBUG = true;
 
@@ -40,7 +40,7 @@ public class Reconfiguration
 	 * @param target list with all target blocks
 	 * @param minTarget the target block in the corner, closest to the robot
 	 */
-	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget)
+	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget, PathFinder pathFinder)
 	{
 		if (robot.size() != target.size())
 		{
@@ -50,37 +50,19 @@ public class Reconfiguration
 		this.robot = robot;
 		this.target = target;
 		targetOrigin = minTarget;
+		this.pathFinder = pathFinder;
 
 		prepare();
 		if (DEBUG)
 		{
 			System.out.println("Reconfiguration Started");
 		}
-		// start();
+		// start(); //Take ID's into account
+		// startEasy(); //ID's are not important
 		check();
 
 	}
-	
-	public Reconfiguration(BlockList blockList, ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget)
-	{
-		if (robot.size() != target.size())
-		{
-			throw new IllegalArgumentException("The number of robot blocks is not equal to the number of target blocks!");
-		}
 
-		this.robot = robot;
-		this.target = target;
-		this.blockList = blockList;
-		targetOrigin = minTarget;
-
-		prepare();
-		if (DEBUG)
-		{
-			System.out.println("Reconfiguration Started");
-		}
-		// startEasy();
-		//check();
-	}
 
 	/**
 	 * 1) Sort the targets in a specific way (how?) to avoid deadlocks 2) Figure
@@ -306,6 +288,7 @@ public class Reconfiguration
 	{
 		
 		int cntr = 0;
+		
 		while(cntr!=robot.size()-1) 
 		{
 			// 1) Select last robot block to move, i.e. robot.get(0)
@@ -327,10 +310,10 @@ public class Reconfiguration
 				}
 			}
 			// 3) Find path from position of robotBlock to target position
-			// TODO: BAD IMPLEMENTATION (I DONT WANT THE BLOCKLIST, I DONT WANT n PATHFINDERS)
-			// TODO: Fix Pathfinder in 3D and make sure it takes a route not disconnecting
+			// Change y-coordinate to make PF work, doesn't take 3D into account right now
 			// TODO: Check if it works with only 1 block
-			final PathFinder pathFinder = new PathFinder(blockList, blockToMove,targetBlock,1,1);
+			Block targetBlockForPF = new Block(new Vector3(targetBlock.getPosition().x, 1, targetBlock.getPosition().z), Block.Type.Goal);
+			pathFinder.startPathFinder(blockToMove, targetBlock);
 			
 			// 4) Perform actual movement
 			// TODO: If this works with threading?
@@ -340,7 +323,7 @@ public class Reconfiguration
 				public void run()
 				{
 					// TODO: Fully implement this (prob by refactoring constructors), Run & Debug this.
-					//new Move3(pathFinder.getFinalList(), robots, obstacles, floor, targetBlock);
+					// new Move3(pathFinder.getFinalList(), robots, obstacles, floor, targetBlock);
 				}
 			}).start();
 			
