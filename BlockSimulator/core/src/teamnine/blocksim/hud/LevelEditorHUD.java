@@ -56,7 +56,7 @@ public class LevelEditorHUD implements Disposable
 	// Block Dialog
 	private Label blockLabel;
 	private Block.Type selectedBlock = Block.Type.Obstacle;
-
+	
 	// Configuration Checker
 	// private ConfigurationChecker check;
 
@@ -192,7 +192,7 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if (StateManager.state == SimulationState.SIMULATION)
+				if (StateManager.state == SimulationState.SIMULATION || StateManager.state == SimulationState.PAUSE)
 				{
 					StateManager.state = SimulationState.BUILD;
 					startButton.setText("Start");
@@ -201,6 +201,7 @@ public class LevelEditorHUD implements Disposable
 					// Hide Pause Button
 					pauseButton.setVisible(false);
 					pauseButton.setTouchable(Touchable.disabled);
+					Gdx.input.setCursorCatched(true);
 				}
 				else
 				{
@@ -224,6 +225,17 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				if(StateManager.state == StateManager.SimulationState.SIMULATION)
+				{
+					StateManager.state = StateManager.SimulationState.PAUSE;
+					pauseButton.setText("Resume");
+				}
+				else if(StateManager.state == StateManager.SimulationState.PAUSE)
+				{
+					StateManager.state = StateManager.SimulationState.SIMULATION;
+					pauseButton.setText("Pause");
+				}
+				
 				super.clicked(event, x, y);
 			}
 		});

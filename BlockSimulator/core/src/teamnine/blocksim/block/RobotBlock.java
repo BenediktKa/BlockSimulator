@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.StateManager;
 import teamnine.blocksim.block.physics.BlockGravity;
 
 public class RobotBlock extends BlockGravity
@@ -149,6 +150,9 @@ public class RobotBlock extends BlockGravity
 
 	public void moveModel()
 	{
+		if(StateManager.state == StateManager.SimulationState.PAUSE)
+			return;
+		
 		if (movement == null)
 		{
 			super.moveModel();
