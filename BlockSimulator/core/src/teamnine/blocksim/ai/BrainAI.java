@@ -22,9 +22,16 @@ public class BrainAI //
 		// Block maxTarget=findFurthestTarget();
 		final Block minTarget = findClosestTarget();
 		RobotBlock maxRobot = findClosestRobot(minTarget);
+		
+		// Dijkstra PathFinder
 		final PathFinder path = new PathFinder(blockList, robots.size(), target.size());
-		final Path p2 = new Path(blockList, maxRobot, minTarget, robots.size(), target.size());
-
+		path.startPathFinder(maxRobot, minTarget);
+		
+		//Greedy PathFinder
+		final Path p2 = new Path(blockList, robots.size(), target.size());
+		p2.findPath(maxRobot.getPosition(), minTarget);
+		
+		
 		for (int i = 0; i < p2.getFinalList().size(); i++)
 		{
 			blockList.createBlock(p2.getFinalList().get(i), Block.Type.Path);
@@ -35,7 +42,8 @@ public class BrainAI //
 			@Override
 			public void run()
 			{
-				new Move3(p2.getFinalList(), robots, obstacles, floor, minTarget);
+				Move3 movement = new Move3(robots, obstacles, floor);
+				movement.startMove3(p2.getFinalList(), minTarget);
 			}
 		}).start();
 		// new Reconfiguration(robots,target,minTarget);

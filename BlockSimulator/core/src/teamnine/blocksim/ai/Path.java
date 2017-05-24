@@ -10,23 +10,23 @@ import teamnine.blocksim.block.BlockList;
 public class Path {
 	
 	private BlockList blockList;
-	private Block target;
+	//private Block target;
 	private Block intitalPosition;
 	private ArrayList<Vector3> bestPath=new ArrayList<Vector3>();
 	private int bestDistance=-1;
 	private int currentDistance=0;
 	private ArrayList<Vector3> currentPath=new ArrayList<Vector3>();
 
-	public Path(BlockList blockList, Block initialPosition, Block target, int numRoboBlocks, int numTargetBlocks)
+	public Path(BlockList blockList, int numRoboBlocks, int numTargetBlocks)
 	{
-		System.out.println("Path" +target.getPosition());
+		//System.out.println("Path" +target.getPosition());
 		this.blockList=blockList;
-		this.intitalPosition=initialPosition;
-		this.target=target;		
-		findPath(initialPosition.getPosition());
 	}
-	public void findPath(Vector3 start)
+	
+	public void findPath(Vector3 startPosition, Block targetPosition)
 	{
+		Vector3 start = startPosition;
+		Block target = targetPosition;
 		
 		if(start.x==target.getPosition().x&&start.z==target.getPosition().z)
 		{
@@ -65,7 +65,7 @@ public class Path {
 		currentPath.add(bestMove);
 		currentDistance=currentDistance+bestMoveD;
 		System.out.println(bestMove+" "+bestMoveD);
-		findPath(bestMove);
+		findPath(bestMove, targetPosition);
 		
 	}
 	public ArrayList<Vector3> getFinalList()
