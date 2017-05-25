@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.StateManager;
+import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
 import teamnine.blocksim.block.BlockList;
@@ -43,7 +45,7 @@ public class Reconfiguration
 	 * @param minTarget the target block in the corner, closest to the robot
 	 * @param movement 
 	 */
-	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget, PathFinder pathFinder, Move3 movement)
+	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget, Move3 movement)
 	{
 		if (robot.size() != target.size())
 		{
@@ -59,12 +61,12 @@ public class Reconfiguration
 		prepare();
 		if (DEBUG)
 		{
-			System.out.println("Reconfiguration Started");
+			System.out.println("//RECONFIG: STARTED");
 		}
 		// start(); //Take ID's into account
-		// startEasy(); //ID's are not important
+		startEasy(); //ID's are not important
 		check();
-
+		Thread.currentThread().interrupt();
 	}
 
 
@@ -112,7 +114,7 @@ public class Reconfiguration
 		// The size of these arraylists depend on the dimension of the target
 		// region (which is seen as one whole cube covering the region
 		int floorLevels = targetWidth + targetLength - 1;
-		int nonFloorLevels = floorLevels + targetHeight;
+		int nonFloorLevels = floorLevels*targetHeight;
 
 		sortedTargets = new ArrayList[floorLevels + nonFloorLevels];
 
@@ -123,8 +125,8 @@ public class Reconfiguration
 
 		if (DEBUG)
 		{
-			System.out.println("//RECONFIG: " + "floor: " + floorLevels);
-			System.out.println("//RECONFIG: " + "nonFloor: " + nonFloorLevels);
+			System.out.println("// RECONFIG: " + "floor: " + floorLevels);
+			System.out.println("// RECONFIG: " + "nonFloor: " + nonFloorLevels);
 		}
 
 		// Define origin for other layers: point opposite to layer0 origin
@@ -142,7 +144,7 @@ public class Reconfiguration
 				int bucket = (int) (Math.abs(target.get(i).getPosition().x - layer0Origin.x) + Math.abs(target.get(i).getPosition().z - layer0Origin.z));
 				if (DEBUG)
 				{
-					System.out.println("//RECONFIG: " + target.get(i).getID() + ": " + bucket);
+					System.out.println("// RECONFIG: " + target.get(i).getID() + ": " + bucket);
 				}
 				sortedTargets[bucket].add(target.get(i));
 			}
@@ -151,7 +153,7 @@ public class Reconfiguration
 				int bucket = (int) (Math.abs(otherOrigin.x - target.get(i).getPosition().x) + Math.abs(otherOrigin.y - target.get(i).getPosition().y) + Math.abs(otherOrigin.z - target.get(i).getPosition().z));
 				if (DEBUG)
 				{
-					System.out.println("//RECONFIG: " + target.get(i).getID() + ": " + (bucket + floorLevels));
+					System.out.println("// RECONFIG: " + target.get(i).getID() + ": " + (bucket + floorLevels));
 				}
 				sortedTargets[bucket + floorLevels].add(target.get(i));
 			}
@@ -280,7 +282,7 @@ public class Reconfiguration
 							cntr++;
 						if (DEBUG && cntr > robot.size())
 						{
-							System.out.println("//RECONFIG " + "All robot blocks have been tried, but no one was able to move to the target position since ID's didn't match");
+							System.out.println("// RECONFIG: " + "All robot blocks have been tried, but no one was able to move to the target position since ID's didn't match");
 						}
 					}
 				}
@@ -293,8 +295,10 @@ public class Reconfiguration
 		
 		int cntr = 0;
 		
-		while(cntr!=robot.size()-1) 
+		while(cntr<robot.size()-1) 
 		{
+			//TODO: Stopping Conditions
+			System.out.println("// RECONFIG: Cntr: "+cntr);
 			// 1) Select last robot block to move, i.e. robot.get(0)
 			RobotBlock blockToMove = robot.get(0);
 			
@@ -306,9 +310,10 @@ public class Reconfiguration
 			//TODO: Improve implementation
 			for(int i=0; i<robot.size(); i++)
 			{
-				if(blockToMove.getPosition().x==targetBlock.getPosition().x&&blockToMove.getPosition().y==targetBlock.getPosition().y&&blockToMove.getPosition().z==targetBlock.getPosition().z)
+				if(robot.get(i).getPosition().x==targetBlock.getPosition().x&&robot.get(i).getPosition().y==targetBlock.getPosition().y&&robot.get(i).getPosition().z==targetBlock.getPosition().z)
 				{
 					targetBlock = easySortedTargets.get(cntr);
+					System.out.println("// RECONFIG: skipped");
 					cntr++;
 					i=0;
 				}
@@ -316,25 +321,48 @@ public class Reconfiguration
 			// 3) Find path from position of robotBlock to target position
 			// Change y-coordinate to make PF work, doesn't take 3D into account right now
 			// TODO: Check if it works with only 1 block
-			Block targetBlockForPF = new Block(new Vector3(targetBlock.getPosition().x, 1, targetBlock.getPosition().z), Block.Type.Goal);
-			final Block targetBlockForMove = new Block(new Vector3(targetBlock.getPosition().x, targetBlock.getPosition().y, targetBlock.getPosition().z), Block.Type.Goal);
-			pathFinder.startPathFinder(blockToMove, targetBlock);
+			//Block targetBlockForPF = new Block(new Vector3(targetBlock.getPosition().x, 1, targetBlock.getPosition().z), Block.Type.Goal);
+			final Block targetBlockForMove = targetBlock;
+			
+			//pathFinder.startPathFinder(blockToMove, targetBlock);
 			
 			// 4) Perform actual movement
 			// TODO: If this works with threading?
-			new Thread(new Runnable()
+			
+			int absDistance = (int) Math.abs((robot.get(0).getPosition().x-targetBlockForMove.getPosition().x)+(robot.get(0).getPosition().z-targetBlockForMove.getPosition().z));
+			
+			Thread thread = new Thread(new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					// TODO: Run & Debug this.
-					movement.startMove3(pathFinder.getFinalList(), targetBlockForMove);;
+					// TODO: Run & Debug this
+					ArrayList<Vector3> fakePath = new ArrayList<Vector3>();
+					fakePath.add(targetBlockForMove.getPosition());
+					System.out.println("// RECONFIG: Start movement, to "+targetBlockForMove.getPosition().x+" "+targetBlockForMove.getPosition().y+" "+targetBlockForMove.getPosition().z);
+					movement.startMove3(fakePath, targetBlockForMove);
 				}
-			}).start();
+			});
+			thread.start();
 			
+			
+			
+			while(thread.isAlive())
+			{
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			System.out.println("// RECONFIG: Start movement, block: "+blockToMove.getID()+ " to: "+targetBlockForMove.getPosition().x+" "+targetBlockForMove.getPosition().y+" "+targetBlockForMove.getPosition().z);
 			
 		}
 		
+		System.out.println("// RECONFIG: End of While loop");
+		
+		//StateManager.state = SimulationState.BUILD;
 
 	}
 
@@ -342,24 +370,24 @@ public class Reconfiguration
 	{
 		int correctPositions = 0;
 
-		for (int i = 0; i < target.size(); i++)
+		for (Block block: target)
 		{
-			Vector3 targetPosition = target.get(i).getPosition();
-			for (int j = 0; j < robot.size(); j++)
+			Vector3 targetPosition = block.getPosition();
+			for (Block robotBlock: robot)
 			{
-				Vector3 robotPosition = robot.get(j).getPosition();
+				Vector3 robotPosition = robotBlock.getPosition();
 				// Find robot & target block on the same position
 				if (targetPosition.x == robotPosition.y && targetPosition.y == robotPosition.y && targetPosition.z == robotPosition.z)
 				{
 					// Check if ID is specified for target
 					try
 					{
-						double targetID = target.get(i).getID();
+						double targetID = block.getID();
 						// Check if ID is specified for robot and matches with
 						// target
 						try
 						{
-							double robotID = robot.get(j).getID();
+							double robotID = robotBlock.getID();
 							if (targetID == robotID)
 							{
 								correctPositions++;
