@@ -75,14 +75,17 @@ public class BlockList implements Disposable
 		createBlock(new Vector3(12, 1, 12), Block.Type.Goal);
 		createBlock(new Vector3(12, 1, 13), Block.Type.Goal);
 	}
-	public  ArrayList<Block> getObstacleList()
+
+	public ArrayList<Block> getObstacleList()
 	{
 		return obstacleList;
 	}
-	public  ArrayList<Block> getGoalList()
+
+	public ArrayList<Block> getGoalList()
 	{
 		return goalList;
 	}
+
 	public int size()
 	{
 		return blockList.size();
@@ -106,7 +109,7 @@ public class BlockList implements Disposable
 			block.setSpeed(increase ? (speed = speed + 1) : (speed = speed - 1));
 		}
 	}
-	
+
 	public ArrayList<RobotBlock> getRobotBlockList()
 	{
 		return robotList;
@@ -114,7 +117,7 @@ public class BlockList implements Disposable
 
 	public ArrayList<Block> getBlockList(Block.Type type)
 	{
-		if(type == null)
+		if (type == null)
 		{
 			return blockList;
 		}
@@ -341,11 +344,12 @@ public class BlockList implements Disposable
 
 	public void render(ModelBatch modelBatch, Environment environment)
 	{
-		for (int i = 0; i < blockList.size(); i++)
+		for (Block block : blockList)
 		{
-			Block block = blockList.get(i);
-			block.moveModel();
-			modelBatch.render(blockList.get(i).getModelInstance(), environment);
+			if (block.getType() == Block.Type.Robot)
+				block.moveModel();
+
+			modelBatch.render(block.getModelInstance(), environment);
 		}
 	}
 
@@ -377,11 +381,11 @@ public class BlockList implements Disposable
 						removeBlock(blockAtPoint(new Vector3(x, y, z)));
 					}
 				}
-				else if(blockAction)
+				else if (blockAction)
 				{
 					createBlock(new Vector3(last_point_x, last_point_y, last_point_z), type);
 				}
-				
+
 				blockSimulator.selectorBlock.setPosition(new Vector3(last_point_x, last_point_y, last_point_z));
 				break;
 			}
@@ -460,19 +464,4 @@ public class BlockList implements Disposable
 			block.dispose();
 		}
 	}
-	
-	public void disposeExceptFloor()
-	{
-		//Dispose all Blocks, except the floor
-		for (int i=0; i<blockList.size();i++)
-		{
-			Block block = blockList.get(i); 
-			if(block.type!=Block.Type.Floor)
-			{
-				blockList.remove(block);
-				i--;
-			}
-		}
-	}
-
 }

@@ -46,7 +46,7 @@ public class RobotBlockText implements Disposable
 	
 	public void render()
 	{
-		stage.draw();
+		//stage.draw();
 	}
 	
 	public void setFrictionText(float value)

@@ -12,7 +12,7 @@ public class Block implements Disposable
 {
 
 	// Model
-	private BlockModel blockModel;
+	protected BlockModel blockModel;
 
 	// Block Variables
 	protected Vector3 position;
@@ -27,6 +27,7 @@ public class Block implements Disposable
 		this.type = type;
 		blockModel = new BlockModel(type);
 		hitbox = new BlockHitbox(position);
+		moveModel();
 	}
 
 	public void setDistanceToPath(float p)
@@ -63,11 +64,13 @@ public class Block implements Disposable
 	public void setPosition(float x, float y, float z)
 	{
 		position = new Vector3(x, y, z);
+		moveModel();
 	}
 
 	public void setPosition(Vector3 vector)
 	{
 		position = vector;
+		moveModel();
 	}
 
 	public Vector3 getPosition()
@@ -77,7 +80,7 @@ public class Block implements Disposable
 
 	public enum Type
 	{
-		Robot, Obstacle, Goal, Selector, Floor, Path;
+		Robot, Obstacle, Goal, Selector, Floor, Path, RobotMoving;
 
 		public Type next()
 		{

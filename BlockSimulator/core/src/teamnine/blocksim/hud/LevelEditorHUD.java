@@ -63,7 +63,7 @@ public class LevelEditorHUD implements Disposable
 	public LevelEditorHUD(final BlockSimulator blockSimulator)
 	{
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
-		stage = new Stage(new ScreenViewport());
+		stage = new Stage(new ScreenViewport(), blockSimulator.spriteBatch);
 
 		// Buttons Table
 		table = new Table();
@@ -263,7 +263,6 @@ public class LevelEditorHUD implements Disposable
 
 	public void render()
 	{
-		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
 

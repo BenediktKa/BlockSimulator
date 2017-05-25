@@ -3,7 +3,9 @@ package teamnine.blocksim.block.physics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.block.BlockModel;
 
 public class BlockGravity extends BlockFriction
 {
@@ -64,8 +66,9 @@ public class BlockGravity extends BlockFriction
 			{
 				position = new Vector3(Math.round(position.x), Math.round(position.y), Math.round(position.z));
 				setGravity(false);
+				blockModel = new BlockModel(Block.Type.Robot);
 			}
-			else
+			else 
 				position.y -= fallVel;
 		}
 		super.moveModel();

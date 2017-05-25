@@ -8,16 +8,4 @@ public class SelectorBlock extends Block
 	{
 		super(position, type);
 	}
-
-	public void setPosition(float x, float y, float z)
-	{
-		position = new Vector3(x, y, z);
-		moveModel();
-	}
-
-	public void setPosition(Vector3 vector)
-	{
-		position = vector;
-		moveModel();
-	}
 }

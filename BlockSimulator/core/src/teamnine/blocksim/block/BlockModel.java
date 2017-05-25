@@ -24,6 +24,12 @@ public class BlockModel
 			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(142f / 255f, 68f / 255f, 173f / 255f, 1.0f))), Usage.Position | Usage.Normal);
 			modelInstance = new ModelInstance(model);
 		}
+		else if (type == Type.RobotMoving)
+		{
+			ModelBuilder modelBuilder = new ModelBuilder();
+			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(102f / 255f, 28f / 255f, 133f / 255f, 1.0f))), Usage.Position | Usage.Normal);
+			modelInstance = new ModelInstance(model);
+		}
 		else if (type == Type.Floor)
 		{
 			ModelBuilder modelBuilder = new ModelBuilder();

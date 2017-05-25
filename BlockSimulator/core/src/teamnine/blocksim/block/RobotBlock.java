@@ -66,7 +66,7 @@ public class RobotBlock extends BlockGravity
 
 	public boolean getMoving()
 	{
-		return moving || gravity;
+		return (moving || gravity);
 	}
 
 	public void setSpeed(float speed)
@@ -149,7 +149,8 @@ public class RobotBlock extends BlockGravity
 		
 		if (movement == null)
 		{
-			super.moveModel();
+			if(getModelInstance() != null)
+				super.moveModel();
 			return;
 		}
 
@@ -157,7 +158,7 @@ public class RobotBlock extends BlockGravity
 		{
 			movement = null;
 			setGravity(true);
-			System.out.println("Called");
+			blockModel = new BlockModel(Block.Type.RobotMoving);
 		}
 		else if ((position.cpy().sub(moveTo).isZero(0.01f) || getOriginalPos().dst(position) > 1 || getOriginalPos().dst(position) < -1) && moving)
 		{
@@ -165,6 +166,7 @@ public class RobotBlock extends BlockGravity
 			position.y = moveTo.y;
 			position.z = moveTo.z;
 			moving = false;
+			
 			rbText.setHorizontalText(0);
 		}
 		else if (moving)
@@ -175,6 +177,8 @@ public class RobotBlock extends BlockGravity
 			position.x += speedX;
 			position.y += speedY;
 			position.z += speedZ;
+			
+			blockModel = new BlockModel(Block.Type.RobotMoving);
 			
 			rbText.setFrictionText(calcFriction(movement.x) + calcFriction(movement.z));
 			rbText.setHorizontalText(speedX + speedZ);
