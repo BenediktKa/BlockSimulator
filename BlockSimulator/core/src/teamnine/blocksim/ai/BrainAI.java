@@ -2,6 +2,8 @@ package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.math.Vector3;
+
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.block.RobotBlock;
@@ -32,9 +34,9 @@ public class BrainAI //
 		p2.findPath(maxRobot.getPosition(), minTarget);
 		
 		
-		for (int i = 0; i < p2.getFinalList().size(); i++)
+		for (Vector3 vector : p2.getFinalList())
 		{
-			blockList.createBlock(p2.getFinalList().get(i), Block.Type.Path);
+			blockList.createBlock(vector, Block.Type.Path);
 		}
 
 		new Thread(new Runnable()
