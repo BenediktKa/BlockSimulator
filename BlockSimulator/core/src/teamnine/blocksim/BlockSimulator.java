@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
@@ -32,7 +31,6 @@ public class BlockSimulator implements ApplicationListener
 	public Environment environment;
 	public PerspectiveCamera camera;
 	public FPSControl fpsController;
-	public ExtendViewport viewport;
 	public SpriteBatch spriteBatch;
 	public ModelBatch modelBatch;
 
