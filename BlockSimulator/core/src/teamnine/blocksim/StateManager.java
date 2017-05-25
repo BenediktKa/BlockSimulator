@@ -6,6 +6,6 @@ public class StateManager
 	
 	public static enum SimulationState
 	{
-		BUILD, MENU, SIMULATION, PAUSE;
+		BUILD, MENU, SIMULATION, SIMULATIONFPS, PAUSE;
 	}
 }

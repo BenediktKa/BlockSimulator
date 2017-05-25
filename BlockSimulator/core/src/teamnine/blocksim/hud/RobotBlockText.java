@@ -10,6 +10,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import teamnine.blocksim.StateManager;
+import teamnine.blocksim.StateManager.SimulationState;
+
 public class RobotBlockText implements Disposable
 {
 	private Skin skin;

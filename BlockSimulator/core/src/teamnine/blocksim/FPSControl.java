@@ -31,7 +31,7 @@ public class FPSControl extends FirstPersonCameraController
 	@Override
 	public boolean mouseMoved(int screenX, int screenY)
 	{
-		if (StateManager.state == SimulationState.BUILD)
+		if (StateManager.state == SimulationState.BUILD || StateManager.state == SimulationState.SIMULATIONFPS)
 		{
 			int magX = Math.abs(mouseX - screenX);
 			int magY = Math.abs(mouseY - screenY);
@@ -109,8 +109,23 @@ public class FPSControl extends FirstPersonCameraController
 	@Override
 	public boolean keyDown(int keycode)
 	{
-		if (StateManager.state == SimulationState.SIMULATION)
+		if (StateManager.state == SimulationState.SIMULATION || StateManager.state == SimulationState.SIMULATIONFPS)
 		{
+			if(keycode == Keys.ESCAPE)
+			{
+				if(StateManager.state == SimulationState.SIMULATION)
+				{
+					blockSimulator.notification.setNotification("Camera Free", Notification.Type.ModeChange, 2);
+					StateManager.state = SimulationState.SIMULATIONFPS;
+					Gdx.input.setCursorCatched(true);
+				}
+				else if(StateManager.state == SimulationState.SIMULATIONFPS)
+				{
+					blockSimulator.notification.setNotification("Camera Locked", Notification.Type.ModeChange, 2);
+					StateManager.state = SimulationState.SIMULATION;
+					Gdx.input.setCursorCatched(false);
+				}
+			}
 			return super.keyDown(keycode);
 		}
 		if (keycode == Keys.UP)

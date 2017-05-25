@@ -60,7 +60,6 @@ public class BlockList implements Disposable
 		createBlock(new Vector3(0, 1, 10), Block.Type.Robot);
 		createBlock(new Vector3(1, 1, 10), Block.Type.Robot);
 		createBlock(new Vector3(0, 2, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 2, 10), Block.Type.Robot);
 		createBlock(new Vector3(0, 3, 10), Block.Type.Robot);
 		createBlock(new Vector3(1, 2, 10), Block.Type.Robot);
 		createBlock(new Vector3(1, 3, 10), Block.Type.Robot);

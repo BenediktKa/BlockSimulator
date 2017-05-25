@@ -123,9 +123,6 @@ public class BlockSimulator implements ApplicationListener
 		Gdx.gl.glClearColor(44f / 255f, 62f / 255f, 80f / 255f, 1);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
-		// Camera Update
-		fpsController.update();
 		
 		// Rendering Models
 		modelBatch.begin(camera);
@@ -142,6 +139,9 @@ public class BlockSimulator implements ApplicationListener
 		crosshair.render(spriteBatch);
 		fpsText.render(spriteBatch);
 		spriteBatch.end();
+		
+		// Camera Update
+		fpsController.update();
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package teamnine.blocksim.block.physics;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.StateManager;
+import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.hud.RobotBlockText;
 
@@ -55,7 +56,7 @@ public class BlockPhysics extends Block
 	
 	public void moveModel()
 	{
-		if(StateManager.state == StateManager.SimulationState.SIMULATION || StateManager.state == StateManager.SimulationState.PAUSE)
+		if(StateManager.state == SimulationState.SIMULATIONFPS || StateManager.state == StateManager.SimulationState.SIMULATION || StateManager.state == StateManager.SimulationState.PAUSE)
 			rbText.render();
 		
 		super.moveModel();
