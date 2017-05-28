@@ -47,7 +47,7 @@ public class BlockSimulator implements ApplicationListener
 	public LevelEditorHUD levelHUD;
 
 	// Grid size
-	public int gridSize = 25;
+	public static int gridSize = 25; //Needed it for smartmovement xxJurriaan
 
 	// BlockList
 	public BlockList blockList;

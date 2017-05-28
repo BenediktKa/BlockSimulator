@@ -41,24 +41,35 @@ public class BrainAI //
 
 		final Move3 movement = new Move3(robots, obstacles, floor);
 		
-		new Thread(new Runnable()
+		boolean testingMovement = false;
+		if(testingMovement)
 		{
-			@Override
-			public void run()
+			new Thread(new Runnable()
 			{
-				//movement.startMove3(p2.getFinalList(), minTarget);
-			}
-		}).start();
+				@Override
+				public void run()
+				{
+					movement.startMove3(p2.getFinalList(), minTarget);
+				}
+			}).start();
+		}
 		
-		/*new Thread(new Runnable()
+		//TODO: START RECONFIGURATION WHEN MOVEMENT IS DONE
+		
+		final SmartMovement smartMovement = new SmartMovement(blockList); //name is not to offend anyone, it isn't smart at all
+		
+		boolean testingReconfiguration = false;
+		if(testingReconfiguration)
 		{
-			@Override
-			public void run()
+			new Thread(new Runnable()
 			{
-				new Reconfiguration(robots,target,minTarget,movement);			
-			}
-		}).start();*/
-		
+				@Override
+				public void run()
+				{
+					new Reconfiguration(robots,target,minTarget,movement,smartMovement);			
+				}
+			}).start();
+		}
 
 	}
 

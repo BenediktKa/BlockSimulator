@@ -31,6 +31,7 @@ public class Reconfiguration
 	
 	private PathFinder pathFinder;
 	private final Move3 movement;
+	private final SmartMovement reconfigurationMovement;
 
 	private final boolean DEBUG = true;
 
@@ -45,7 +46,7 @@ public class Reconfiguration
 	 * @param minTarget the target block in the corner, closest to the robot
 	 * @param movement 
 	 */
-	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget, Move3 movement)
+	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget, Move3 movement, SmartMovement reconfigurationMovement)
 	{
 		if (robot.size() != target.size())
 		{
@@ -55,8 +56,8 @@ public class Reconfiguration
 		this.robot = robot;
 		this.target = target;
 		targetOrigin = minTarget;
-		this.pathFinder = pathFinder;
 		this.movement = movement;
+		this.reconfigurationMovement = reconfigurationMovement;
 
 		prepare();
 		if (DEBUG)
@@ -85,7 +86,7 @@ public class Reconfiguration
 	 * Stores the target-blocks in buckets, every bucket representing level with
 	 * a set of target positions that should be filled first, before the
 	 * positions will be filled (2x2x2 target, origin at left-top-on floor,
-	 * level-matrix: floor[0,1;1,2] floor+1[5,4;4,3] //TODO: CHECK MATRIX ABOVE
+	 * level-matrix: floor[0,1;1,2] floor+1[5,4;4,3] 
 	 * This does not have to be the most efficient way, since other targets
 	 * could be reached as well and blocks for the other positions may be at a
 	 * shorter path. Works in linear time
@@ -153,9 +154,9 @@ public class Reconfiguration
 				int bucket = (int) (Math.abs(otherOrigin.x - target.get(i).getPosition().x) + Math.abs(otherOrigin.y - target.get(i).getPosition().y) + Math.abs(otherOrigin.z - target.get(i).getPosition().z));
 				if (DEBUG)
 				{
-					System.out.println("// RECONFIG: " + target.get(i).getID() + ": " + (bucket + floorLevels));
+					System.out.println("// RECONFIG: " + target.get(i).getID() + ": " + (bucket + floorLevels -1));
 				}
-				sortedTargets[bucket + floorLevels].add(target.get(i));
+				sortedTargets[bucket + floorLevels - 1].add(target.get(i));
 			}
 		}
 		
@@ -222,8 +223,6 @@ public class Reconfiguration
 
 		int currentLevel;
 
-		// TODO: Assuming that robot.get(0) gives the last robot block in the
-		// chain, which is able to move
 		for (currentLevel = 0; currentLevel < sortedTargets.length; currentLevel++)
 		{
 			if (sortedTargets[currentLevel].size() != 0)
@@ -295,12 +294,15 @@ public class Reconfiguration
 		
 		int cntr = 0;
 		
-		while(cntr<robot.size()-1) 
+		while(cntr<robot.size()) 
 		{
-			//TODO: Stopping Conditions
+			
 			System.out.println("// RECONFIG: Cntr: "+cntr);
-			// 1) Select last robot block to move, i.e. robot.get(0)
-			RobotBlock blockToMove = robot.get(0);
+			// 1) Select last robot block to move, i.e. robot.get(0)????!!!!!?????!!!!!?????!!!!!?????!!!!
+			//PROBLEM: SELECTING THE RIGHT BLOCK FOR MOVEMENTS....
+			//final RobotBlock blockToMove = robot.get(robot.size()-1);
+			final RobotBlock blockToMove = robot.get(0);
+			//robot.remove(0);
 			
 			// 2) Select the target position where it has to go to, there should not be a robot block on it
 			Block targetBlock = easySortedTargets.get(cntr);
@@ -319,35 +321,56 @@ public class Reconfiguration
 				}
 			}
 			// 3) Find path from position of robotBlock to target position
-			// Change y-coordinate to make PF work, doesn't take 3D into account right now
 			// TODO: Check if it works with only 1 block
-			//Block targetBlockForPF = new Block(new Vector3(targetBlock.getPosition().x, 1, targetBlock.getPosition().z), Block.Type.Goal);
 			final Block targetBlockForMove = targetBlock;
 			
 			//pathFinder.startPathFinder(blockToMove, targetBlock);
 			
 			// 4) Perform actual movement
-			// TODO: If this works with threading?
 			
-			int absDistance = (int) Math.abs((robot.get(0).getPosition().x-targetBlockForMove.getPosition().x)+(robot.get(0).getPosition().z-targetBlockForMove.getPosition().z));
+			System.out.println("// RECONFIG: Start movement, block: "+blockToMove.getID()+ " to: "+targetOrigin.getPosition().x+" "+targetOrigin.getPosition().y+" "+targetOrigin.getPosition().z);
 			
-			Thread thread = new Thread(new Runnable()
+			// FIRST: Move the block to the target origin			
+			
+			/*
+			Thread thread1 = new Thread(new Runnable()
 			{
 				@Override
 				public void run()
 				{
 					// TODO: Run & Debug this
 					ArrayList<Vector3> fakePath = new ArrayList<Vector3>();
-					fakePath.add(targetBlockForMove.getPosition());
-					System.out.println("// RECONFIG: Start movement, to "+targetBlockForMove.getPosition().x+" "+targetBlockForMove.getPosition().y+" "+targetBlockForMove.getPosition().z);
-					movement.startMove3(fakePath, targetBlockForMove);
+					fakePath.add(targetOrigin.getPosition());
+					movement.startMove3(fakePath, targetOrigin);
 				}
 			});
-			thread.start();
+			thread1.start();
 			
+			while(thread1.isAlive())
+			{
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			*/
 			
+			// THIRD: Do Reconfiguration Part
 			
-			while(thread.isAlive())
+			System.out.println("// RECONFIG: Start smartMovement, block: "+blockToMove.getID()+ " to: "+targetBlockForMove.getPosition().x+" "+targetBlockForMove.getPosition().y+" "+targetBlockForMove.getPosition().z);
+			Thread thread2 = new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					reconfigurationMovement.newSmartMove(blockToMove, targetBlockForMove.getPosition());
+				}
+				
+			});
+			thread2.start();
+			
+			while(thread2.isAlive())
 			{
 				try {
 					Thread.sleep(100);
@@ -356,7 +379,9 @@ public class Reconfiguration
 				}
 			}
 			
-			System.out.println("// RECONFIG: Start movement, block: "+blockToMove.getID()+ " to: "+targetBlockForMove.getPosition().x+" "+targetBlockForMove.getPosition().y+" "+targetBlockForMove.getPosition().z);
+			System.out.println("// RECONFIG: CNTR: "+cntr+" ROBOT SIZE: "+robot.size());
+			// TODO: SECOND: Try to get the block out of the list for move3
+			
 			
 		}
 		
