@@ -26,6 +26,7 @@ public class BrainAI //
 		RobotBlock maxRobot = findClosestRobot(minTarget);
 		
 		// Dijkstra PathFinder
+		
 		final PathFinder path = new PathFinder(blockList, robots.size(), target.size());
 		//path.startPathFinder(maxRobot, minTarget);
 		
@@ -36,6 +37,7 @@ public class BrainAI //
 		
 		for (Vector3 vector : p2.getFinalList())
 		{
+			
 			blockList.createBlock(vector, Block.Type.Path);
 		}
 

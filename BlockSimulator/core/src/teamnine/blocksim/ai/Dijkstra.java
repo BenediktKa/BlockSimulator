@@ -36,7 +36,6 @@ public class Dijkstra
         finalList.add(position);
         DistanceBlock[] neighbours = position.getNeighbours();
         int[] weights = position.getWeights();
-        
         if((position.getX() == target.getX()) && (position.getZ() == target.getZ()))
         {
         	return;
@@ -70,6 +69,7 @@ public class Dijkstra
         		}
         		if (!(containsNeig))
         		{
+        			
         			for(int j= 0; j < array.size(); j++)
     				{
     					listToReduce.add(array.get(j));
@@ -77,6 +77,7 @@ public class Dijkstra
         		}	
         		else
         		{
+        			
 	            	int neededRobo = 1;
 	            	for (int j = weights[i]; j>0; j--)
 	            	{
@@ -87,6 +88,7 @@ public class Dijkstra
 		            	numRoboBlocks = numRoboBlocks- neededRobo;
 			            if (neighbour.getDistance() > (position.getDistance() + weights[i]))
 			            {
+			            	
 			                 neighbour.setPrevious(position);
 			                 neighbour.setDistance(position.getDistance() + weights[i]);
 			            }

@@ -21,7 +21,7 @@ public class PathFinder
 	ArrayList<DistanceBlock> list = new ArrayList<DistanceBlock>();
 	AbstractList<Block> obstacles;
 	ArrayList<DistanceBlock> disObstacles;
-	ArrayList<Vector3> finalList = new ArrayList<Vector3>();
+	ArrayList<Vector3> vectorList = new ArrayList<Vector3>();
 
 	public PathFinder(BlockList blockList, int numRoboBlocks, int numTargetBlocks){
 		this.blockList = blockList;
@@ -55,7 +55,7 @@ public class PathFinder
 		int initalX = (int) initialPosition.getData().x;
 		int initalZ = (int) initialPosition.getData().z;
 		
-		if (!finalList.isEmpty()) finalList.clear();
+		if (!vectorList.isEmpty()) vectorList.clear();
 		
 		// create a list with all the possible positions
 		for (int i = 0; i < maxX; i++)
@@ -81,7 +81,7 @@ public class PathFinder
 					}
 					if (!(added))
 					{
-						initialList.add(new DistanceBlock(MAX_VALUE, new Vector3(i, 1, j), 0));
+						initialList.add(new DistanceBlock(MAX_VALUE, new Vector3(i, 2, j), 0));
 					}
 				}
 			}
@@ -131,29 +131,24 @@ public class PathFinder
 		DistanceBlock tar = new DistanceBlock(MAX_VALUE, target.getPosition(), 0);
 		Dijkstra dijkstra = new Dijkstra(initialList, tar,numRoboBlocks,numTargetBlocks);
 		list = dijkstra.getFinalList();
-
 		if (list.get(list.size() - 1).getData().equals(target.getPosition()))
 		{
 			setFinalList(list.get(list.size() - 1));
-		}
-
-		for (int i = 0; i < finalList.size(); i++)
-		{
-			blockList.createBlock(finalList.get(i), Block.Type.Path);
 		}
 	}
 
 	public void setFinalList(DistanceBlock current)
 	{
-		finalList.add(current.getData());
+		vectorList.add(current.getData());
 		if (current.getPrevious() != null)
 		{
+			System.out.println("arrives1");
 			setFinalList(current.getPrevious());
 		}
 	}
 
-	public ArrayList<Vector3> getFinalList()
+	public ArrayList<Vector3> getVectorList()
 	{
-		return finalList;
+		return vectorList;
 	}
 }
