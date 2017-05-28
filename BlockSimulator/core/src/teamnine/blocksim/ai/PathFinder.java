@@ -46,12 +46,15 @@ public class PathFinder
 					j = disObstacles.size();
 				}
 			}
-		} //
+		} 
 	}
 	
-	public void startPathFinder(Block initialPosition, Block target)
+	public void startPathFinder(Block initialP, Block target)
 	{
-		disObstacles.add(new DistanceBlock(0, initialPosition.getPosition(), 0));
+		DistanceBlock initialPosition = new DistanceBlock(0, initialP.getPosition(), 0);
+		int initalX = (int) initialPosition.getData().x;
+		int initalZ = (int) initialPosition.getData().z;
+		
 		if (!finalList.isEmpty()) finalList.clear();
 		
 		// create a list with all the possible positions
@@ -59,19 +62,27 @@ public class PathFinder
 		{
 			for (int j = 0; j < maxZ; j++)
 			{
-				boolean added = false;
-				for (int m = 0; m < disObstacles.size(); m++)
+				if (!(i == initalX) && (j== initalZ))
 				{
-					if ((disObstacles.get(m).getData().x == i) && (disObstacles.get(m).getData().z == j))
-					{
-						initialList.add(disObstacles.get(m));
-						added = true;
-						m = disObstacles.size();
-					}
+					initialList.add(initialPosition);
 				}
-				if (!(added))
+				else
 				{
-					initialList.add(new DistanceBlock(MAX_VALUE, new Vector3(i, 1, j), 0));
+					boolean added = false;
+					int mY = 0;
+					for (int m = 0; m < disObstacles.size(); m++)
+					{
+						if ((disObstacles.get(m).getData().x == i) && (disObstacles.get(m).getData().z == j) && (disObstacles.get(m).getData().y > mY))
+						{
+							initialList.add(disObstacles.get(m));
+							added = true;
+							m = disObstacles.size();
+						}
+					}
+					if (!(added))
+					{
+						initialList.add(new DistanceBlock(MAX_VALUE, new Vector3(i, 1, j), 0));
+					}
 				}
 			}
 		}

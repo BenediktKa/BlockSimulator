@@ -28,7 +28,6 @@ public class Dijkstra
 		}
 
 		completeFinalList(originalList);
-		System.out.println(target.getData() + "dijk");
 	}
 
 	public void completeFinalList(PriorityQueue<DistanceBlock> listToReduce)
@@ -38,7 +37,7 @@ public class Dijkstra
         DistanceBlock[] neighbours = position.getNeighbours();
         int[] weights = position.getWeights();
         
-        if(position.getData().equals(target.getData()))
+        if((position.getX() == target.getX()) && (position.getZ() == target.getZ()))
         {
         	return;
         }
@@ -46,28 +45,56 @@ public class Dijkstra
         {
             for (int i = 0; i < neighbours.length; i++)
             {
-            	int neededRobo = 2;
-            	for (int j = weights[i]; j>0; j--)
-            	{
-            		neededRobo = neededRobo + j -1;
-            	}
-            	System.out.println(neededRobo +  " needed");
-	            if((numTargetBlocks < (numRoboBlocks- neededRobo)))
-	            {
-	            	numRoboBlocks = numRoboBlocks- neededRobo;
-	            	DistanceBlock neighbour = neighbours[i];
-	                if (listToReduce.contains(neighbour))
-	                {
-		                if (neighbour.getDistance() >= (position.getDistance() + weights[i]))
-		                {
-		                  	listToReduce.remove(neighbour);
-		                   	neighbour.setPrevious(position);
-		                   	neighbour.setDistance(position.getDistance() + weights[i]);
-		                   	listToReduce.add(neighbour);
-		                }
-		            } 
-	            }
+            	DistanceBlock neig = neighbours[i];
+            	DistanceBlock neighbour = null;
+            	boolean containsNeig = false;
+            	
+            	ArrayList<DistanceBlock> array = new ArrayList<DistanceBlock>();
+        		for (int m = 0; m < listToReduce.size(); m++)
+        		{
+        			DistanceBlock object = listToReduce.poll();
+        			if((neig.getX() == object.getX()) && (neig.getZ() == object.getZ()))
+        			{
+        				for(int j= 0; j < array.size(); j++)
+        				{
+        					listToReduce.add(array.get(j));
+        				}
+        				neighbour = object;
+        				containsNeig = true;
+        				m = listToReduce.size();
+        			}
+        			else
+        			{
+        				array.add(object);
+        			}
+        		}
+        		if (!(containsNeig))
+        		{
+        			for(int j= 0; j < array.size(); j++)
+    				{
+    					listToReduce.add(array.get(j));
+    				}
+        		}	
+        		else
+        		{
+	            	int neededRobo = 1;
+	            	for (int j = weights[i]; j>0; j--)
+	            	{
+	            		neededRobo = neededRobo + j;
+	            	}
+		            if((numTargetBlocks <= (numRoboBlocks- neededRobo)))
+		            {
+		            	numRoboBlocks = numRoboBlocks- neededRobo;
+			            if (neighbour.getDistance() > (position.getDistance() + weights[i]))
+			            {
+			                 neighbour.setPrevious(position);
+			                 neighbour.setDistance(position.getDistance() + weights[i]);
+			            }
+		            }
+		            listToReduce.add(neighbour);
+        		}
             }
+            
             if (listToReduce.size() != 0)
             {
             	completeFinalList(listToReduce);

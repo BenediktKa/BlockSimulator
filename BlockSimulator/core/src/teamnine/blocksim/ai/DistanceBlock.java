@@ -50,7 +50,7 @@ public class DistanceBlock
 	public void setPrevious(DistanceBlock previous)
 	{
 		this.previous = previous;
-	}//
+	}
 
 	public float getDistance()
 	{
@@ -75,5 +75,15 @@ public class DistanceBlock
 	public Vector3 getData()
 	{
 		return data;
+	}
+	
+	public float getX()
+	{
+		return data.x;
+	}
+	
+	public float getZ()
+	{
+		return data.z;
 	}
 }
