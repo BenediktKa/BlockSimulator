@@ -68,6 +68,7 @@ public class BlockList implements Disposable
 		createBlock(new Vector3(1, 6, 10), Block.Type.Robot);
 
 		// Obstacle
+		createBlock(new Vector3(15, 1, 15), Block.Type.Obstacle);
 
 		// Goal
 		createBlock(new Vector3(12, 1, 12), Block.Type.Goal);
