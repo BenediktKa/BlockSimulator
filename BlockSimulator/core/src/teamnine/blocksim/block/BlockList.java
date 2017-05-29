@@ -29,10 +29,6 @@ public class BlockList implements Disposable
 	private ArrayList<Block> pathList = new ArrayList<Block>();
 	private ArrayList<RobotBlock> robotList = new ArrayList<RobotBlock>();
 
-	// Stacks
-	private Stack<Action> undoQueue = new Stack<Action>();
-	private Stack<Action> redoQueue = new Stack<Action>();
-
 	// Register Action
 	boolean registerAction = true;
 
@@ -151,14 +147,6 @@ public class BlockList implements Disposable
 
 	public void addBlock(Block block)
 	{
-
-		// Add Adder Action To Queue
-		if (registerAction)
-		{
-			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), false));
-			redoQueue.clear();
-		}
-
 		// Add Block to different List
 		if (block.getType() == Block.Type.Floor)
 		{
@@ -219,14 +207,6 @@ public class BlockList implements Disposable
 
 	public void removeBlock(Block block)
 	{
-
-		// Add Removal Action To Queue
-		if (registerAction)
-		{
-			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
-			redoQueue.clear();
-		}
-
 		// Add Block to different List
 		if (block.getType() == Block.Type.Floor)
 		{
@@ -279,12 +259,6 @@ public class BlockList implements Disposable
 	{
 		Block block = blockList.get(i);
 
-		// Add Removal Action To Queue
-		if (registerAction)
-		{
-			undoQueue.push(new Action(block.getPosition(), block.getType(), block.getID(), true));
-			redoQueue.clear();
-		}
 		registerAction = true;
 		blockList.remove(block);
 
@@ -406,52 +380,6 @@ public class BlockList implements Disposable
 			return true;
 		else
 			return false;
-	}
-
-	public void undo()
-	{
-		if (undoQueue.isEmpty())
-		{
-			blockSimulator.notification.setNotification("Can't Undo", Notification.Type.Error, 1);
-			return;
-		}
-
-		Action undoAction = undoQueue.pop();
-
-		// If it was removal Action
-		if (undoAction.wasRemoved())
-		{
-			registerAction = false;
-			createBlock(undoAction.getPosition(), undoAction.getBlockType(), undoAction.getID());
-			redoQueue.push(new Action(undoAction.getPosition(), undoAction.getBlockType(), undoAction.getID(), false));
-		}
-		else
-		{
-			registerAction = false;
-			removeBlock(blockAtPoint(undoAction.getPosition()));
-			redoQueue.push(new Action(undoAction.getPosition(), undoAction.getBlockType(), undoAction.getID(), true));
-		}
-	}
-
-	public void redo()
-	{
-		if (redoQueue.isEmpty())
-		{
-			blockSimulator.notification.setNotification("Can't Redo", Notification.Type.Error, 1);
-			return;
-		}
-
-		Action redoAction = redoQueue.pop();
-
-		// If it was removal Action
-		if (redoAction.wasRemoved())
-		{
-			createBlock(redoAction.getPosition(), redoAction.getBlockType(), redoAction.getID());
-		}
-		else
-		{
-			removeBlock(blockAtPoint(redoAction.getPosition()));
-		}
 	}
 
 	@Override
