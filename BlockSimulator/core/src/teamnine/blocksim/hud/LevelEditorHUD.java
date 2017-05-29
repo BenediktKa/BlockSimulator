@@ -18,6 +18,7 @@ import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.ai.BrainAI;
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.Block.Type;
 import teamnine.blocksim.configs.configurationLoader;
 import teamnine.blocksim.configs.simulationLoader;
 
@@ -53,12 +54,29 @@ public class LevelEditorHUD implements Disposable
 	// Load Simulation Button
 	private TextButton simulationButton;
 
+	// AI Mode Button
+	private TextButton aiModeButton;
+	private AIMode aiMode = AIMode.Greedy;
+
 	// Block Dialog
 	private Label blockLabel;
 	private Block.Type selectedBlock = Block.Type.Obstacle;
-	
+
 	// Configuration Checker
 	// private ConfigurationChecker check;
+
+	public enum AIMode
+	{
+		Greedy, Dijkstra;
+
+		public AIMode next()
+		{
+			AIMode types[] = AIMode.values();
+			int ordinal = this.ordinal();
+			ordinal = ++ordinal % types.length;
+			return types[ordinal];
+		}
+	}
 
 	public LevelEditorHUD(final BlockSimulator blockSimulator)
 	{
@@ -76,6 +94,7 @@ public class LevelEditorHUD implements Disposable
 		exportButton = new TextButton("Export", skin);
 		undoButton = new TextButton("Undo", skin, "midnight");
 		redoButton = new TextButton("Redo", skin, "midnight");
+		aiModeButton = new TextButton("AI: " + aiMode, skin);
 		startButton = new TextButton("Start", skin);
 		pauseButton = new TextButton("Pause", skin);
 		pauseButton.setVisible(false);
@@ -93,6 +112,7 @@ public class LevelEditorHUD implements Disposable
 		table.row().height(20);
 		table.add(undoButton).padRight(20);
 		table.add(redoButton).padRight(20);
+		table.add(aiModeButton).padRight(20);
 		table.add(startButton).padRight(20);
 		table.add(pauseButton);
 
@@ -186,6 +206,18 @@ public class LevelEditorHUD implements Disposable
 			}
 		});
 
+		// AI Button Listener
+		aiModeButton.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				aiMode = aiMode.next();
+				aiModeButton.setText("AI: " + aiMode);
+				super.clicked(event, x, y);
+			}
+		});
+
 		// Start Button Listener
 		startButton.addListener(new ClickListener()
 		{
@@ -224,17 +256,17 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(StateManager.state == StateManager.SimulationState.SIMULATION)
+				if (StateManager.state == StateManager.SimulationState.SIMULATION)
 				{
 					StateManager.state = StateManager.SimulationState.PAUSE;
 					pauseButton.setText("Resume");
 				}
-				else if(StateManager.state == StateManager.SimulationState.PAUSE)
+				else if (StateManager.state == StateManager.SimulationState.PAUSE)
 				{
 					StateManager.state = StateManager.SimulationState.SIMULATION;
 					pauseButton.setText("Pause");
 				}
-				
+
 				super.clicked(event, x, y);
 			}
 		});
