@@ -31,7 +31,7 @@ public class PathFinder
 		maxX = blockList.getGridSize();
 		maxZ = maxX;
 		
-		// create a List with the obstacles and the initial position
+		// create a List with the obstacles
 		disObstacles = new ArrayList<DistanceBlock>();
 		for (int i = 0; i < obstacles.size(); i++)
 		{
@@ -62,7 +62,7 @@ public class PathFinder
 		{
 			for (int j = 0; j < maxZ; j++)
 			{
-				if (!(i == initalX) && (j== initalZ))
+				if ((i == initalX) && (j == initalZ))
 				{
 					initialList.add(initialPosition);
 				}
@@ -81,7 +81,7 @@ public class PathFinder
 					}
 					if (!(added))
 					{
-						initialList.add(new DistanceBlock(MAX_VALUE, new Vector3(i, 2, j), 0));
+						initialList.add(new DistanceBlock(MAX_VALUE, new Vector3(i, 1, j), 0));
 					}
 				}
 			}
@@ -131,10 +131,7 @@ public class PathFinder
 		DistanceBlock tar = new DistanceBlock(MAX_VALUE, target.getPosition(), 0);
 		Dijkstra dijkstra = new Dijkstra(initialList, tar,numRoboBlocks,numTargetBlocks);
 		list = dijkstra.getFinalList();
-		if (list.get(list.size() - 1).getData().equals(target.getPosition()))
-		{
-			setFinalList(list.get(list.size() - 1));
-		}
+		setFinalList(list.get(list.size() - 1));
 	}
 
 	public void setFinalList(DistanceBlock current)
@@ -147,7 +144,7 @@ public class PathFinder
 		}
 	}
 
-	public ArrayList<Vector3> getVectorList()
+	public ArrayList<Vector3> getFinalList()
 	{
 		return vectorList;
 	}
