@@ -56,19 +56,7 @@ public class BlockList implements Disposable
 
 	public void preconfig()
 	{
-		// Robots
-		createBlock(new Vector3(0, 1, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 1, 10), Block.Type.Robot);
-		createBlock(new Vector3(0, 2, 10), Block.Type.Robot);
-		createBlock(new Vector3(0, 3, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 2, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 3, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 4, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 5, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 6, 10), Block.Type.Robot);
-
-		// Obstacle
-		createBlock(new Vector3(15, 1, 15), Block.Type.Obstacle);
+		
 
 		// Goal
 		createBlock(new Vector3(12, 1, 12), Block.Type.Goal);

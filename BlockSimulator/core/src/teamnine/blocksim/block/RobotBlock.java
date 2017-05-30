@@ -20,6 +20,8 @@ public class RobotBlock extends BlockGravity
 	private boolean visited = false;
 	private int counter = 0;
 	private ArrayList<RobotBlock> connections = new ArrayList<RobotBlock>();
+	private ArrayList<Vector3> unpassableVectors= new ArrayList<Vector3>();
+	private ArrayList<Integer> numOfPass= new ArrayList<Integer>();
 
 	public RobotBlock(Vector3 position, Type type, float speed, BlockList blockList)
 	{
@@ -28,7 +30,22 @@ public class RobotBlock extends BlockGravity
 		this.speed = speed;
 		this.blockList = blockList;
 	}
-
+	public void addUnpassableVector(Vector3 v)
+	{
+		unpassableVectors.add(v);
+	}
+	public ArrayList<Vector3> getUnpassableVectors()
+	{
+		return unpassableVectors;
+	}
+	public void addNumOfpass()
+	{
+		numOfPass.add(0);
+	}
+	public ArrayList<Integer> getNumOfPass()
+	{
+		return numOfPass;
+	}
 	public void setCounter(int c)
 	{
 		counter = c;
