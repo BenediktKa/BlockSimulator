@@ -23,6 +23,7 @@ public class Move6
 	private Vector3 intermediateTarget = null;
 	private int iteration = 0;
 	private int failedMoves = 0;
+	private boolean done=false;
 
 	public Move6(ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, ArrayList<Block> floor)
 	{
@@ -43,12 +44,11 @@ public class Move6
 			System.out.println(this.path.get(i));
 		while (!targetReached)
 		{
-			// System.out.println("reached while failed moves and interation
-			// "+failedMoves+" "+iteration);
+			 System.out.println("reached while failed moves and interation"+failedMoves+" "+iteration);
 			iteration++;
 			if (intermediateTargetReached)
 			{
-				// System.out.println("reached intermediate target true");
+				System.out.println("reached intermediate target true");
 				intermediateTarget = null;
 				decideMove(this.path.get(0));
 				if (iteration == robots.size())
@@ -90,60 +90,123 @@ public class Move6
 			}
 			else
 			{
-				// System.out.println("ughhh + intermediate target
-				// "+intermediateTarget);
-				/*
-				 * for(int k=0;k<robots.size();k++) {
-				 * if(robots.get(k).getPosition().x+1==intermediateTarget.x&&
-				 * robots.get(k).getPosition().z==intermediateTarget.z) {
-				 * System.out.println("close to target 1"); boolean bigger=true;
-				 * int attempt=1; int result=0; int currentBest=0; while(bigger)
-				 * { int total=0; for(int j=attempt;j>0;j--) { total=total+j; }
-				 * if(total>robots.size()) { currentBest=total; bigger=false; }
-				 * else { result=currentBest; attempt++; } } result++;
-				 * intermediateTarget=new
-				 * Vector3(intermediateTarget.x+result,1,intermediateTarget.z);
-				 * } else
-				 * if(robots.get(k).getPosition().x-1==intermediateTarget.x&&
-				 * robots.get(k).getPosition().z==intermediateTarget.z) {
-				 * System.out.println("close to target 2"); boolean bigger=true;
-				 * int attempt=1; int result=0; int currentBest=0; while(bigger)
-				 * { int total=0; for(int j=attempt;j>0;j--) { total=total+j; }
-				 * if(total>robots.size()) { currentBest=total; bigger=false; }
-				 * else { result=currentBest; attempt++; } } result++;
-				 * intermediateTarget=new
-				 * Vector3(intermediateTarget.x-result,1,intermediateTarget.z);
-				 * } else
-				 * if(robots.get(k).getPosition().x==intermediateTarget.x&&
-				 * robots.get(k).getPosition().z+1==intermediateTarget.z) {
-				 * System.out.println("close to target 3 "+robots.get(k).
-				 * getPosition()+" tar "+intermediateTarget); boolean
-				 * bigger=true; int attempt=1; int result=0; int currentBest=0;
-				 * while(bigger) { int total=0; for(int j=attempt;j>0;j--) {
-				 * total=total+j; } if(total>robots.size()) { currentBest=total;
-				 * bigger=false; } else { result=currentBest; attempt++; } }
-				 * result++; System.out.println("result "+result+
-				 * " inter "+intermediateTarget); intermediateTarget=new
-				 * Vector3(intermediateTarget.x,1,intermediateTarget.z+result);
-				 * System.out.println("result "+result+
-				 * " new inter "+intermediateTarget); } else
-				 * if(robots.get(k).getPosition().x==intermediateTarget.x&&
-				 * robots.get(k).getPosition().z-1==intermediateTarget.z) {
-				 * System.out.println("close to target 4"); boolean bigger=true;
-				 * int attempt=1; int result=0; int currentBest=0; while(bigger)
-				 * { int total=0; for(int j=attempt;j>0;j--) { total=total+j; }
-				 * if(total>robots.size()) { currentBest=total; bigger=false; }
-				 * else { result=currentBest; attempt++; } } result++;
-				 * intermediateTarget=new
-				 * Vector3(intermediateTarget.x,1,intermediateTarget.z-result);
-				 * } }
-				 */
+			//	System.out.println("ughhh + intermediate target" + intermediateTarget);
+				if(!done){
+					
+				for (int k = 0; k < robots.size(); k++) 
+				{
+					if (robots.get(k).getPosition().x + 1 == intermediateTarget.x&& robots.get(k).getPosition().z == intermediateTarget.z) {
+						System.out.println("close to target 1");
+						boolean bigger = true;
+						int attempt = 1;
+						int result = 0;
+						int currentBest = 0;
+						while (bigger) {
+							int total = 0;
+							for (int j = attempt; j > 0; j--) {
+								total = total + j;
+							}
+							if (total > robots.size()) {
+								currentBest = attempt;
+								bigger = false;
+							} else {
+								result = currentBest;
+								attempt++;
+							}
+						}
+						
+						intermediateTarget = new Vector3(intermediateTarget.x + result, 1, intermediateTarget.z);
+						done=true;
+					} 
+					else if (robots.get(k).getPosition().x - 1 == intermediateTarget.x&& robots.get(k).getPosition().z == intermediateTarget.z) {
+						System.out.println("close to target 2");
+						boolean bigger = true;
+						int attempt = 1;
+						int result = 0;
+						int currentBest = 0;
+						while (bigger) {
+							int total = 0;
+							for (int j = attempt; j > 0; j--) {
+								total = total + j;
+							}
+							if (total > robots.size()) {
+								currentBest = attempt;
+								bigger = false;
+							} else {
+								result = currentBest;
+								attempt++;
+							}
+						}
+						
+						intermediateTarget = new Vector3(intermediateTarget.x - result, 1, intermediateTarget.z);
+						done=true;
+					} 
+					else if (robots.get(k).getPosition().x == intermediateTarget.x&& robots.get(k).getPosition().z + 1 == intermediateTarget.z) {
+						System.out.println("close to target 3 " + robots.get(k).getPosition() + " tar " + intermediateTarget);
+						boolean bigger = true;
+						int attempt = 1;
+						int result = 0;
+						int currentBest = 0;
+						while (bigger) {
+							int total = 0;
+							for (int j = attempt; j > 0; j--) {
+								total = total + j;
+							}
+							if (total > robots.size()) {
+								currentBest = attempt;
+								bigger = false;
+							} else {
+								result = currentBest;
+								attempt++;
+							}
+						}
+						
+						System.out.println("result " + result + " inter " + intermediateTarget);
+						intermediateTarget = new Vector3(intermediateTarget.x, 1, intermediateTarget.z + result);
+						done=true;
+						//System.out.println("result " + result + " new inter " + intermediateTarget);
+					} 
+					else if (robots.get(k).getPosition().x == intermediateTarget.x&& robots.get(k).getPosition().z - 1 == intermediateTarget.z) {
+						System.out.println("close to target 4");
+						boolean bigger = true;
+						int attempt = 1;
+						int result = 0;
+						int currentBest = 0;
+						
+						while (bigger) {
+							System.out.println("statrt");
+							int total = 0;
+							for (int j = attempt; j > 0; j--) {
+								total = total + j;
+								System.out.println("total "+total+" att "+attempt+" cur "+currentBest);
+								
+							}
+							if (total > robots.size()) {
+								System.out.println("exit");
+								result = currentBest;
+								bigger = false;
+							} else {
+								System.out.println("total set currentBest");
+								currentBest = attempt;
+								attempt++;
+							}
+						}
+						
+						System.out.println("result "+result);
+						intermediateTarget = new Vector3(intermediateTarget.x, 1, intermediateTarget.z - result);
+						done=true;
+					}
+				}}
+
 				decideMove(intermediateTarget);
+				
+
 				if (iteration == robots.size())
 				{
 					iteration = 0;
 					failedMoves = 0;
-				}
+					
+				}			
 			}
 		}
 
@@ -186,10 +249,7 @@ public class Move6
 		}
 		System.out.println("current " + currentVector);
 		boolean found = false;
-		for (int i = 0; i < obstacles.size(); i++)
-		{
-			System.out.println(obstacles.get(i).getPosition());
-		}
+		
 		while (!found)
 		{
 			found = true;
@@ -198,10 +258,9 @@ public class Move6
 				if (lastVector.x == obstacles.get(i).getPosition().x && lastVector.z == obstacles.get(i).getPosition().z)
 				{
 					continue;
-				}
+				} 
 
-				System.out.println("not the same");
-				System.out.println(obstacles.get(i).getPosition());
+			
 				if (currentVector.x + 1 == obstacles.get(i).getPosition().x && currentVector.z == obstacles.get(i).getPosition().z)
 				{
 					System.out.println("foun next1 " + obstacles.get(i).getPosition());
@@ -261,76 +320,20 @@ public class Move6
 			System.out.println("z>z");
 			return new Vector3(currentVector.x, 1, currentVector.z - 1);
 		}
-		/*
-		 * boolean found=false; while(!found){
-		 * System.out.println("enter while"); found=true; for(int
-		 * i=0;i<obstacles.size();i++) {
-		 * if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).
-		 * getPosition().z!=lastVector.z)&&currentVector.x+1==obstacles.get(i).
-		 * getPosition().x&&currentVector.z==obstacles.get(i).getPosition().z) {
-		 * System.out.println("foun next1 "+obstacles.get(i).getPosition());
-		 * found=false; lastVector=currentVector;
-		 * currentVector=obstacles.get(i).getPosition();
-		 * 
-		 * } else
-		 * if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).
-		 * getPosition().z!=lastVector.z)&&currentVector.x-1==obstacles.get(i).
-		 * getPosition().x&&currentVector.z==obstacles.get(i).getPosition().z) {
-		 * System.out.println("foun next2 "+obstacles.get(i).getPosition());
-		 * found=false; lastVector=currentVector;
-		 * currentVector=obstacles.get(i).getPosition();
-		 * 
-		 * } else
-		 * if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).
-		 * getPosition().z!=lastVector.z)&&currentVector.x==obstacles.get(i).
-		 * getPosition().x&&currentVector.z+1==obstacles.get(i).getPosition().z)
-		 * { System.out.println("foun next3 "+obstacles.get(i).getPosition());
-		 * found=false; lastVector=currentVector;
-		 * currentVector=obstacles.get(i).getPosition();
-		 * 
-		 * } else
-		 * if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).
-		 * getPosition().z!=lastVector.z)&&currentVector.x==obstacles.get(i).
-		 * getPosition().x&&currentVector.z-1==obstacles.get(i).getPosition().z)
-		 * { System.out.println("foun next4 "+obstacles.get(i).getPosition());
-		 * found=false; lastVector=currentVector;
-		 * currentVector=obstacles.get(i).getPosition();
-		 * 
-		 * } } } if(!found) { if(lastVector.x<currentVector.x) {
-		 * System.out.println("x<x"); return new
-		 * Vector3(currentVector.x+1,1,currentVector.z); }
-		 * 
-		 * else if(lastVector.x>currentVector.x) {System.out.println("x>x");
-		 * return new Vector3(currentVector.x-1,1,currentVector.z); }
-		 * 
-		 * else if(lastVector.z<currentVector.z) {System.out.println("z<z");
-		 * return new Vector3(currentVector.x,1,currentVector.z+1); }
-		 * 
-		 * else {System.out.println("z>z"); return new
-		 * Vector3(currentVector.x,1,currentVector.z-1); } }
-		 */
+		
 	}
 
 	public void decideMove(Vector3 v)
 	{
 
 		ArrayList<RobotBlock> orderToMove = new ArrayList<RobotBlock>();
-		/*
-		 * float targetX=v.x; float targetZ=v.z; //finds distance from the block
-		 * to the target assigns the value to the block
-		 * 
-		 * for(int i=0;i<robots.size();i++) { float
-		 * distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.
-		 * abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition(
-		 * ).y; robots.get(i).setDistanceToPath(distanceToPath);
-		 * orderToMove.add(robots.get(i)); }
-		 */
-		////////////////////////////
-
+		
+		
 		for (int i = 0; i < robots.size(); i++)
 		{
 			orderToMove.add(robots.get(i));
 		}
+		System.out.println("decide "+orderToMove.size());
 		RobotBlock end = new RobotBlock(v, null, 0, null);
 		robots.add(end);
 		for (int i = 0; i < robots.size(); i++)
@@ -374,7 +377,7 @@ public class Move6
 		}
 
 		for (int i = 0; i < robots.size(); i++)
-		{//
+		{
 			setDistances(robots.get(i), end);
 			for (int j = 0; j < robots.size(); j++)
 			{
@@ -389,8 +392,7 @@ public class Move6
 			robots.get(i).setCounter(0);
 		}
 		robots.remove(robots.size() - 1);
-		//////////////////////////
-
+	
 		ArrayList<RobotBlock> newOrderToMove = order(orderToMove);
 		for (int i = 0; i < newOrderToMove.size(); i++)
 		{
@@ -400,9 +402,12 @@ public class Move6
 
 	public void setDistances(RobotBlock b, RobotBlock end)
 	{
-		if (b.getPosition().x == end.getPosition().x && b.getPosition().y == end.getPosition().y)
+		
+		if (b.getPosition().x == end.getPosition().x && b.getPosition().z == end.getPosition().z)
 		{
+			System.out.println("target found"+b.getPosition()+" "+end.getPosition());
 			b.setDistanceToPath(0);
+		
 		}
 		else
 		{
@@ -430,16 +435,20 @@ public class Move6
 				}
 			}
 			if (end.getCounter() != 0 && end.getCounter() > (int) ((Math.abs(b.getPosition().x - end.getPosition().x) + Math.abs(b.getPosition().z - end.getPosition().z) + b.getPosition().y) - 1))
-				b.setDistanceToPath(end.getCounter());
+				{b.setDistanceToPath(end.getCounter());System.out.println("linked dis");}
 			else
-				b.setDistanceToPath((int) ((Math.abs(b.getPosition().x - end.getPosition().x) + Math.abs(b.getPosition().z - end.getPosition().z) + b.getPosition().y) - 1));
+				{b.setDistanceToPath((int) ((Math.abs(b.getPosition().x - end.getPosition().x) + Math.abs(b.getPosition().z - end.getPosition().z) + b.getPosition().y) - 1));
+				System.out.println("abs dis");
+				}System.out.println("distance "+b.getDistanceToPath());
 		}
 	}
 
 	public ArrayList<RobotBlock> order(ArrayList<RobotBlock> otm)
 	{
+		System.out.println("order");
 		ArrayList<RobotBlock> sorted = new ArrayList<RobotBlock>();
 		float maxDistance = 0;
+		
 		for (int i = 0; i < otm.size(); i++)
 		{
 			if (otm.get(i).getDistanceToPath() > maxDistance)
@@ -447,6 +456,7 @@ public class Move6
 				maxDistance = otm.get(i).getDistanceToPath();
 			}
 		}
+		System.out.println("order maxd"+maxDistance);
 		ArrayList<Bucket> buckets = new ArrayList<Bucket>();
 		buckets.add(new Bucket());
 		for (int i = 0; i < maxDistance; i++)
@@ -464,14 +474,14 @@ public class Move6
 		{
 			sorted.addAll(buckets.get(i).getBloks());
 		}
-
+		System.out.println(sorted.size());
 		return sorted;
 	}
 
 	public void moving(RobotBlock b, Vector3 v)
 	{
 		// targetReached = false;
-
+		
 		checkIfCanMove(b);
 		System.out.println("b " + b.getPosition() + " t " + v);
 		ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
@@ -529,17 +539,30 @@ public class Move6
 		removeObstacles(possibleMovements);
 		removeImpossibleMovements(possibleMovements, b);
 		removeOrPos(possibleMovements, b, v);
-		removePass(possibleMovements, b);
-
-		if (b.getPosition().x == v.x && b.getPosition().z == v.z)
+		//removePass(possibleMovements, b);
+		boolean found=false;
+		for(int i=0;i<robots.size();i++)
 		{
-			intermediateTargetReached = true;
-			if (path.get(0).x == b.getPosition().x && path.get(0).z == b.getPosition().z)
-				targetReached = true;
-			System.out.println("targetReached " + targetReached);
+			if(robots.get(i).getPosition().x == v.x && robots.get(i).getPosition().z == v.z)
+			{
+				intermediateTargetReached = true;
+				if (path.get(0).x == robots.get(i).getPosition().x && path.get(0).z == robots.get(i).getPosition().z)
+				{
+					targetReached = true;
+					System.out.println("done!!!");
+				}
+					found=true;
+				System.out.println("targetReachedxgnf " + targetReached);
+				for(int y=0;y<robots.size();y++)
+				{
+					robots.get(i).setOriginalPos(new Vector3(-1,-1,-1));
+				}
+			}
 		}
-		else if (possibleMovements.size() == 0)
+		
+		if (possibleMovements.size() == 0)
 		{
+			System.out.println("no moves");
 			failedMoves++;
 		}
 		else
@@ -636,8 +659,9 @@ public class Move6
 			{
 				if (possibleMovements.get(i).x == b.getUnpassableVectors().get(j).x && possibleMovements.get(i).z == b.getUnpassableVectors().get(j).z)
 				{
-					if (b.getNumOfPass().get(j) > 0)
+					if (b.getNumOfPass().get(j) > 1)
 					{
+						System.out.println("remove pass "+b.getPosition());
 						toRemove.add(possibleMovements.get(i));
 					}
 				}
