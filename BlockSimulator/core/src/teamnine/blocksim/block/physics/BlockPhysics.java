@@ -1,5 +1,6 @@
 package teamnine.blocksim.block.physics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.StateManager;
@@ -10,9 +11,10 @@ import teamnine.blocksim.hud.RobotBlockText;
 public class BlockPhysics extends Block
 {
 
+	private float SPEED, ANIMATIONSPEED = 5;
 	private float GRAVITY = 0.098f;
 	private float TERMINALVELOCITY = 10;
-	private float FRICTIONCONSTANT = 0.5f;
+	private float FRICTIONCONSTANT = 0.25f;
 	
 	protected static RobotBlockText rbText;
 
@@ -22,6 +24,20 @@ public class BlockPhysics extends Block
 		
 		if(rbText == null)
 			rbText = new RobotBlockText();
+		
+		calcSpeed();
+	}
+	
+	public void calcSpeed()
+	{
+		float maxFriction = 2* (FRICTIONCONSTANT * GRAVITY);
+		SPEED = Math.abs(maxFriction + ANIMATIONSPEED);
+		System.out.println(SPEED);
+	}
+	
+	public float getSpeed()
+	{
+		return SPEED;
 	}
 
 	public float getGravity()

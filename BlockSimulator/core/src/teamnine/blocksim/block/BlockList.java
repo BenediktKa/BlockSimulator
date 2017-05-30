@@ -36,9 +36,6 @@ public class BlockList implements Disposable
 	// Register Action
 	boolean registerAction = true;
 
-	// Speed for Robot Blocks
-	private float speed = 5;
-
 	public BlockList(int gridSize, BlockSimulator blockSimulator)
 	{
 		this.gridSize = gridSize;
@@ -111,25 +108,6 @@ public class BlockList implements Disposable
 	public int size()
 	{
 		return blockList.size();
-	}
-
-	public float getSpeed()
-	{
-		return speed;
-	}
-
-	public void setSpeed(boolean increase)
-	{
-		for (RobotBlock block : robotList)
-		{
-			if (!increase && speed - 1 <= 0)
-			{
-				speed = 1;
-				block.setSpeed(speed);
-				continue;
-			}
-			block.setSpeed(increase ? (speed = speed + 1) : (speed = speed - 1));
-		}
 	}
 
 	public ArrayList<RobotBlock> getRobotBlockList()
@@ -208,7 +186,7 @@ public class BlockList implements Disposable
 	{
 		if (type == Block.Type.Robot)
 		{
-			RobotBlock robotBlock = new RobotBlock(vector, type, speed, this);
+			RobotBlock robotBlock = new RobotBlock(vector, type, this);
 			robotList.add(robotBlock);
 			addBlock((Block) robotBlock);
 			return robotBlock;
@@ -225,7 +203,7 @@ public class BlockList implements Disposable
 	{
 		if (type == Block.Type.Robot)
 		{
-			RobotBlock robotBlock = new RobotBlock(vector, type, speed, this);
+			RobotBlock robotBlock = new RobotBlock(vector, type, this);
 			robotList.add(robotBlock);
 			addBlock((Block) robotBlock);
 			robotBlock.setID(ID);

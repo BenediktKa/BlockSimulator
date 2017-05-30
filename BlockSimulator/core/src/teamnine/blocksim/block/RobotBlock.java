@@ -13,7 +13,6 @@ public class RobotBlock extends BlockGravity
 {
 
 	private Vector3 moveTo, movement;
-	private float speed;
 	private boolean moving = false;
 	private BlockList blockList;
 	private Block target;
@@ -24,11 +23,10 @@ public class RobotBlock extends BlockGravity
 	private ArrayList<Vector3> unpassableVectors= new ArrayList<Vector3>();
 	private ArrayList<Integer> numOfPass= new ArrayList<Integer>();
 
-	public RobotBlock(Vector3 position, Type type, float speed, BlockList blockList)
+	public RobotBlock(Vector3 position, Type type, BlockList blockList)
 	{
 		super(position, type, blockList);
 
-		this.speed = speed;
 		this.blockList = blockList;
 	}
 	public void addUnpassableVector(Vector3 v)
@@ -95,11 +93,6 @@ public class RobotBlock extends BlockGravity
 	public boolean getMoving()
 	{
 		return (moving || gravity);
-	}
-
-	public void setSpeed(float speed)
-	{
-		this.speed = speed;
 	}
 
 	public void setTarget(Block targetBlock)
@@ -199,9 +192,9 @@ public class RobotBlock extends BlockGravity
 		}
 		else if (moving)
 		{
-			float speedX = movement.x * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.x);
-			float speedY = movement.y * speed * Gdx.graphics.getDeltaTime();
-			float speedZ = movement.z * speed * Gdx.graphics.getDeltaTime() + calcFriction(movement.z);
+			float speedX = movement.x * getSpeed() * Gdx.graphics.getDeltaTime() + calcFriction(movement.x);
+			float speedY = movement.y * getSpeed() * Gdx.graphics.getDeltaTime();
+			float speedZ = movement.z * getSpeed() * Gdx.graphics.getDeltaTime() + calcFriction(movement.z);
 			position.x += speedX;
 			position.y += speedY;
 			position.z += speedZ;
