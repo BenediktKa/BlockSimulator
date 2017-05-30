@@ -60,7 +60,7 @@ public class BrainAI //
 		final SmartMovement smartMovement = new SmartMovement(blockList); //name is not to offend anyone, it isn't smart at all
 		final BlockList finBlockList = blockList; 
 		
-		boolean testingReconfiguration = true;
+		boolean testingReconfiguration = false;
 		if(testingReconfiguration)
 		{
 			new Thread(new Runnable()
