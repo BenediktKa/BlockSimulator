@@ -20,6 +20,7 @@ import teamnine.blocksim.block.RobotBlock;
 public class SmartMovement 
 {
 	private BlockList blocklist;
+	private final boolean DEBUG = true;
 	//private ArrayList<RobotBlock> robotBlockList;
 	//private ArrayList<Block> obstacleBlockList;
 	
@@ -44,6 +45,8 @@ public class SmartMovement
 			
 			performMovement(moveTo, movingBlock);
 			
+			if (DEBUG) System.out.println("//S-MOVE: Block to position: "+movingBlock.getPosition()+" "+moveTo);
+			
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -53,13 +56,13 @@ public class SmartMovement
 			//TODO: POSSIBLE MOVEMENTS INVALID
 			possibleMovements = getPossibleMovements(movingBlock);
 			
-			System.out.println("//S-MOVE: Block to position: "+movingBlock.getPosition()+" "+targetPosition);
+			
 		}
 		
 		
 		
-		if(possibleMovements.size()==0) System.out.println("//S-MOVE: Block Locked");
-		if(movingBlock.getPosition().equals(targetPosition)) System.out.println("//S-MOVE: Block in position: "+movingBlock.getPosition()+" "+targetPosition);
+		if(DEBUG&&possibleMovements.size()==0) System.out.println("//S-MOVE: Block Locked");
+		if(DEBUG&&movingBlock.getPosition().equals(targetPosition)) System.out.println("//S-MOVE: Block in position: "+movingBlock.getPosition()+" "+targetPosition);
 		
 		if(movingBlock.getPosition().equals(targetPosition))
 		{
@@ -82,14 +85,14 @@ public class SmartMovement
 			Vector3 shift = new Vector3(movingBlock.getPosition().x-1,movingBlock.getPosition().y,movingBlock.getPosition().z);
 			Vector3 climb = new Vector3(movingBlock.getPosition().x-1,movingBlock.getPosition().y+1,movingBlock.getPosition().z);
 			
-			if(blocklist.blockAtPointIgnoreGoal(shift)==null)
+			if(blocklist.blockAtPointIgnoreGoal(shift)==null && surroundedByRobot(shift, movingBlock.getPosition()))
 			{
 				//check if there is a robot block surrounding
 				
 				//x-1 is possible
 				possibleMovements.add(shift);
 			}
-			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null)
+			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null && surroundedByRobot(climb, movingBlock.getPosition()))
 			{
 				//check if there is a robot block surrounding
 				//x-1 y+1 is possible
@@ -103,14 +106,14 @@ public class SmartMovement
 			Vector3 shift = new Vector3(movingBlock.getPosition().x,movingBlock.getPosition().y,movingBlock.getPosition().z-1);
 			Vector3 climb = new Vector3(movingBlock.getPosition().x,movingBlock.getPosition().y+1,movingBlock.getPosition().z-1);
 			
-			if(blocklist.blockAtPointIgnoreGoal(shift)==null)
+			if(blocklist.blockAtPointIgnoreGoal(shift)==null && surroundedByRobot(shift, movingBlock.getPosition()))
 			{
 				//check if there is a robot block surrounding
 				
 				//z-1 is possible
 				possibleMovements.add(shift);
 			}
-			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null)
+			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null && surroundedByRobot(climb, movingBlock.getPosition()))
 			{
 				//check if there is a robot block surrounding
 				//z-1 y+1 is possible
@@ -123,14 +126,14 @@ public class SmartMovement
 			Vector3 shift = new Vector3(movingBlock.getPosition().x+1,movingBlock.getPosition().y,movingBlock.getPosition().z);
 			Vector3 climb = new Vector3(movingBlock.getPosition().x+1,movingBlock.getPosition().y+1,movingBlock.getPosition().z);
 			
-			if(blocklist.blockAtPointIgnoreGoal(shift)==null)
+			if(blocklist.blockAtPointIgnoreGoal(shift)==null && surroundedByRobot(shift, movingBlock.getPosition()))
 			{
 				//check if there is a robot block surrounding
 				
 				//x+1 is possible
 				possibleMovements.add(shift);
 			}
-			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null)
+			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null && surroundedByRobot(climb, movingBlock.getPosition()))
 			{
 				//check if there is a robot block surrounding
 				//x+1 y+1 is possible
@@ -143,14 +146,14 @@ public class SmartMovement
 			Vector3 shift = new Vector3(movingBlock.getPosition().x,movingBlock.getPosition().y,movingBlock.getPosition().z+1);
 			Vector3 climb = new Vector3(movingBlock.getPosition().x,movingBlock.getPosition().y+1,movingBlock.getPosition().z+1);
 			
-			if(blocklist.blockAtPointIgnoreGoal(shift)==null)
+			if(blocklist.blockAtPointIgnoreGoal(shift)==null && surroundedByRobot(shift, movingBlock.getPosition()))
 			{
 				//check if there is a robot block surrounding
 				
 				//z+1 is possible
 				possibleMovements.add(shift);
 			}
-			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null)
+			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null && surroundedByRobot(climb, movingBlock.getPosition()))
 			{
 				//check if there is a robot block surrounding
 				//z+1 y+1 is possible
@@ -182,7 +185,7 @@ public class SmartMovement
 	private void performMovement(Vector3 moveTo, RobotBlock movingBlock) 
 	{
 		checkIfCanMove(movingBlock);
-		System.out.println("//S-MOVE: moving: "+movingBlock.getID());
+		if (DEBUG) System.out.println("//S-MOVE: moving: "+movingBlock.getID());
 		if(movingBlock.getPosition().y < moveTo.y) movingBlock.climb();
 		
 		if(movingBlock.getPosition().x < moveTo.x) movingBlock.moveRight();
@@ -217,6 +220,41 @@ public class SmartMovement
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private boolean surroundedByRobot(Vector3 newPosition, Vector3 oldPosition)
+	{
+		boolean surrounded = false;
+		Vector3 position = new Vector3(newPosition.x+1, newPosition.y, newPosition.z);
+		if(position != oldPosition && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType() == Block.Type.Robot)
+		{
+			surrounded = true;
+		}
+		
+		position = new Vector3(newPosition.x-1, newPosition.y, newPosition.z);
+		if(position != oldPosition && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType() == Block.Type.Robot)
+		{
+			surrounded = true;
+		}
+		
+		position = new Vector3(newPosition.x, newPosition.y, newPosition.z+1);
+		if(position != oldPosition && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType() == Block.Type.Robot)
+		{
+			surrounded = true;
+		}
+		
+		position = new Vector3(newPosition.x, newPosition.y, newPosition.z-1);
+		if(position != oldPosition && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType() == Block.Type.Robot)
+		{
+			surrounded = true;
+		}
+		
+		position = new Vector3(newPosition.x, newPosition.y-1, newPosition.z);
+		if(position != oldPosition && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType() == Block.Type.Robot)
+		{
+			surrounded = true;
+		}
+		return surrounded;
 	}
 
 }
