@@ -37,14 +37,25 @@ public class PathFinder
 		{
 			float x = obstacles.get(i).getPosition().x;
 			float z = obstacles.get(i).getPosition().z;
-			disObstacles.add(new DistanceBlock(MAX_VALUE, obstacles.get(i).getPosition(), (int) obstacles.get(i).getPosition().y));
+			float y = obstacles.get(i).getPosition().y;
+			boolean add = true;
+			
 			for (int j = 0; j < disObstacles.size(); j++)
 			{
-				if ((x == disObstacles.get(j).getData().x) && (z == disObstacles.get(j).getData().z) && (disObstacles.get(j).getHigh() > obstacles.get(i).getPosition().y))
+				if ((x == disObstacles.get(j).getData().x) && (z == disObstacles.get(j).getData().z))
 				{
-					disObstacles.remove(disObstacles.size() - 1);
-					j = disObstacles.size();
+					if (disObstacles.get(j).getHigh() < y)
+					{
+						System.out.println("arrives");
+						add = false;
+						j = disObstacles.size();
+					}
 				}
+			}
+			
+			if(add)
+			{
+				disObstacles.add(new DistanceBlock(MAX_VALUE, obstacles.get(i).getPosition(), (int) y));
 			}
 		} 
 	}
@@ -139,7 +150,6 @@ public class PathFinder
 		vectorList.add(current.getData());
 		if (current.getPrevious() != null)
 		{
-			System.out.println("arrives1");
 			setFinalList(current.getPrevious());
 		}
 	}
