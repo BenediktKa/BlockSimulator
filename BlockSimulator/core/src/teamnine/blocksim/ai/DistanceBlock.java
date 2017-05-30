@@ -32,6 +32,7 @@ public class DistanceBlock
 			for (int i = 0; i < neighbours.length; i++)
 			{
 				weights[i] = (neighbours[i].getHigh()) + 1;
+				//System.out.println(weights[i]);
 			}
 		}
 
