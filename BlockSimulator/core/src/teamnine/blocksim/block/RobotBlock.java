@@ -18,6 +18,7 @@ public class RobotBlock extends BlockGravity
 	private BlockList blockList;
 	private Block target;
 	private boolean visited = false;
+	private boolean inFinalPosition = false;
 	private int counter = 0;
 	private ArrayList<RobotBlock> connections = new ArrayList<RobotBlock>();
 
@@ -57,6 +58,16 @@ public class RobotBlock extends BlockGravity
 	public void setVisited(boolean v)
 	{
 		visited = v;
+	}
+	
+	public void setInFinalPosition(boolean v)
+	{
+		inFinalPosition = v;
+	}
+	
+	public boolean isInFinalPosition()
+	{
+		return inFinalPosition;
 	}
 
 	public boolean getVisited()

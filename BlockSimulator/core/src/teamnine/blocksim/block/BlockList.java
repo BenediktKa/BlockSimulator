@@ -57,15 +57,15 @@ public class BlockList implements Disposable
 	public void preconfig()
 	{
 		// Robots
-		createBlock(new Vector3(0, 1, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 1, 10), Block.Type.Robot);
-		createBlock(new Vector3(0, 2, 10), Block.Type.Robot);
+		createBlock(new Vector3(11, 1, 12), Block.Type.Robot, 1);
+		createBlock(new Vector3(12, 1, 12), Block.Type.Robot, 2);
+		/*createBlock(new Vector3(0, 2, 10), Block.Type.Robot);
 		createBlock(new Vector3(0, 3, 10), Block.Type.Robot);
 		createBlock(new Vector3(1, 2, 10), Block.Type.Robot);
 		createBlock(new Vector3(1, 3, 10), Block.Type.Robot);
 		createBlock(new Vector3(1, 4, 10), Block.Type.Robot);
 		createBlock(new Vector3(1, 5, 10), Block.Type.Robot);
-		createBlock(new Vector3(1, 6, 10), Block.Type.Robot);
+		createBlock(new Vector3(1, 6, 10), Block.Type.Robot);*/
 
 		// Obstacle
 		createBlock(new Vector3(15, 1, 15), Block.Type.Obstacle);
@@ -302,6 +302,18 @@ public class BlockList implements Disposable
 			if (blockList.get(i).getPosition().cpy().sub(point).isZero())
 			{
 				return blockList.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public Block blockAtPointIgnoreGoal(Vector3 point)
+	{
+		for (Block block : blockList)
+		{
+			if (block.getPosition().cpy().sub(point).isZero() && block.getType()!=Block.Type.Goal)
+			{
+				return block;
 			}
 		}
 		return null;
