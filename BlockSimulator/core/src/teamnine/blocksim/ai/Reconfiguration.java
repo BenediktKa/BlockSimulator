@@ -34,7 +34,7 @@ public class Reconfiguration
 	private boolean zIncreasing;
 	
 	private PathFinder pathFinder;
-	private final Move3 movement;
+	private final Move6 movement;
 	private final SmartMovement reconfigurationMovement;
 
 	private final boolean DEBUG = true;
@@ -50,7 +50,7 @@ public class Reconfiguration
 	 * @param minTarget the target block in the corner, closest to the robot
 	 * @param movement 
 	 */
-	public Reconfiguration(BlockList blockList, Block minTarget, Move3 movement, SmartMovement reconfigurationMovement)
+	public Reconfiguration(BlockList blockList, Block minTarget, Move6 movement, SmartMovement reconfigurationMovement)
 	{
 		
 
@@ -350,7 +350,7 @@ public class Reconfiguration
 					// TODO: Run & Debug this
 					ArrayList<Vector3> fakePath = new ArrayList<Vector3>();
 					fakePath.add(targetOrigin.getPosition());
-					movement.startMove3(fakePath, targetOrigin);
+					movement.startMove6(fakePath, targetOrigin);
 				}
 			});
 			thread1.start();
