@@ -9,6 +9,10 @@
 			file: Emu.fnt,
 			scaledSize: 10
 		},
+		small-font: {
+			file: Emu.fnt,
+			scaledSize: 8
+		}
 	},
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
   		default: {
@@ -26,6 +30,10 @@
   			font: default-font, 
   			fontColor: grey
   		},
+  		smallLabel: {
+  			font: small-font, 
+  			fontColor: grey
+  		}
 	},
 	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		default:  {
