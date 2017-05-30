@@ -23,11 +23,15 @@ import teamnine.blocksim.block.BlockList;
  */
 public class Reconfiguration
 {
+	private BlockList blockList;
 	private ArrayList<RobotBlock> robot;
 	private ArrayList<Block> target;
 	private ArrayList<Block>[] sortedTargets;
 	private ArrayList<Block> easySortedTargets;
 	private Block targetOrigin;
+	
+	private boolean xIncreasing;
+	private boolean zIncreasing;
 	
 	private PathFinder pathFinder;
 	private final Move3 movement;
@@ -46,19 +50,22 @@ public class Reconfiguration
 	 * @param minTarget the target block in the corner, closest to the robot
 	 * @param movement 
 	 */
-	public Reconfiguration(ArrayList<RobotBlock> robot, ArrayList<Block> target, Block minTarget, Move3 movement, SmartMovement reconfigurationMovement)
+	public Reconfiguration(BlockList blockList, Block minTarget, Move3 movement, SmartMovement reconfigurationMovement)
 	{
-		if (robot.size() != target.size())
-		{
-			throw new IllegalArgumentException("The number of robot blocks is not equal to the number of target blocks!");
-		}
+		
 
-		this.robot = robot;
-		this.target = target;
+		this.blockList = blockList;
+		this.robot = blockList.getRobotBlockList();
+		this.target = blockList.getGoalList();
 		targetOrigin = minTarget;
 		this.movement = movement;
 		this.reconfigurationMovement = reconfigurationMovement;
 
+		if (robot.size() != target.size())
+		{
+			throw new IllegalArgumentException("The number of robot blocks is not equal to the number of target blocks!");
+		}
+		
 		prepare();
 		if (DEBUG)
 		{
@@ -97,6 +104,7 @@ public class Reconfiguration
 		// Define origin for layer 0: point where robot blocks enter the goal
 		// region
 		Vector3 layer0Origin = new Vector3(targetOrigin.getPosition().x, 1, targetOrigin.getPosition().z);
+		System.out.println("// RECONFIG: "+targetOrigin.getPosition());
 
 		// Figure out what the dimensions of the target objects together are
 		int targetWidth = 0;
@@ -107,14 +115,17 @@ public class Reconfiguration
 		{
 			targetWidth = (int) Math.max(targetWidth, Math.abs(target.get(i).getPosition().x - layer0Origin.x + 1)); // +1:if there
 			// was only one block, the abs distance would be 0, but should be 1
+
 			targetLength = (int) Math.max(targetLength, Math.abs(target.get(i).getPosition().z - layer0Origin.z + 1));
 			targetHeight = (int) Math.max(targetHeight, target.get(i).getPosition().y - 1); 
 			// Robot blocks on the first level are not taken into account for height; so -1
 		}
+		
+		System.out.println("// RECONFIG: TW: "+targetWidth+" TL: "+targetLength+" TH: "+targetHeight);
 
 		// The size of these arraylists depend on the dimension of the target
 		// region (which is seen as one whole cube covering the region
-		int floorLevels = targetWidth + targetLength - 1;
+		int floorLevels = targetWidth + targetLength;
 		int nonFloorLevels = floorLevels*targetHeight;
 
 		sortedTargets = new ArrayList[floorLevels + nonFloorLevels];
@@ -299,10 +310,8 @@ public class Reconfiguration
 			
 			System.out.println("// RECONFIG: Cntr: "+cntr);
 			// 1) Select last robot block to move, i.e. robot.get(0)????!!!!!?????!!!!!?????!!!!!?????!!!!
-			//PROBLEM: SELECTING THE RIGHT BLOCK FOR MOVEMENTS....
-			//final RobotBlock blockToMove = robot.get(robot.size()-1);
-			final RobotBlock blockToMove = robot.get(0);
-			//robot.remove(0);
+			final RobotBlock blockToMove = getFurthestRobot();
+
 			
 			// 2) Select the target position where it has to go to, there should not be a robot block on it
 			Block targetBlock = easySortedTargets.get(cntr);
@@ -328,7 +337,7 @@ public class Reconfiguration
 			
 			// 4) Perform actual movement
 			
-			System.out.println("// RECONFIG: Start movement, block: "+blockToMove.getID()+ " to: "+targetOrigin.getPosition().x+" "+targetOrigin.getPosition().y+" "+targetOrigin.getPosition().z);
+			System.out.println("// RECONFIG: Start movement, block: "+blockToMove.getID()+ " to: "+targetOrigin.getPosition());
 			
 			// FIRST: Move the block to the target origin			
 			
@@ -358,7 +367,7 @@ public class Reconfiguration
 			
 			// THIRD: Do Reconfiguration Part
 			
-			System.out.println("// RECONFIG: Start smartMovement, block: "+blockToMove.getID()+ " to: "+targetBlockForMove.getPosition().x+" "+targetBlockForMove.getPosition().y+" "+targetBlockForMove.getPosition().z);
+			System.out.println("// RECONFIG: Start smartMovement, block: "+blockToMove.getID()+ " to: "+targetBlockForMove.getPosition());
 			Thread thread2 = new Thread(new Runnable()
 			{
 				@Override
@@ -379,6 +388,8 @@ public class Reconfiguration
 				}
 			}
 			
+			blockToMove.setInFinalPosition(true);
+			
 			System.out.println("// RECONFIG: CNTR: "+cntr+" ROBOT SIZE: "+robot.size());
 			// TODO: SECOND: Try to get the block out of the list for move3
 			
@@ -387,9 +398,41 @@ public class Reconfiguration
 		
 		System.out.println("// RECONFIG: End of While loop");
 		
-		//StateManager.state = SimulationState.BUILD;
+		//CLOSE MOVING MODE
 
 	}
+
+	private RobotBlock getFurthestRobot() {
+		// TODO: Watch out that robot blocks that are already in place are not given
+		xIncreasing = true;
+		zIncreasing = true;
+		
+		RobotBlock furthestBlock = null;
+		int biggestDistance = 0;
+		Vector3 targetOrigin = this.targetOrigin.getPosition();
+		
+		for(RobotBlock block : robot)
+		{
+			Vector3 vector = block.getPosition();
+
+			if(!block.isInFinalPosition()){
+				System.out.println("true");
+				int thisDistance = (int) (Math.abs(vector.x - targetOrigin.x) + Math.abs(vector.z - targetOrigin.z) + Math.abs(vector.y - targetOrigin.y));
+				if(thisDistance > biggestDistance)
+				{
+					biggestDistance = thisDistance;
+					furthestBlock = block;
+					System.out.println("Found one");
+				}
+			}
+			
+			
+		}
+		
+		System.out.println("// RECONFIG: Furthest robot block: "+furthestBlock.getID()+" "+furthestBlock.getPosition());
+		return furthestBlock;
+	}
+
 
 	private boolean check()
 	{

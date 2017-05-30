@@ -8,9 +8,9 @@ import teamnine.blocksim.block.BlockComparator;
 
 public class Dijkstra
 {
-	PriorityQueue originalList;
-	ArrayList finalList = new ArrayList();
-	Comparator blockComparator = new BlockComparator();
+	PriorityQueue<DistanceBlock> originalList;
+	ArrayList<DistanceBlock> finalList = new ArrayList<DistanceBlock>();
+	Comparator<DistanceBlock> blockComparator = new BlockComparator();
 	DistanceBlock target;
 	int numTargetBlocks;
 	int numRoboBlocks;
@@ -38,6 +38,7 @@ public class Dijkstra
         int[] weights = position.getWeights();
         if((position.getX() == target.getX()) && (position.getZ() == target.getZ()))
         {
+        	
         	return;
         }
         else if (neighbours != null)
@@ -49,7 +50,8 @@ public class Dijkstra
             	boolean containsNeig = false;
             	
             	ArrayList<DistanceBlock> array = new ArrayList<DistanceBlock>();
-        		for (int m = 0; m < listToReduce.size(); m++)
+            	int size = listToReduce.size();
+        		for (int m = 0; m < size; m++)
         		{
         			DistanceBlock object = listToReduce.poll();
         			if((neig.getX() == object.getX()) && (neig.getZ() == object.getZ()))
@@ -69,7 +71,6 @@ public class Dijkstra
         		}
         		if (!(containsNeig))
         		{
-        			
         			for(int j= 0; j < array.size(); j++)
     				{
     					listToReduce.add(array.get(j));
@@ -77,21 +78,10 @@ public class Dijkstra
         		}	
         		else
         		{
-        			
-	            	int neededRobo = 1;
-	            	for (int j = weights[i]; j>0; j--)
-	            	{
-	            		neededRobo = neededRobo + j;
-	            	}
-		            if((numTargetBlocks <= (numRoboBlocks- neededRobo)))
+		            if (neighbour.getDistance() > (position.getDistance() + weights[i]))
 		            {
-		            	numRoboBlocks = numRoboBlocks- neededRobo;
-			            if (neighbour.getDistance() > (position.getDistance() + weights[i]))
-			            {
-			            	
-			                 neighbour.setPrevious(position);
-			                 neighbour.setDistance(position.getDistance() + weights[i]);
-			            }
+		                 neighbour.setPrevious(position);
+		                 neighbour.setDistance(position.getDistance() + weights[i]);
 		            }
 		            listToReduce.add(neighbour);
         		}

@@ -44,15 +44,19 @@ public class SmartMovement
 			
 			performMovement(moveTo, movingBlock);
 			
-			possibleMovements = getPossibleMovements(movingBlock);
-			
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			//TODO: POSSIBLE MOVEMENTS INVALID
+			possibleMovements = getPossibleMovements(movingBlock);
+			
+			System.out.println("//S-MOVE: Block to position: "+movingBlock.getPosition()+" "+targetPosition);
 		}
+		
+		
 		
 		if(possibleMovements.size()==0) System.out.println("//S-MOVE: Block Locked");
 		if(movingBlock.getPosition().equals(targetPosition)) System.out.println("//S-MOVE: Block in position: "+movingBlock.getPosition()+" "+targetPosition);
@@ -69,20 +73,23 @@ public class SmartMovement
 		ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
 		//TODO: WHAT ABOUT y-1
 		
+		boolean climbPossible = false;
+		Vector3 aboveBlock = new Vector3(movingBlock.getPosition().x, movingBlock.getPosition().y+1, movingBlock.getPosition().z);
+		if (blocklist.blockAtPointIgnoreGoal(aboveBlock) == null) climbPossible=true;
 		
 		if(movingBlock.getPosition().x>0)
 		{
 			Vector3 shift = new Vector3(movingBlock.getPosition().x-1,movingBlock.getPosition().y,movingBlock.getPosition().z);
 			Vector3 climb = new Vector3(movingBlock.getPosition().x-1,movingBlock.getPosition().y+1,movingBlock.getPosition().z);
 			
-			if(blocklist.blockAtPoint(shift)==null||blocklist.blockAtPoint(shift).getType()==Block.Type.Goal)
+			if(blocklist.blockAtPointIgnoreGoal(shift)==null)
 			{
 				//check if there is a robot block surrounding
 				
 				//x-1 is possible
 				possibleMovements.add(shift);
 			}
-			else
+			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null)
 			{
 				//check if there is a robot block surrounding
 				//x-1 y+1 is possible
@@ -96,14 +103,14 @@ public class SmartMovement
 			Vector3 shift = new Vector3(movingBlock.getPosition().x,movingBlock.getPosition().y,movingBlock.getPosition().z-1);
 			Vector3 climb = new Vector3(movingBlock.getPosition().x,movingBlock.getPosition().y+1,movingBlock.getPosition().z-1);
 			
-			if(blocklist.blockAtPoint(shift)==null||blocklist.blockAtPoint(shift).getType()==Block.Type.Goal)
+			if(blocklist.blockAtPointIgnoreGoal(shift)==null)
 			{
 				//check if there is a robot block surrounding
 				
 				//z-1 is possible
 				possibleMovements.add(shift);
 			}
-			else if (blocklist.blockAtPoint(new Vector3(movingBlock.getPosition().x, movingBlock.getPosition().y+1, movingBlock.getPosition().z))==null)
+			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null)
 			{
 				//check if there is a robot block surrounding
 				//z-1 y+1 is possible
@@ -116,14 +123,14 @@ public class SmartMovement
 			Vector3 shift = new Vector3(movingBlock.getPosition().x+1,movingBlock.getPosition().y,movingBlock.getPosition().z);
 			Vector3 climb = new Vector3(movingBlock.getPosition().x+1,movingBlock.getPosition().y+1,movingBlock.getPosition().z);
 			
-			if(blocklist.blockAtPoint(shift)==null||blocklist.blockAtPoint(shift).getType()==Block.Type.Goal)
+			if(blocklist.blockAtPointIgnoreGoal(shift)==null)
 			{
 				//check if there is a robot block surrounding
 				
 				//x+1 is possible
 				possibleMovements.add(shift);
 			}
-			else
+			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null)
 			{
 				//check if there is a robot block surrounding
 				//x+1 y+1 is possible
@@ -136,14 +143,14 @@ public class SmartMovement
 			Vector3 shift = new Vector3(movingBlock.getPosition().x,movingBlock.getPosition().y,movingBlock.getPosition().z+1);
 			Vector3 climb = new Vector3(movingBlock.getPosition().x,movingBlock.getPosition().y+1,movingBlock.getPosition().z+1);
 			
-			if(blocklist.blockAtPoint(shift)==null||blocklist.blockAtPoint(shift).getType()==Block.Type.Goal)
+			if(blocklist.blockAtPointIgnoreGoal(shift)==null)
 			{
 				//check if there is a robot block surrounding
 				
 				//z+1 is possible
 				possibleMovements.add(shift);
 			}
-			else
+			else if(climbPossible && blocklist.blockAtPointIgnoreGoal(climb)==null)
 			{
 				//check if there is a robot block surrounding
 				//z+1 y+1 is possible

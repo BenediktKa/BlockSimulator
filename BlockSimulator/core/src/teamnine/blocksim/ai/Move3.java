@@ -36,7 +36,7 @@ public class Move3
 		System.out.println("poep " + path.size());
 		for (int i = 0; i < path.size(); i++)
 			System.out.println(this.path.get(i));
-		for (int i = 0; i < path.size(); i++)
+		for (int i = path.size()-1; i > 0; i--)
 			decideMove(this.path.get(i));
 
 		//decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y, mt.getPosition().z));

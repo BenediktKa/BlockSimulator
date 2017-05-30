@@ -1,6 +1,7 @@
 package teamnine.blocksim.hud;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -23,6 +24,9 @@ import teamnine.blocksim.configs.simulationLoader;
 
 public class LevelEditorHUD implements Disposable
 {
+	// Block Simulator
+	private BlockSimulator blockSimulator;
+	
 	// Stage
 	private Stage stage;
 
@@ -53,15 +57,37 @@ public class LevelEditorHUD implements Disposable
 	// Load Simulation Button
 	private TextButton simulationButton;
 
+	// AI Mode Button
+	private TextButton aiModeButton;
+	private AIMode aiMode = AIMode.Greedy;
+
 	// Block Dialog
 	private Label blockLabel;
 	private Block.Type selectedBlock = Block.Type.Obstacle;
 	
+	//Selector Block Position
+	private Label selectorPosLabel;
+
 	// Configuration Checker
 	// private ConfigurationChecker check;
 
+	public enum AIMode
+	{
+		Greedy, Dijkstra;
+
+		public AIMode next()
+		{
+			AIMode types[] = AIMode.values();
+			int ordinal = this.ordinal();
+			ordinal = ++ordinal % types.length;
+			return types[ordinal];
+		}
+	}
+
 	public LevelEditorHUD(final BlockSimulator blockSimulator)
 	{
+		this.blockSimulator = blockSimulator;
+		
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
 		stage = new Stage(new ScreenViewport(), blockSimulator.spriteBatch);
 
@@ -76,6 +102,7 @@ public class LevelEditorHUD implements Disposable
 		exportButton = new TextButton("Export", skin);
 		undoButton = new TextButton("Undo", skin, "midnight");
 		redoButton = new TextButton("Redo", skin, "midnight");
+		aiModeButton = new TextButton("AI: " + aiMode, skin);
 		startButton = new TextButton("Start", skin);
 		pauseButton = new TextButton("Pause", skin);
 		pauseButton.setVisible(false);
@@ -84,17 +111,21 @@ public class LevelEditorHUD implements Disposable
 
 		// Create Labels
 		blockLabel = new Label("Selected: " + selectedBlock, skin);
+		selectorPosLabel = new Label("", skin, "smallLabel");
 
 		// Add to Table
 		table.add(importButton).padRight(20);
 		table.add(exportButton).padRight(20);
 		table.add(simulationButton).padRight(20);
-		table.add(blockLabel);
+		table.add(blockLabel).padRight(20);
+		table.add(selectorPosLabel).padRight(20);
 		table.row().height(20);
 		table.add(undoButton).padRight(20);
 		table.add(redoButton).padRight(20);
+		table.add(aiModeButton).padRight(20);
 		table.add(startButton).padRight(20);
 		table.add(pauseButton);
+		table.row().height(20);
 
 		// Import Button Listener
 		importButton.addListener(new ClickListener()
@@ -186,6 +217,18 @@ public class LevelEditorHUD implements Disposable
 			}
 		});
 
+		// AI Button Listener
+		aiModeButton.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				aiMode = aiMode.next();
+				aiModeButton.setText("AI: " + aiMode);
+				super.clicked(event, x, y);
+			}
+		});
+
 		// Start Button Listener
 		startButton.addListener(new ClickListener()
 		{
@@ -224,17 +267,17 @@ public class LevelEditorHUD implements Disposable
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(StateManager.state == StateManager.SimulationState.SIMULATION)
+				if (StateManager.state == StateManager.SimulationState.SIMULATION)
 				{
 					StateManager.state = StateManager.SimulationState.PAUSE;
 					pauseButton.setText("Resume");
 				}
-				else if(StateManager.state == StateManager.SimulationState.PAUSE)
+				else if (StateManager.state == StateManager.SimulationState.PAUSE)
 				{
 					StateManager.state = StateManager.SimulationState.SIMULATION;
 					pauseButton.setText("Pause");
 				}
-				
+
 				super.clicked(event, x, y);
 			}
 		});
@@ -263,6 +306,8 @@ public class LevelEditorHUD implements Disposable
 
 	public void render()
 	{
+		Vector3 selectorPos = blockSimulator.selectorBlock.getPosition();
+		selectorPosLabel.setText("X:" + selectorPos.x + " Y: " + selectorPos.y + " Z: " + selectorPos.z);
 		stage.draw();
 	}
 
