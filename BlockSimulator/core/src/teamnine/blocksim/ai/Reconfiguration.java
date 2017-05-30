@@ -121,7 +121,7 @@ public class Reconfiguration
 			// Robot blocks on the first level are not taken into account for height; so -1
 		}
 		
-		System.out.println("// RECONFIG: TW: "+targetWidth+" TL: "+targetLength+" TH: "+targetHeight);
+		if (DEBUG) System.out.println("// RECONFIG: TW: "+targetWidth+" TL: "+targetLength+" TH: "+targetHeight);
 
 		// The size of these arraylists depend on the dimension of the target
 		// region (which is seen as one whole cube covering the region
@@ -308,7 +308,7 @@ public class Reconfiguration
 		while(cntr<robot.size()) 
 		{
 			
-			System.out.println("// RECONFIG: Cntr: "+cntr);
+			if (DEBUG) System.out.println("// RECONFIG: Cntr: "+cntr);
 			// 1) Select last robot block to move, i.e. robot.get(0)????!!!!!?????!!!!!?????!!!!!?????!!!!
 			final RobotBlock blockToMove = getFurthestRobot();
 
@@ -324,7 +324,7 @@ public class Reconfiguration
 				if(robot.get(i).getPosition().x==targetBlock.getPosition().x&&robot.get(i).getPosition().y==targetBlock.getPosition().y&&robot.get(i).getPosition().z==targetBlock.getPosition().z)
 				{
 					targetBlock = easySortedTargets.get(cntr);
-					System.out.println("// RECONFIG: skipped");
+					if (DEBUG) System.out.println("// RECONFIG: skipped");
 					cntr++;
 					i=0;
 				}
@@ -337,11 +337,11 @@ public class Reconfiguration
 			
 			// 4) Perform actual movement
 			
-			System.out.println("// RECONFIG: Start movement, block: "+blockToMove.getID()+ " to: "+targetOrigin.getPosition());
+			/*System.out.println("// RECONFIG: Start movement, block: "+blockToMove.getID()+ " to: "+targetOrigin.getPosition());
 			
 			// FIRST: Move the block to the target origin			
 			
-			/*
+			
 			Thread thread1 = new Thread(new Runnable()
 			{
 				@Override
@@ -367,7 +367,7 @@ public class Reconfiguration
 			
 			// THIRD: Do Reconfiguration Part
 			
-			System.out.println("// RECONFIG: Start smartMovement, block: "+blockToMove.getID()+ " to: "+targetBlockForMove.getPosition());
+			if (DEBUG) System.out.println("// RECONFIG: Start smartMovement, block: "+blockToMove.getID()+ " to: "+targetBlockForMove.getPosition());
 			Thread thread2 = new Thread(new Runnable()
 			{
 				@Override
@@ -390,13 +390,13 @@ public class Reconfiguration
 			
 			blockToMove.setInFinalPosition(true);
 			
-			System.out.println("// RECONFIG: CNTR: "+cntr+" ROBOT SIZE: "+robot.size());
+			if (DEBUG) System.out.println("// RECONFIG: CNTR: "+cntr+" ROBOT SIZE: "+robot.size());
 			// TODO: SECOND: Try to get the block out of the list for move3
 			
 			
 		}
 		
-		System.out.println("// RECONFIG: End of While loop");
+		if (DEBUG) System.out.println("// RECONFIG: End of While loop");
 		
 		//CLOSE MOVING MODE
 
@@ -416,20 +416,20 @@ public class Reconfiguration
 			Vector3 vector = block.getPosition();
 
 			if(!block.isInFinalPosition()){
-				System.out.println("true");
+				if (DEBUG) System.out.println("true");
 				int thisDistance = (int) (Math.abs(vector.x - targetOrigin.x) + Math.abs(vector.z - targetOrigin.z) + Math.abs(vector.y - targetOrigin.y));
 				if(thisDistance > biggestDistance)
 				{
 					biggestDistance = thisDistance;
 					furthestBlock = block;
-					System.out.println("Found one");
+					if (DEBUG) System.out.println("Found one");
 				}
 			}
 			
 			
 		}
 		
-		System.out.println("// RECONFIG: Furthest robot block: "+furthestBlock.getID()+" "+furthestBlock.getPosition());
+		if (DEBUG) System.out.println("// RECONFIG: Furthest robot block: "+furthestBlock.getID()+" "+furthestBlock.getPosition());
 		return furthestBlock;
 	}
 
