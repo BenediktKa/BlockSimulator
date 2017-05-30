@@ -104,6 +104,7 @@ public class Reconfiguration
 		// Define origin for layer 0: point where robot blocks enter the goal
 		// region
 		Vector3 layer0Origin = new Vector3(targetOrigin.getPosition().x, 1, targetOrigin.getPosition().z);
+		System.out.println("// RECONFIG: "+targetOrigin.getPosition());
 
 		// Figure out what the dimensions of the target objects together are
 		int targetWidth = 0;
@@ -114,14 +115,17 @@ public class Reconfiguration
 		{
 			targetWidth = (int) Math.max(targetWidth, Math.abs(target.get(i).getPosition().x - layer0Origin.x + 1)); // +1:if there
 			// was only one block, the abs distance would be 0, but should be 1
+
 			targetLength = (int) Math.max(targetLength, Math.abs(target.get(i).getPosition().z - layer0Origin.z + 1));
 			targetHeight = (int) Math.max(targetHeight, target.get(i).getPosition().y - 1); 
 			// Robot blocks on the first level are not taken into account for height; so -1
 		}
+		
+		System.out.println("// RECONFIG: TW: "+targetWidth+" TL: "+targetLength+" TH: "+targetHeight);
 
 		// The size of these arraylists depend on the dimension of the target
 		// region (which is seen as one whole cube covering the region
-		int floorLevels = targetWidth + targetLength - 1;
+		int floorLevels = targetWidth + targetLength;
 		int nonFloorLevels = floorLevels*targetHeight;
 
 		sortedTargets = new ArrayList[floorLevels + nonFloorLevels];
