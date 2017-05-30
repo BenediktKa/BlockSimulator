@@ -58,8 +58,10 @@ public class BrainAI //
 		}
 		
 		//TODO: START RECONFIGURATION WHEN MOVEMENT IS DONE
-		/*
+		
 		final SmartMovement smartMovement = new SmartMovement(blockList); //name is not to offend anyone, it isn't smart at all
+		final BlockList thisblocklist = blockList;
+		
 		
 		boolean testingReconfiguration = false;
 		if(testingReconfiguration)
@@ -69,10 +71,10 @@ public class BrainAI //
 				@Override
 				public void run()
 				{
-					new Reconfiguration(robots,target,minTarget,movement,smartMovement);			
+					new Reconfiguration(thisblocklist,minTarget,movement,smartMovement);			
 				}
 			}).start();
-		}*/
+		}
 
 	}
 

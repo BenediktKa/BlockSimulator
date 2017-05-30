@@ -329,6 +329,19 @@ public class BlockList implements Disposable
 		}
 		return null;
 	}
+	
+
+	public Block blockAtPointIgnoreGoal(Vector3 point)
+	{
+		for (Block block : blockList)
+		{
+			if (block.getPosition().cpy().sub(point).isZero() && block.getType()!=Block.Type.Goal)
+			{
+				return block;
+			}
+		}
+		return null;
+	}
 
 	public void resizeFloor(int gridSize)
 	{
