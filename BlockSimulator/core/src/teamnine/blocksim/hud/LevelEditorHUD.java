@@ -250,7 +250,7 @@ public class LevelEditorHUD implements Disposable
 					StateManager.state = SimulationState.SIMULATION;
 					startButton.setText("Stop");
 					// new Movement(blockSimulator.blockList);
-					new BrainAI(blockSimulator.blockList);
+					new BrainAI(blockSimulator.blockList, aiMode);
 
 					// Display Pause Button
 					pauseButton.setVisible(true);

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.block.RobotBlock;
+import teamnine.blocksim.hud.LevelEditorHUD.AIMode;
 
 public class BrainAI //
 {
@@ -14,55 +15,60 @@ public class BrainAI //
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> target;
 	private ArrayList<Block> floor;
+	AIMode typeAI;
 
-	public BrainAI(BlockList blockList)
+	public BrainAI(BlockList blockList, AIMode typeAI)
 	{
 		this.obstacles = blockList.getBlockList(Block.Type.Obstacle);
 		this.robots = blockList.getRobotBlockList();
 		this.target = blockList.getBlockList(Block.Type.Goal);
 		this.floor = blockList.getBlockList(Block.Type.Floor);
+		this.typeAI = typeAI;
 		// Block maxTarget=findFurthestTarget();
 		final Block minTarget = findClosestTarget();
 		RobotBlock maxRobot = findClosestRobot(minTarget);
 		
+		if (typeAI == AIMode.Dijkstra)
 		// Dijkstra PathFinder
-		
-	//	final PathFinder path = new PathFinder(blockList, robots.size(), target.size());
-		//path.startPathFinder(maxRobot, minTarget);
-		
-		//Greedy PathFinder
-		//final Path p2 = new Path(blockList, robots.size(), target.size());
-		//p2.findPath(maxRobot.getPosition(), minTarget);
-		final ArrayList<Vector3> p3= new ArrayList<Vector3>();
-		p3.add(minTarget.getPosition());
-		
-		for (Vector3 vector : p3)
 		{
-			
-			blockList.createBlock(vector, Block.Type.Path);
-		}
-
-		final Move6 movement = new Move6(robots, obstacles, floor);
-		
-		boolean testingMovement = true;
-		if(testingMovement)
-		{
-			new Thread(new Runnable()
+			final PathFinder path = new PathFinder(blockList, robots.size(), target.size());
+			path.startPathFinder(maxRobot, minTarget);
+			ArrayList<Vector3> finalPath = path.getFinalList();
+			for (Vector3 vector : finalPath)
 			{
-				@Override
-				public void run()
-				{
-					movement.startMove3(p3, minTarget);
-				}
-			}).start();
+				blockList.createBlock(vector, Block.Type.Path);
+			}
+			final Move3 movement = new Move3(robots, obstacles, floor);
 		}
 		
+		else
+		//Greedy PathFinder
+		{
+			final Path p2 = new Path(blockList, robots.size(), target.size());
+			p2.findPath(maxRobot.getPosition(), minTarget);
+			final ArrayList<Vector3> p3= new ArrayList<Vector3>();
+			p3.add(minTarget.getPosition());
+			final Move6 movement = new Move6(robots, obstacles, floor);
+		
+			boolean testingMovement = true;
+			if(testingMovement)
+			{
+				new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						movement.startMove3(p3, minTarget);
+					}
+				}).start();
+			}
+		}
 		//TODO: START RECONFIGURATION WHEN MOVEMENT IS DONE
 		
 		final SmartMovement smartMovement = new SmartMovement(blockList); //name is not to offend anyone, it isn't smart at all
 		final BlockList thisblocklist = blockList;
 		
-		
+		final Move6 movement = new Move6(robots, obstacles, floor);
 		boolean testingReconfiguration = false;
 		if(testingReconfiguration)
 		{
