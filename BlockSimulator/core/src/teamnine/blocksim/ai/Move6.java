@@ -18,12 +18,13 @@ public class Move6
 	private ArrayList<Block> obstacles;
 	private ArrayList<Block> floor;
 	private int timestep = 0;
-	private boolean targetReached=false;
-	private boolean intermediateTargetReached=true;
-	private Vector3 intermediateTarget=null;
-	private int iteration=0;
-	private int failedMoves=0;
-	public Move6(ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, ArrayList<Block> floor)	
+	private boolean targetReached = false;
+	private boolean intermediateTargetReached = true;
+	private Vector3 intermediateTarget = null;
+	private int iteration = 0;
+	private int failedMoves = 0;
+
+	public Move6(ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, ArrayList<Block> floor)
 	{
 		this.obstacles = obstacles;
 		this.robots = new ArrayList<RobotBlock>(robots);
@@ -31,351 +32,285 @@ public class Move6
 		/*
 		 * for (int i = path.size() - 1; i > 0; i--)
 		 * decideMove(this.path.get(i));
-		 */	
+		 */
 	}
-	
-	public void startMove3 (ArrayList<Vector3> path, Block mt)
+
+	public void startMove3(ArrayList<Vector3> path, Block mt)
 	{
 		this.path = path;
 		System.out.println("poep " + path.size());
 		for (int i = 0; i < path.size(); i++)
 			System.out.println(this.path.get(i));
-		while(!targetReached)
+		while (!targetReached)
 		{
-			//System.out.println("reached while failed moves and interation "+failedMoves+" "+iteration);
+			// System.out.println("reached while failed moves and interation
+			// "+failedMoves+" "+iteration);
 			iteration++;
-			if(intermediateTargetReached)
+			if (intermediateTargetReached)
 			{
-				//System.out.println("reached intermediate target true");
-				intermediateTarget=null;
+				// System.out.println("reached intermediate target true");
+				intermediateTarget = null;
 				decideMove(this.path.get(0));
-				if(iteration==robots.size())
+				if (iteration == robots.size())
 				{
-					//System.out.println("wall check");
-					
-					
-					if(failedMoves==(robots.size()*iteration))
+					// System.out.println("wall check");
+
+					if (failedMoves == (robots.size() * iteration))
 					{
 						System.out.println("entered");
-						RobotBlock closest=null;
-						for(int z=0;z<robots.size();z++)
+						RobotBlock closest = null;
+						for (int z = 0; z < robots.size(); z++)
 						{
-							if(closest==null)
+							if (closest == null)
 							{
-								closest=robots.get(z);
+								closest = robots.get(z);
 							}
 							else
 							{
-								if(closest.getDistanceToPath()>robots.get(z).getDistanceToPath())
+								if (closest.getDistanceToPath() > robots.get(z).getDistanceToPath())
 								{
-									closest=robots.get(z);
+									closest = robots.get(z);
 								}
 							}
 						}
-						Vector3 pass=findOpening(closest.getPosition());
-						intermediateTarget=pass;
+						Vector3 pass = findOpening(closest.getPosition());
+						intermediateTarget = pass;
 						System.out.println(pass);
-						for(int z=0;z<robots.size();z++)
+						for (int z = 0; z < robots.size(); z++)
 						{
 							robots.get(z).addUnpassableVector(pass);
 							robots.get(z).addNumOfpass();
 						}
-						intermediateTargetReached=false;
+						intermediateTargetReached = false;
 					}
-					iteration=0;
-					failedMoves=0;
-				}	
-				//System.out.println("past wall check");
+					iteration = 0;
+					failedMoves = 0;
+				}
+				// System.out.println("past wall check");
 			}
 			else
 			{
-				//System.out.println("ughhh + intermediate target "+intermediateTarget);
-				/*for(int k=0;k<robots.size();k++)
-				{
-					if(robots.get(k).getPosition().x+1==intermediateTarget.x&&robots.get(k).getPosition().z==intermediateTarget.z)
-					{
-						System.out.println("close to target 1");
-						boolean bigger=true;
-						int attempt=1;
-						int result=0;
-						int currentBest=0;
-						while(bigger)
-						{
-							int total=0;
-							for(int j=attempt;j>0;j--)
-							{
-								total=total+j;
-							}
-							if(total>robots.size())
-							{
-								currentBest=total;
-								bigger=false;
-							}
-							else
-							{
-								result=currentBest;
-								attempt++;
-							}
-						}
-						result++;
-						intermediateTarget=new Vector3(intermediateTarget.x+result,1,intermediateTarget.z);
-					}
-					else if(robots.get(k).getPosition().x-1==intermediateTarget.x&&robots.get(k).getPosition().z==intermediateTarget.z)
-					{
-						System.out.println("close to target 2");
-						boolean bigger=true;
-						int attempt=1;
-						int result=0;
-						int currentBest=0;
-						while(bigger)
-						{
-							int total=0;
-							for(int j=attempt;j>0;j--)
-							{
-								total=total+j;
-							}
-							if(total>robots.size())
-							{
-								currentBest=total;
-								bigger=false;
-							}
-							else
-							{
-								result=currentBest;
-								attempt++;
-							}
-						}
-						result++;
-						intermediateTarget=new Vector3(intermediateTarget.x-result,1,intermediateTarget.z);
-					}
-					else if(robots.get(k).getPosition().x==intermediateTarget.x&&robots.get(k).getPosition().z+1==intermediateTarget.z)
-					{
-						System.out.println("close to target 3 "+robots.get(k).getPosition()+" tar "+intermediateTarget);
-						boolean bigger=true;
-						int attempt=1;
-						int result=0;
-						int currentBest=0;
-						while(bigger)
-						{
-							int total=0;
-							for(int j=attempt;j>0;j--)
-							{
-								total=total+j;
-							}
-							if(total>robots.size())
-							{
-								currentBest=total;
-								bigger=false;
-							}
-							else
-							{
-								result=currentBest;
-								attempt++;
-							}
-						}
-						result++;
-						System.out.println("result "+result+ " inter "+intermediateTarget);
-						intermediateTarget=new Vector3(intermediateTarget.x,1,intermediateTarget.z+result);
-						System.out.println("result "+result+ " new inter "+intermediateTarget);
-					}
-					else if(robots.get(k).getPosition().x==intermediateTarget.x&&robots.get(k).getPosition().z-1==intermediateTarget.z)
-					{
-						System.out.println("close to target 4");
-						boolean bigger=true;
-						int attempt=1;
-						int result=0;
-						int currentBest=0;
-						while(bigger)
-						{
-							int total=0;
-							for(int j=attempt;j>0;j--)
-							{
-								total=total+j;
-							}
-							if(total>robots.size())
-							{
-								currentBest=total;
-								bigger=false;
-							}
-							else
-							{
-								result=currentBest;
-								attempt++;
-							}
-						}
-						result++;
-						intermediateTarget=new Vector3(intermediateTarget.x,1,intermediateTarget.z-result);
-					}					
-				}*/
+				// System.out.println("ughhh + intermediate target
+				// "+intermediateTarget);
+				/*
+				 * for(int k=0;k<robots.size();k++) {
+				 * if(robots.get(k).getPosition().x+1==intermediateTarget.x&&
+				 * robots.get(k).getPosition().z==intermediateTarget.z) {
+				 * System.out.println("close to target 1"); boolean bigger=true;
+				 * int attempt=1; int result=0; int currentBest=0; while(bigger)
+				 * { int total=0; for(int j=attempt;j>0;j--) { total=total+j; }
+				 * if(total>robots.size()) { currentBest=total; bigger=false; }
+				 * else { result=currentBest; attempt++; } } result++;
+				 * intermediateTarget=new
+				 * Vector3(intermediateTarget.x+result,1,intermediateTarget.z);
+				 * } else
+				 * if(robots.get(k).getPosition().x-1==intermediateTarget.x&&
+				 * robots.get(k).getPosition().z==intermediateTarget.z) {
+				 * System.out.println("close to target 2"); boolean bigger=true;
+				 * int attempt=1; int result=0; int currentBest=0; while(bigger)
+				 * { int total=0; for(int j=attempt;j>0;j--) { total=total+j; }
+				 * if(total>robots.size()) { currentBest=total; bigger=false; }
+				 * else { result=currentBest; attempt++; } } result++;
+				 * intermediateTarget=new
+				 * Vector3(intermediateTarget.x-result,1,intermediateTarget.z);
+				 * } else
+				 * if(robots.get(k).getPosition().x==intermediateTarget.x&&
+				 * robots.get(k).getPosition().z+1==intermediateTarget.z) {
+				 * System.out.println("close to target 3 "+robots.get(k).
+				 * getPosition()+" tar "+intermediateTarget); boolean
+				 * bigger=true; int attempt=1; int result=0; int currentBest=0;
+				 * while(bigger) { int total=0; for(int j=attempt;j>0;j--) {
+				 * total=total+j; } if(total>robots.size()) { currentBest=total;
+				 * bigger=false; } else { result=currentBest; attempt++; } }
+				 * result++; System.out.println("result "+result+
+				 * " inter "+intermediateTarget); intermediateTarget=new
+				 * Vector3(intermediateTarget.x,1,intermediateTarget.z+result);
+				 * System.out.println("result "+result+
+				 * " new inter "+intermediateTarget); } else
+				 * if(robots.get(k).getPosition().x==intermediateTarget.x&&
+				 * robots.get(k).getPosition().z-1==intermediateTarget.z) {
+				 * System.out.println("close to target 4"); boolean bigger=true;
+				 * int attempt=1; int result=0; int currentBest=0; while(bigger)
+				 * { int total=0; for(int j=attempt;j>0;j--) { total=total+j; }
+				 * if(total>robots.size()) { currentBest=total; bigger=false; }
+				 * else { result=currentBest; attempt++; } } result++;
+				 * intermediateTarget=new
+				 * Vector3(intermediateTarget.x,1,intermediateTarget.z-result);
+				 * } }
+				 */
 				decideMove(intermediateTarget);
-				if(iteration==robots.size())
+				if (iteration == robots.size())
 				{
-					iteration=0;
-					failedMoves=0;
+					iteration = 0;
+					failedMoves = 0;
 				}
 			}
 		}
-		
 
-		//decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y, mt.getPosition().z));
+		// decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y,
+		// mt.getPosition().z));
 		System.out.println("Timestep: " + timestep);
 		Thread.currentThread().interrupt();
 	}
+
 	public Vector3 findOpening(Vector3 start)
 	{
-		Vector3 lastVector=null;
-		Vector3 currentVector=start;
-		
-			if(lastVector==null)
+		Vector3 lastVector = null;
+		Vector3 currentVector = start;
+
+		if (lastVector == null)
+		{
+			for (int i = 0; i < obstacles.size(); i++)
 			{
-				for(int i=0;i<obstacles.size();i++)
+				if (start.x + 1 == obstacles.get(i).getPosition().x && start.z == obstacles.get(i).getPosition().z)
 				{
-					if(start.x+1==obstacles.get(i).getPosition().x&&start.z==obstacles.get(i).getPosition().z)
-					{
-						lastVector=currentVector.cpy();
-						currentVector=obstacles.get(i).getPosition().cpy();
-					}
-					else if(start.x-1==obstacles.get(i).getPosition().x&&start.z==obstacles.get(i).getPosition().z)
-					{
-						lastVector=currentVector.cpy();
-						currentVector=obstacles.get(i).getPosition().cpy();
-					}
-					else if(start.x==obstacles.get(i).getPosition().x&&start.z+1==obstacles.get(i).getPosition().z)
-					{
-						lastVector=currentVector.cpy();
-						currentVector=obstacles.get(i).getPosition().cpy();
-					}
-					else if(start.x==obstacles.get(i).getPosition().x&&start.z-1==obstacles.get(i).getPosition().z)
-					{
-						lastVector=currentVector.cpy();
-						currentVector=obstacles.get(i).getPosition().cpy();
-					}					
+					lastVector = currentVector.cpy();
+					currentVector = obstacles.get(i).getPosition().cpy();
+				}
+				else if (start.x - 1 == obstacles.get(i).getPosition().x && start.z == obstacles.get(i).getPosition().z)
+				{
+					lastVector = currentVector.cpy();
+					currentVector = obstacles.get(i).getPosition().cpy();
+				}
+				else if (start.x == obstacles.get(i).getPosition().x && start.z + 1 == obstacles.get(i).getPosition().z)
+				{
+					lastVector = currentVector.cpy();
+					currentVector = obstacles.get(i).getPosition().cpy();
+				}
+				else if (start.x == obstacles.get(i).getPosition().x && start.z - 1 == obstacles.get(i).getPosition().z)
+				{
+					lastVector = currentVector.cpy();
+					currentVector = obstacles.get(i).getPosition().cpy();
 				}
 			}
-			System.out.println("current "+currentVector);
-			boolean found =false;
-			for(int i=0;i<obstacles.size();i++)
+		}
+		System.out.println("current " + currentVector);
+		boolean found = false;
+		for (int i = 0; i < obstacles.size(); i++)
+		{
+			System.out.println(obstacles.get(i).getPosition());
+		}
+		while (!found)
+		{
+			found = true;
+			for (int i = 0; i < obstacles.size(); i++)
 			{
+				if (lastVector.x == obstacles.get(i).getPosition().x && lastVector.z == obstacles.get(i).getPosition().z)
+				{
+					continue;
+				}
+
+				System.out.println("not the same");
 				System.out.println(obstacles.get(i).getPosition());
-			}
-			while(!found)
-			{
-				found=true;
-				for(int i=0;i<obstacles.size();i++)
+				if (currentVector.x + 1 == obstacles.get(i).getPosition().x && currentVector.z == obstacles.get(i).getPosition().z)
 				{
-					if(obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).getPosition().z!=lastVector.z)
-					{
-						System.out.println("not the same");
-						if(currentVector.x+1==obstacles.get(i).getPosition().x&&currentVector.z==obstacles.get(i).getPosition().z)
-						{
-							System.out.println("foun next1 "+obstacles.get(i).getPosition());
-							found=false;
-							lastVector=currentVector.cpy();
-							currentVector=obstacles.get(i).getPosition().cpy();
-							break;
-						
-						}
-						else if(currentVector.x-1==obstacles.get(i).getPosition().x&&currentVector.z==obstacles.get(i).getPosition().z)
-						{
-							System.out.println("foun next2 "+obstacles.get(i).getPosition());
-							found=false;
-							lastVector=currentVector.cpy();
-							currentVector=obstacles.get(i).getPosition().cpy();
-							break;
-						
-						}
-						else if(currentVector.x==obstacles.get(i).getPosition().x&&currentVector.z+1==obstacles.get(i).getPosition().z)
-						{
-							System.out.println("foun next3 "+obstacles.get(i).getPosition());
-							found=false;
-							lastVector=currentVector.cpy();
-							currentVector=obstacles.get(i).getPosition().cpy();
-							break;
-							
-						}
-						else if(currentVector.x==obstacles.get(i).getPosition().x&&currentVector.z-1==obstacles.get(i).getPosition().z)
-						{
-							System.out.println("foun next4 "+obstacles.get(i).getPosition());
-							found=false;
-							lastVector=currentVector.cpy();
-							currentVector=obstacles.get(i).getPosition().cpy();
-							break;
-							
-						}	
-					}
+					System.out.println("foun next1 " + obstacles.get(i).getPosition());
+					found = false;
+					lastVector = currentVector.cpy();
+					currentVector = obstacles.get(i).getPosition().cpy();
+					break;
+
 				}
-			System.out.println("current2 "+currentVector);
-			}
-				/*boolean found=false;
-				while(!found){
-					System.out.println("enter while");
-					found=true;
-					for(int i=0;i<obstacles.size();i++)
-					{
-						if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).getPosition().z!=lastVector.z)&&currentVector.x+1==obstacles.get(i).getPosition().x&&currentVector.z==obstacles.get(i).getPosition().z)
-						{
-							System.out.println("foun next1 "+obstacles.get(i).getPosition());
-							found=false;
-							lastVector=currentVector;
-							currentVector=obstacles.get(i).getPosition();
-						
-						}
-						else if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).getPosition().z!=lastVector.z)&&currentVector.x-1==obstacles.get(i).getPosition().x&&currentVector.z==obstacles.get(i).getPosition().z)
-						{
-							System.out.println("foun next2 "+obstacles.get(i).getPosition());
-							found=false;
-							lastVector=currentVector;
-							currentVector=obstacles.get(i).getPosition();
-						
-						}
-						else if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).getPosition().z!=lastVector.z)&&currentVector.x==obstacles.get(i).getPosition().x&&currentVector.z+1==obstacles.get(i).getPosition().z)
-						{
-							System.out.println("foun next3 "+obstacles.get(i).getPosition());
-							found=false;
-							lastVector=currentVector;
-							currentVector=obstacles.get(i).getPosition();
-							
-						}
-						else if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).getPosition().z!=lastVector.z)&&currentVector.x==obstacles.get(i).getPosition().x&&currentVector.z-1==obstacles.get(i).getPosition().z)
-						{
-							System.out.println("foun next4 "+obstacles.get(i).getPosition());
-							found=false;
-							lastVector=currentVector;
-							currentVector=obstacles.get(i).getPosition();
-							
-						}					
-					}
-				}
-				if(!found)
+				else if (currentVector.x - 1 == obstacles.get(i).getPosition().x && currentVector.z == obstacles.get(i).getPosition().z)
 				{
-					if(lastVector.x<currentVector.x)
-					{
-						System.out.println("x<x");
-						return new Vector3(currentVector.x+1,1,currentVector.z);
-					}
-						
-					else if(lastVector.x>currentVector.x)
-					{System.out.println("x>x");
-						return new Vector3(currentVector.x-1,1,currentVector.z);
-					}
-						
-					else if(lastVector.z<currentVector.z)
-					{System.out.println("z<z");
-						return new Vector3(currentVector.x,1,currentVector.z+1);
-					}
-						
-					else 
-					{System.out.println("z>z");
-						return new Vector3(currentVector.x,1,currentVector.z-1);
-					}
+					System.out.println("foun next2 " + obstacles.get(i).getPosition());
+					found = false;
+					lastVector = currentVector.cpy();
+					currentVector = obstacles.get(i).getPosition().cpy();
+					break;
+
 				}
-			*/
-			
-		
-		return currentVector;
-		
-		
+				else if (currentVector.x == obstacles.get(i).getPosition().x && currentVector.z + 1 == obstacles.get(i).getPosition().z)
+				{
+					System.out.println("foun next3 " + obstacles.get(i).getPosition());
+					found = false;
+					lastVector = currentVector.cpy();
+					currentVector = obstacles.get(i).getPosition().cpy();
+					break;
+
+				}
+				else if (currentVector.x == obstacles.get(i).getPosition().x && currentVector.z - 1 == obstacles.get(i).getPosition().z)
+				{
+					System.out.println("foun next4 " + obstacles.get(i).getPosition());
+					found = false;
+					lastVector = currentVector.cpy();
+					currentVector = obstacles.get(i).getPosition().cpy();
+					break;
+
+				}
+			}
+			System.out.println("current2 " + currentVector);
+		}
+		if (lastVector.x < currentVector.x)
+		{
+			System.out.println("x<x");
+			return new Vector3(currentVector.x + 1, 1, currentVector.z);
+		}
+		else if (lastVector.x > currentVector.x)
+		{
+			System.out.println("x>x");
+			return new Vector3(currentVector.x - 1, 1, currentVector.z);
+		}
+		else if (lastVector.z < currentVector.z)
+		{
+			System.out.println("z<z");
+			return new Vector3(currentVector.x, 1, currentVector.z + 1);
+		}
+		else
+		{
+			System.out.println("z>z");
+			return new Vector3(currentVector.x, 1, currentVector.z - 1);
+		}
+		/*
+		 * boolean found=false; while(!found){
+		 * System.out.println("enter while"); found=true; for(int
+		 * i=0;i<obstacles.size();i++) {
+		 * if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).
+		 * getPosition().z!=lastVector.z)&&currentVector.x+1==obstacles.get(i).
+		 * getPosition().x&&currentVector.z==obstacles.get(i).getPosition().z) {
+		 * System.out.println("foun next1 "+obstacles.get(i).getPosition());
+		 * found=false; lastVector=currentVector;
+		 * currentVector=obstacles.get(i).getPosition();
+		 * 
+		 * } else
+		 * if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).
+		 * getPosition().z!=lastVector.z)&&currentVector.x-1==obstacles.get(i).
+		 * getPosition().x&&currentVector.z==obstacles.get(i).getPosition().z) {
+		 * System.out.println("foun next2 "+obstacles.get(i).getPosition());
+		 * found=false; lastVector=currentVector;
+		 * currentVector=obstacles.get(i).getPosition();
+		 * 
+		 * } else
+		 * if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).
+		 * getPosition().z!=lastVector.z)&&currentVector.x==obstacles.get(i).
+		 * getPosition().x&&currentVector.z+1==obstacles.get(i).getPosition().z)
+		 * { System.out.println("foun next3 "+obstacles.get(i).getPosition());
+		 * found=false; lastVector=currentVector;
+		 * currentVector=obstacles.get(i).getPosition();
+		 * 
+		 * } else
+		 * if((obstacles.get(i).getPosition().x!=lastVector.x&&obstacles.get(i).
+		 * getPosition().z!=lastVector.z)&&currentVector.x==obstacles.get(i).
+		 * getPosition().x&&currentVector.z-1==obstacles.get(i).getPosition().z)
+		 * { System.out.println("foun next4 "+obstacles.get(i).getPosition());
+		 * found=false; lastVector=currentVector;
+		 * currentVector=obstacles.get(i).getPosition();
+		 * 
+		 * } } } if(!found) { if(lastVector.x<currentVector.x) {
+		 * System.out.println("x<x"); return new
+		 * Vector3(currentVector.x+1,1,currentVector.z); }
+		 * 
+		 * else if(lastVector.x>currentVector.x) {System.out.println("x>x");
+		 * return new Vector3(currentVector.x-1,1,currentVector.z); }
+		 * 
+		 * else if(lastVector.z<currentVector.z) {System.out.println("z<z");
+		 * return new Vector3(currentVector.x,1,currentVector.z+1); }
+		 * 
+		 * else {System.out.println("z>z"); return new
+		 * Vector3(currentVector.x,1,currentVector.z-1); } }
+		 */
 	}
+
 	public void decideMove(Vector3 v)
 	{
 
@@ -535,160 +470,160 @@ public class Move6
 
 	public void moving(RobotBlock b, Vector3 v)
 	{
-		//targetReached = false;
-		
-			checkIfCanMove(b);
-			System.out.println("b "+b.getPosition()+" t "+v);
-			ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
-			for (int i = 0; i < robots.size(); i++)
-			{
-				if (robots.get(i).getPosition().x == b.getPosition().x + 1 && robots.get(i).getPosition().z == b.getPosition().z)
-				{
-					if (robots.get(i).getPosition().y <= b.getPosition().y)
-					{
-						possibleMovements.add(new Vector3(robots.get(i).getPosition().x, robots.get(i).getPosition().y + 1, robots.get(i).getPosition().z));
-					}
-				}
-				if (robots.get(i).getPosition().x == b.getPosition().x && robots.get(i).getPosition().z == b.getPosition().z + 1)
-				{
-					if (robots.get(i).getPosition().y <= b.getPosition().y)
-					{
-						possibleMovements.add(new Vector3(robots.get(i).getPosition().x, robots.get(i).getPosition().y + 1, robots.get(i).getPosition().z));
-					}
-				}
-				if (robots.get(i).getPosition().x == b.getPosition().x - 1 && robots.get(i).getPosition().z == b.getPosition().z)
-				{
-					if (robots.get(i).getPosition().y <= b.getPosition().y)
-					{
-						possibleMovements.add(new Vector3(robots.get(i).getPosition().x, robots.get(i).getPosition().y + 1, robots.get(i).getPosition().z));
-					}
-				}
-				if (robots.get(i).getPosition().x == b.getPosition().x && robots.get(i).getPosition().z == b.getPosition().z - 1)
-				{
-					if (robots.get(i).getPosition().y <= b.getPosition().y)
-					{
-						possibleMovements.add(new Vector3(robots.get(i).getPosition().x, robots.get(i).getPosition().y + 1, robots.get(i).getPosition().z));
-					}
-				}
-			}
-			for (int i = 0; i < floor.size(); i++)
-			{
-				if (floor.get(i).getPosition().x == b.getPosition().x + 1 && floor.get(i).getPosition().z == b.getPosition().z)
-				{
-					possibleMovements.add(new Vector3(floor.get(i).getPosition().x, b.getPosition().y, floor.get(i).getPosition().z));
-				}
-				if (floor.get(i).getPosition().x == b.getPosition().x && floor.get(i).getPosition().z == b.getPosition().z + 1)
-				{
-					possibleMovements.add(new Vector3(floor.get(i).getPosition().x, b.getPosition().y, floor.get(i).getPosition().z));
-				}
-				if (floor.get(i).getPosition().x == b.getPosition().x - 1 && floor.get(i).getPosition().z == b.getPosition().z)
-				{
-					possibleMovements.add(new Vector3(floor.get(i).getPosition().x, b.getPosition().y, floor.get(i).getPosition().z));
-				}
-				if (floor.get(i).getPosition().x == b.getPosition().x && floor.get(i).getPosition().z == b.getPosition().z - 1)
-				{
-					possibleMovements.add(new Vector3(floor.get(i).getPosition().x, b.getPosition().y, floor.get(i).getPosition().z));
-				}
-			}
-			removeRobots(possibleMovements);
-			removeObstacles(possibleMovements);
-			removeImpossibleMovements(possibleMovements, b);
-			removeOrPos(possibleMovements, b, v);
-			removePass(possibleMovements,b);
+		// targetReached = false;
 
-			if (b.getPosition().x == v.x && b.getPosition().z == v.z)
+		checkIfCanMove(b);
+		System.out.println("b " + b.getPosition() + " t " + v);
+		ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
+		for (int i = 0; i < robots.size(); i++)
+		{
+			if (robots.get(i).getPosition().x == b.getPosition().x + 1 && robots.get(i).getPosition().z == b.getPosition().z)
 			{
-				intermediateTargetReached=true;
-				if(path.get(0).x==b.getPosition().x&&path.get(0).z==b.getPosition().z)
-					targetReached=true;
-				System.out.println("targetReached "+targetReached);
-			}
-			else if (possibleMovements.size() == 0)
-			{
-				failedMoves++;
-			}
-			else
-			{
-				Vector3 bestMovement = null;
-				int bestDistance = -1;
-				if (possibleMovements.size() != 0)
+				if (robots.get(i).getPosition().y <= b.getPosition().y)
 				{
-					if (possibleMovements.size() == 1)
+					possibleMovements.add(new Vector3(robots.get(i).getPosition().x, robots.get(i).getPosition().y + 1, robots.get(i).getPosition().z));
+				}
+			}
+			if (robots.get(i).getPosition().x == b.getPosition().x && robots.get(i).getPosition().z == b.getPosition().z + 1)
+			{
+				if (robots.get(i).getPosition().y <= b.getPosition().y)
+				{
+					possibleMovements.add(new Vector3(robots.get(i).getPosition().x, robots.get(i).getPosition().y + 1, robots.get(i).getPosition().z));
+				}
+			}
+			if (robots.get(i).getPosition().x == b.getPosition().x - 1 && robots.get(i).getPosition().z == b.getPosition().z)
+			{
+				if (robots.get(i).getPosition().y <= b.getPosition().y)
+				{
+					possibleMovements.add(new Vector3(robots.get(i).getPosition().x, robots.get(i).getPosition().y + 1, robots.get(i).getPosition().z));
+				}
+			}
+			if (robots.get(i).getPosition().x == b.getPosition().x && robots.get(i).getPosition().z == b.getPosition().z - 1)
+			{
+				if (robots.get(i).getPosition().y <= b.getPosition().y)
+				{
+					possibleMovements.add(new Vector3(robots.get(i).getPosition().x, robots.get(i).getPosition().y + 1, robots.get(i).getPosition().z));
+				}
+			}
+		}
+		for (int i = 0; i < floor.size(); i++)
+		{
+			if (floor.get(i).getPosition().x == b.getPosition().x + 1 && floor.get(i).getPosition().z == b.getPosition().z)
+			{
+				possibleMovements.add(new Vector3(floor.get(i).getPosition().x, b.getPosition().y, floor.get(i).getPosition().z));
+			}
+			if (floor.get(i).getPosition().x == b.getPosition().x && floor.get(i).getPosition().z == b.getPosition().z + 1)
+			{
+				possibleMovements.add(new Vector3(floor.get(i).getPosition().x, b.getPosition().y, floor.get(i).getPosition().z));
+			}
+			if (floor.get(i).getPosition().x == b.getPosition().x - 1 && floor.get(i).getPosition().z == b.getPosition().z)
+			{
+				possibleMovements.add(new Vector3(floor.get(i).getPosition().x, b.getPosition().y, floor.get(i).getPosition().z));
+			}
+			if (floor.get(i).getPosition().x == b.getPosition().x && floor.get(i).getPosition().z == b.getPosition().z - 1)
+			{
+				possibleMovements.add(new Vector3(floor.get(i).getPosition().x, b.getPosition().y, floor.get(i).getPosition().z));
+			}
+		}
+		removeRobots(possibleMovements);
+		removeObstacles(possibleMovements);
+		removeImpossibleMovements(possibleMovements, b);
+		removeOrPos(possibleMovements, b, v);
+		removePass(possibleMovements, b);
+
+		if (b.getPosition().x == v.x && b.getPosition().z == v.z)
+		{
+			intermediateTargetReached = true;
+			if (path.get(0).x == b.getPosition().x && path.get(0).z == b.getPosition().z)
+				targetReached = true;
+			System.out.println("targetReached " + targetReached);
+		}
+		else if (possibleMovements.size() == 0)
+		{
+			failedMoves++;
+		}
+		else
+		{
+			Vector3 bestMovement = null;
+			int bestDistance = -1;
+			if (possibleMovements.size() != 0)
+			{
+				if (possibleMovements.size() == 1)
+				{
+					bestMovement = possibleMovements.get(0);
+				}
+				for (int i = 0; i < possibleMovements.size(); i++)
+				{
+					if (bestDistance == -1)
 					{
-						bestMovement = possibleMovements.get(0);
+						bestMovement = possibleMovements.get(i);
+						bestDistance = (int) (Math.abs(possibleMovements.get(i).x - v.x) + Math.abs(possibleMovements.get(i).z - v.z));
 					}
-					for (int i = 0; i < possibleMovements.size(); i++)
+					else
 					{
-						if (bestDistance == -1)
+						if (bestDistance > ((int) (Math.abs(possibleMovements.get(i).x - v.x) + Math.abs(possibleMovements.get(i).z - v.z))))
 						{
 							bestMovement = possibleMovements.get(i);
 							bestDistance = (int) (Math.abs(possibleMovements.get(i).x - v.x) + Math.abs(possibleMovements.get(i).z - v.z));
 						}
-						else
-						{
-							if (bestDistance > ((int) (Math.abs(possibleMovements.get(i).x - v.x) + Math.abs(possibleMovements.get(i).z - v.z))))
-							{
-								bestMovement = possibleMovements.get(i);
-								bestDistance = (int) (Math.abs(possibleMovements.get(i).x - v.x) + Math.abs(possibleMovements.get(i).z - v.z));
-							}
-						}
 					}
 				}
-				if (bestMovement.y > b.getPosition().y)
+			}
+			if (bestMovement.y > b.getPosition().y)
+			{
+				for (int p = 0; p < b.getUnpassableVectors().size(); p++)
 				{
-					for(int p=0;p<b.getUnpassableVectors().size();p++)
+					if (bestMovement.x == b.getUnpassableVectors().get(p).x)
 					{
-						if(bestMovement.x==b.getUnpassableVectors().get(p).x)
-						{
-							b.getNumOfPass().set(p, Integer.valueOf(1));
-						}
+						b.getNumOfPass().set(p, Integer.valueOf(1));
 					}
-					boolean possible = true;
-					for (int i = 0; i < robots.size(); i++)
-						if (b.getPosition().x == robots.get(i).getPosition().x && b.getPosition().z == robots.get(i).getPosition().z && b.getPosition().y + 1 == robots.get(i).getPosition().y)
-						{
-							possible = false;
-						}
-					if (possible)
+				}
+				boolean possible = true;
+				for (int i = 0; i < robots.size(); i++)
+					if (b.getPosition().x == robots.get(i).getPosition().x && b.getPosition().z == robots.get(i).getPosition().z && b.getPosition().y + 1 == robots.get(i).getPosition().y)
 					{
-						System.out.println("climb");
-						timestep++;
-						b.climb();
-						checkIfCanMove(b);
+						possible = false;
 					}
-					else
-					{
-						
-					}
-
-				}
-				if (bestMovement.x < b.getPosition().x)
+				if (possible)
 				{
-					System.out.println("move left");
+					System.out.println("climb");
 					timestep++;
-					b.moveLeft();
-				}
-				else if (bestMovement.x > b.getPosition().x)
-				{
-					System.out.println("move right");
-					timestep++;
-					b.moveRight();
-				}
-				else if (bestMovement.z < b.getPosition().z)
-				{
-					System.out.println("move back");
-					timestep++;
-					b.moveBackwards();
+					b.climb();
+					checkIfCanMove(b);
 				}
 				else
 				{
-					System.out.println("move forward");
-					timestep++;
-					b.moveForward();
+
 				}
 
 			}
-		
+			if (bestMovement.x < b.getPosition().x)
+			{
+				System.out.println("move left");
+				timestep++;
+				b.moveLeft();
+			}
+			else if (bestMovement.x > b.getPosition().x)
+			{
+				System.out.println("move right");
+				timestep++;
+				b.moveRight();
+			}
+			else if (bestMovement.z < b.getPosition().z)
+			{
+				System.out.println("move back");
+				timestep++;
+				b.moveBackwards();
+			}
+			else
+			{
+				System.out.println("move forward");
+				timestep++;
+				b.moveForward();
+			}
+
+		}
+
 		checkIfCanMove(b);
 	}
 
@@ -697,11 +632,11 @@ public class Move6
 		ArrayList<Vector3> toRemove = new ArrayList<Vector3>();
 		for (int i = 0; i < possibleMovements.size(); i++)
 		{
-			for(int j=0;j<b.getUnpassableVectors().size();j++)
+			for (int j = 0; j < b.getUnpassableVectors().size(); j++)
 			{
-				if(possibleMovements.get(i).x==b.getUnpassableVectors().get(j).x&&possibleMovements.get(i).z==b.getUnpassableVectors().get(j).z)
+				if (possibleMovements.get(i).x == b.getUnpassableVectors().get(j).x && possibleMovements.get(i).z == b.getUnpassableVectors().get(j).z)
 				{
-					if(b.getNumOfPass().get(j)>0)
+					if (b.getNumOfPass().get(j) > 0)
 					{
 						toRemove.add(possibleMovements.get(i));
 					}
@@ -710,6 +645,7 @@ public class Move6
 		}
 		possibleMovements.removeAll(toRemove);
 	}
+
 	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b, Vector3 v)
 	{
 		ArrayList<Vector3> toRemove = new ArrayList<Vector3>();
@@ -961,7 +897,7 @@ public class Move6
 				e.printStackTrace();
 			}
 		}
-		
+
 		while (b.getMoving() || StateManager.state == SimulationState.PAUSE)
 		{
 			try
