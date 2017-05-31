@@ -64,7 +64,7 @@ public class BlockGravity extends BlockFriction
 			// Check if the next update downwards will lead to a collision
 			if (isColliding(this, new Vector3(position.x, position.y - fallVel, position.z)))
 			{
-				position = new Vector3(Math.round(position.x), Math.round(position.y), Math.round(position.z));
+				position = new Vector3(Math.round(position.x), (float)Math.floor(position.y), Math.round(position.z));
 				setGravity(false);
 				blockModel = new BlockModel(Block.Type.Robot);
 			}

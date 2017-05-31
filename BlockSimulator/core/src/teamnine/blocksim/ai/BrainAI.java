@@ -33,13 +33,20 @@ public class BrainAI //
 		{
 			final PathFinder path = new PathFinder(blockList, robots.size(), target.size());
 			path.startPathFinder(maxRobot, minTarget);
-			ArrayList<Vector3> finalPath = path.getFinalList();
+			final ArrayList<Vector3> finalPath = path.getFinalList();
 			for (Vector3 vector : finalPath)
 			{
 				blockList.createBlock(vector, Block.Type.Path);
 			}
 			final Move3 movement = new Move3(robots, obstacles, floor);
-			movement.startMove3(finalPath);
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					movement.startMove3(finalPath);
+				}
+			}).start();
 		}
 		
 		else
