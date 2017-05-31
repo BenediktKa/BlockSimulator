@@ -39,7 +39,11 @@ public class BrainAI //
 				blockList.createBlock(vector, Block.Type.Path);
 			}
 			final Move3 movement = new Move3(robots, obstacles, floor);
+<<<<<<< Updated upstream
 			movement.startMove3(finalPath);
+=======
+			//movement.startMove3(finalPath);
+>>>>>>> Stashed changes
 		}
 		
 		else
