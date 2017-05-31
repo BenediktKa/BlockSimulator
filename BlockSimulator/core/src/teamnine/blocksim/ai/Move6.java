@@ -334,7 +334,7 @@ public class Move6
 			orderToMove.add(robots.get(i));
 		}
 		System.out.println("decide "+orderToMove.size());
-		RobotBlock end = new RobotBlock(v, null, 0, null);
+		RobotBlock end = new RobotBlock(v, null, null);
 		robots.add(end);
 		for (int i = 0; i < robots.size(); i++)
 		{

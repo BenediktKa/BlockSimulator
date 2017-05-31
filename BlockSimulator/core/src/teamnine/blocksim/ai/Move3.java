@@ -64,7 +64,7 @@ public class Move3
 		{
 			orderToMove.add(robots.get(i));
 		}
-		RobotBlock end = new RobotBlock(v, null, 0, null);
+		RobotBlock end = new RobotBlock(v, null, null);
 		robots.add(end);
 		for (int i = 0; i < robots.size(); i++)
 		{
