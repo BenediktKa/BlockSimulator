@@ -22,7 +22,7 @@ public class Move3
 	public Move3(ArrayList<RobotBlock> robots, ArrayList<Block> obstacles, ArrayList<Block> floor)	
 	{
 		this.obstacles = obstacles;
-		this.robots = new ArrayList<RobotBlock>(robots);
+		this.robots = new ArrayList<RobotBlock>(robots); 
 		this.floor = floor;
 		/*
 		 * for (int i = path.size() - 1; i > 0; i--)
@@ -30,7 +30,7 @@ public class Move3
 		 */	
 	}
 	
-	public void startMove3 (ArrayList<Vector3> path, Block mt)
+	public void startMove3 (ArrayList<Vector3> path)
 	{
 		this.path = path;
 		System.out.println("poep " + path.size());

@@ -39,6 +39,7 @@ public class BrainAI //
 				blockList.createBlock(vector, Block.Type.Path);
 			}
 			final Move3 movement = new Move3(robots, obstacles, floor);
+			movement.startMove3(finalPath);
 		}
 		
 		else
