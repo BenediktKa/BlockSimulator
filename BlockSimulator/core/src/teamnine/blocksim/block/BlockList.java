@@ -53,43 +53,76 @@ public class BlockList implements Disposable
 
 	public void preconfig()
 	{
-		createBlock(new Vector3(6, 1, 12), Block.Type.Robot);
-		createBlock(new Vector3(5, 1, 12), Block.Type.Robot);
-		createBlock(new Vector3(4, 1, 12), Block.Type.Robot);
-		createBlock(new Vector3(8, 1, 12), Block.Type.Obstacle);
-		createBlock(new Vector3(8, 2, 12), Block.Type.Obstacle);
-		createBlock(new Vector3(8, 1, 11), Block.Type.Obstacle);
-		createBlock(new Vector3(8, 2, 11), Block.Type.Obstacle);
-		createBlock(new Vector3(8, 1, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(8, 2, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(8, 1, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(8, 2, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(7, 1, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(7, 2, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(6, 1, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(6, 2, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(5, 1, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(5, 2, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(4, 1, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(4, 2, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(4, 1, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(4, 2, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 1, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 2, 13), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 1, 12), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 2, 12), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 1, 11), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 2, 11), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 1, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 2, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(5, 1, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(5, 2, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(6, 1, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(6, 2, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(7, 1, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(7, 2, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 1, 10), Block.Type.Obstacle);
-		createBlock(new Vector3(3, 2, 10), Block.Type.Obstacle);
+		for(int i = 0; i < gridSize; i++)
+		{
+			createBlock(new Vector3(i, 1, 0), Block.Type.Obstacle);
+			createBlock(new Vector3(i, 2, 0), Block.Type.Obstacle);
+			
+			createBlock(new Vector3(0, 1, i), Block.Type.Obstacle);
+			createBlock(new Vector3(0, 2, i), Block.Type.Obstacle);
+			
+			createBlock(new Vector3(i, 1, gridSize - 1), Block.Type.Obstacle);
+			createBlock(new Vector3(i, 2, gridSize - 1), Block.Type.Obstacle);
+			
+			createBlock(new Vector3(gridSize - 1, 1, i), Block.Type.Obstacle);
+			createBlock(new Vector3(gridSize - 1, 2, i), Block.Type.Obstacle);
+		}
+		
+		createBlock(new Vector3(2, 1, 1), Block.Type.Obstacle);
+		createBlock(new Vector3(2, 2, 1), Block.Type.Obstacle);
+
+		createBlock(new Vector3(3, 1, 3), Block.Type.Obstacle);
+		createBlock(new Vector3(3, 2, 3), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(4, 1, 3), Block.Type.Obstacle);
+		createBlock(new Vector3(4, 2, 3), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(4, 1, 4), Block.Type.Obstacle);
+		createBlock(new Vector3(4, 2, 4), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(1, 1, 4), Block.Type.Obstacle);
+		createBlock(new Vector3(1, 2, 4), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(4, 1, 6), Block.Type.Obstacle);
+		createBlock(new Vector3(4, 2, 6), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(3, 1, 6), Block.Type.Obstacle);
+		createBlock(new Vector3(3, 2, 6), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(2, 1, 6), Block.Type.Obstacle);
+		createBlock(new Vector3(2, 2, 6), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(1, 1, 6), Block.Type.Obstacle);
+		createBlock(new Vector3(1, 2, 6), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(5, 1, 6), Block.Type.Obstacle);
+		createBlock(new Vector3(5, 2, 6), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(5, 1, 1), Block.Type.Obstacle);
+		createBlock(new Vector3(5, 2, 1), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(5, 1, 3), Block.Type.Obstacle);
+		createBlock(new Vector3(5, 2, 3), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(6, 1, 6), Block.Type.Obstacle);
+		createBlock(new Vector3(6, 2, 6), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(6, 1, 5), Block.Type.Obstacle);
+		createBlock(new Vector3(6, 2, 5), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(6, 1, 4), Block.Type.Obstacle);
+		createBlock(new Vector3(6, 2, 4), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(6, 1, 3), Block.Type.Obstacle);
+		createBlock(new Vector3(6, 2, 3), Block.Type.Obstacle);
+		
+		createBlock(new Vector3(6, 1, 7), Block.Type.Obstacle);
+		createBlock(new Vector3(6, 2, 7), Block.Type.Obstacle);
+		
+		// Robots
+		createBlock(new Vector3(1, 1, 1), Block.Type.Robot);
+		createBlock(new Vector3(1, 2, 1), Block.Type.Robot);
+		
 		// Goal
 		createBlock(new Vector3(12, 1, 12), Block.Type.Goal);
 		createBlock(new Vector3(12, 1, 13), Block.Type.Goal);
