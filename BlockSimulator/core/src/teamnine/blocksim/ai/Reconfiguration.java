@@ -415,7 +415,7 @@ public class Reconfiguration
 
 			if(!block.isInFinalPosition()){
 				if (DEBUG) System.out.println("true");
-				int thisDistance = (int) (Math.abs(vector.x - targetOrigin.x) + Math.abs(vector.z - targetOrigin.z) + Math.abs(vector.y - targetOrigin.y));
+				int thisDistance = (int) (Math.abs(vector.x - targetOrigin.x) + Math.abs(vector.z - targetOrigin.z) + Math.abs(vector.y - targetOrigin.y)*50);
 				if(thisDistance > biggestDistance)
 				{
 					biggestDistance = thisDistance;
