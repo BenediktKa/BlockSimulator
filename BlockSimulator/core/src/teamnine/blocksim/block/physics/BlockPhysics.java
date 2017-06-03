@@ -1,6 +1,5 @@
 package teamnine.blocksim.block.physics;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.StateManager;
@@ -32,7 +31,6 @@ public class BlockPhysics extends Block
 	{
 		float maxFriction = 2* (FRICTIONCONSTANT * GRAVITY);
 		SPEED = Math.abs(maxFriction + ANIMATIONSPEED);
-		System.out.println(SPEED);
 	}
 	
 	public float getSpeed()

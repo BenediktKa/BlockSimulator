@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.StateManager;
 import teamnine.blocksim.block.physics.BlockGravity;
-import teamnine.blocksim.hud.RobotBlockText;
 
 public class RobotBlock extends BlockGravity
 {

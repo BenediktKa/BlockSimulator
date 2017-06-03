@@ -4,11 +4,9 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.StateManager;
-import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.RobotBlock;
 import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.block.RobotBlock;
 
 /**
  * Responsible for managing the reconfiguration
