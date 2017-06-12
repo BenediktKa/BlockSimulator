@@ -13,7 +13,6 @@ public class RobotBlock extends BlockGravity
 
 	private Vector3 moveTo, movement;
 	private boolean moving = false;
-	private BlockList blockList;
 	private Block target;
 	private boolean visited = false;
 	private boolean inFinalPosition = false;
@@ -22,11 +21,9 @@ public class RobotBlock extends BlockGravity
 	private ArrayList<Vector3> unpassableVectors= new ArrayList<Vector3>();
 	private ArrayList<Integer> numOfPass= new ArrayList<Integer>();
 
-	public RobotBlock(Vector3 position, Type type, BlockList blockList)
+	public RobotBlock(Vector3 position, Type type)
 	{
-		super(position, type, blockList);
-
-		this.blockList = blockList;
+		super(position, type);
 	}
 	public void addUnpassableVector(Vector3 v)
 	{

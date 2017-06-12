@@ -3,26 +3,23 @@ package teamnine.blocksim.block.physics;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.blocklist.BlockListController;
 
 public class BlockCollision extends BlockPhysics
 {
-	private BlockList blockList;
+	private BlockListController blockListController = null;
 
-	public BlockCollision(Vector3 position, Type type, BlockList blockList)
+	public BlockCollision(Vector3 position, Type type)
 	{
 		super(position, type);
-		this.blockList = blockList;
+		this.blockListController = BlockListController.getInstance();
 	}
 
 	public boolean isColliding(Block blockNotToCheck, Vector3 position)
 	{
 		BlockHitbox hitbox = new BlockHitbox(position);
-		for (Block block : blockList.getBlockList(null))
+		for (Block block : blockListController.getExcludedBlockList(Block.Type.Path, Block.Type.Goal))
 		{
-			if (block.getType() == Block.Type.Path || block.getType() == Block.Type.Goal)
-				continue;
-
 			if (block == blockNotToCheck)
 				continue;
 

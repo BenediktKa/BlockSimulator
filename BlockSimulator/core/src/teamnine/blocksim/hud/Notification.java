@@ -6,12 +6,15 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
+import teamnine.blocksim.blocklist.BlockListController;
+
 /**
  * Class that allows to display Notification messages on screen
  */
 public class Notification implements Disposable
 {
 
+	private static Notification notification;
 	/** Notification BitmapFont */
 	private BitmapFont font;
 
@@ -38,10 +41,18 @@ public class Notification implements Disposable
 	/**
 	 * Instantiates a new notification.
 	 */
-	public Notification()
+	private Notification()
 	{
 		font = new BitmapFont();
 		layout = new GlyphLayout();
+	}
+
+	public static Notification getInstance()
+	{
+		if (notification == null)
+			return (notification = new Notification());
+		else
+			return notification;
 	}
 
 	/**
@@ -51,15 +62,15 @@ public class Notification implements Disposable
 	 */
 	public void render(SpriteBatch spriteBatch)
 	{
+		// If there is no Text
+		if (text == null)
+			return;
+
 		// Update Alpha
 		if (alpha <= 0)
 			return;
 		else
 			alpha -= 0.015;
-
-		// If there is no Text
-		if (text == null)
-			return;
 
 		// Change Text Color based on Type
 		if (type == Type.Error)

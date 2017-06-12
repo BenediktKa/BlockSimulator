@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.block.BlockModel;
 
 public class BlockGravity extends BlockFriction
@@ -16,14 +15,12 @@ public class BlockGravity extends BlockFriction
 
 	// Timer to recalculate gravity
 	private float gravityTime = 0;
-
-	private BlockList blockList;
+	
 	private Vector3 originalPos;
 
-	public BlockGravity(Vector3 position, Type type, BlockList blockList)
+	public BlockGravity(Vector3 position, Type type)
 	{
-		super(position, type, blockList);
-		this.blockList = blockList;
+		super(position, type);
 	}
 
 	public void setGravity(boolean gravity)

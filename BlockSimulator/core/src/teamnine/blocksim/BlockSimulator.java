@@ -10,11 +10,10 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.SelectorBlock;
+import teamnine.blocksim.blocklist.BlockListController;
 import teamnine.blocksim.hud.Crosshair;
 import teamnine.blocksim.hud.FPSCounter;
 import teamnine.blocksim.hud.LevelEditorHUD;
@@ -34,9 +33,6 @@ public class BlockSimulator implements ApplicationListener
 	public SpriteBatch spriteBatch;
 	public ModelBatch modelBatch;
 
-	// Selector Block
-	public SelectorBlock selectorBlock;
-
 	// State Manager
 	public StateManager stateManager;
 
@@ -50,10 +46,10 @@ public class BlockSimulator implements ApplicationListener
 	public static int gridSize = 15; //Needed it for smartmovement xxJurriaan
 
 	// BlockList
-	public BlockList blockList;
+	private BlockListController blockListController;
 
 	// Notifications
-	public Notification notification;
+	private Notification notification;
 
 	// Crosshair
 	private Crosshair crosshair;
@@ -66,7 +62,7 @@ public class BlockSimulator implements ApplicationListener
 	{
 
 		// Create State Manager
-		stateManager = new StateManager();
+		stateManager = new StateManager(SimulationState.BUILD);
 
 		// Create Environment
 		environment = new Environment();
@@ -74,7 +70,7 @@ public class BlockSimulator implements ApplicationListener
 		modelBatch = new ModelBatch();
 
 		// Notification
-		notification = new Notification();
+		notification = Notification.getInstance();
 
 		// Input Multiplexer
 		inputMultiplexer = new InputMultiplexer();
@@ -82,9 +78,6 @@ public class BlockSimulator implements ApplicationListener
 		// Lighting
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-
-		// Selector Block
-		selectorBlock = new SelectorBlock(new Vector3(0, 0, 0), Block.Type.Selector);
 
 		// Crosshair
 		crosshair = new Crosshair();
@@ -100,7 +93,7 @@ public class BlockSimulator implements ApplicationListener
 		camera.far = CAMERA_FAR;
 
 		// Camera Control
-		fpsController = new FPSControl(camera, this);
+		fpsController = new FPSControl(camera);
 
 		// Interface
 		levelHUD = new LevelEditorHUD(this);
@@ -110,8 +103,8 @@ public class BlockSimulator implements ApplicationListener
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		Gdx.input.setCursorCatched(true);
 		
-		// BlockList
-		blockList = new BlockList(gridSize, this);
+		blockListController = BlockListController.getInstance();
+		blockListController.initialize(gridSize);
 	}
 
 	@Override
@@ -124,8 +117,8 @@ public class BlockSimulator implements ApplicationListener
 		
 		// Rendering Models
 		modelBatch.begin(camera);
-		blockList.render(modelBatch, environment);
-		modelBatch.render(selectorBlock.getModelInstance(), environment);
+		blockListController.render(modelBatch, environment);
+		modelBatch.render(SelectorBlock.getInstance().getModelInstance(), environment);
 		modelBatch.end();
 
 		// Render LevelHUD
@@ -162,7 +155,7 @@ public class BlockSimulator implements ApplicationListener
 	{
 		crosshair.dispose();
 		fpsText.dispose();
-		blockList.dispose();
+		blockListController.dispose();
 		notification.dispose();
 	}
 }

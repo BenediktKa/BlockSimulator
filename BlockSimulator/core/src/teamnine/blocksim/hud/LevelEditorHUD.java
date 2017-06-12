@@ -1,7 +1,6 @@
 package teamnine.blocksim.hud;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -19,6 +18,8 @@ import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.ai.BrainAI;
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.SelectorBlock;
+import teamnine.blocksim.blocklist.BlockListController;
 import teamnine.blocksim.configs.configurationLoader;
 import teamnine.blocksim.configs.simulationLoader;
 
@@ -63,10 +64,11 @@ public class LevelEditorHUD implements Disposable
 
 	// Block Dialog
 	private Label blockLabel;
-	private Block.Type selectedBlock = Block.Type.Obstacle;
 	
 	//Selector Block Position
 	private Label selectorPosLabel;
+	
+	private SelectorBlock selectorBlock = null;
 
 	// Configuration Checker
 	// private ConfigurationChecker check;
@@ -87,6 +89,7 @@ public class LevelEditorHUD implements Disposable
 	public LevelEditorHUD(final BlockSimulator blockSimulator)
 	{
 		this.blockSimulator = blockSimulator;
+		selectorBlock = SelectorBlock.getInstance();
 		
 		skin = new Skin(Gdx.files.internal("interface/skins/uiskin.json"));
 		stage = new Stage(new ScreenViewport(), blockSimulator.spriteBatch);
@@ -110,7 +113,7 @@ public class LevelEditorHUD implements Disposable
 		simulationButton = new TextButton("Load Simulation", skin);
 
 		// Create Labels
-		blockLabel = new Label("Selected: " + selectedBlock, skin);
+		blockLabel = new Label("Selected: " + selectorBlock.getSelectedBlock(), skin);
 		selectorPosLabel = new Label("", skin, "smallLabel");
 
 		// Add to Table
@@ -135,7 +138,7 @@ public class LevelEditorHUD implements Disposable
 			{
 				if (StateManager.state == SimulationState.MENU)
 				{
-					new configurationLoader(blockSimulator.blockList);
+					new configurationLoader();
 				}
 				super.clicked(event, x, y);
 			}
@@ -190,7 +193,7 @@ public class LevelEditorHUD implements Disposable
 		});
 
 		// Undo Button Listener
-		undoButton.addListener(new ClickListener()
+		/*undoButton.addListener(new ClickListener()
 		{
 			@Override
 			public void clicked(InputEvent event, float x, float y)
@@ -201,10 +204,10 @@ public class LevelEditorHUD implements Disposable
 				}
 				super.clicked(event, x, y);
 			}
-		});
+		});*/
 
 		// Redo Button Listener
-		redoButton.addListener(new ClickListener()
+		/*redoButton.addListener(new ClickListener()
 		{
 			@Override
 			public void clicked(InputEvent event, float x, float y)
@@ -215,7 +218,7 @@ public class LevelEditorHUD implements Disposable
 				}
 				super.clicked(event, x, y);
 			}
-		});
+		});*/
 
 		// AI Button Listener
 		aiModeButton.addListener(new ClickListener()
@@ -240,7 +243,7 @@ public class LevelEditorHUD implements Disposable
 					StateManager.state = SimulationState.MENU;
 					startButton.setText("Start");
 					// Remove Path
-					blockSimulator.blockList.removeBlockType(Block.Type.Path);
+					BlockListController.getInstance().removeAllBlocksOfType(Block.Type.Path);
 					// Hide Pause Button
 					pauseButton.setVisible(false);
 					pauseButton.setTouchable(Touchable.disabled);
@@ -250,7 +253,7 @@ public class LevelEditorHUD implements Disposable
 					StateManager.state = SimulationState.SIMULATION;
 					startButton.setText("Stop");
 					// new Movement(blockSimulator.blockList);
-					new BrainAI(blockSimulator.blockList, aiMode);
+					new BrainAI(aiMode);
 
 					// Display Pause Button
 					pauseButton.setVisible(true);
@@ -306,20 +309,9 @@ public class LevelEditorHUD implements Disposable
 
 	public void render()
 	{
-		Vector3 selectorPos = blockSimulator.selectorBlock.getPosition();
-		selectorPosLabel.setText("X:" + selectorPos.x + " Y: " + selectorPos.y + " Z: " + selectorPos.z);
+		blockLabel.setText("Selected: " + selectorBlock.getSelectedBlock());
+		selectorPosLabel.setText("X:" + selectorBlock.getPosition().x + " Y: " + selectorBlock.getPosition().y + " Z: " + selectorBlock.getPosition().z);
 		stage.draw();
-	}
-
-	public Block.Type getSelectedBlock()
-	{
-		return selectedBlock;
-	}
-
-	public void setSelectedBlock(Block.Type selectedBlock)
-	{
-		blockLabel.setText("Selected: " + selectedBlock);
-		this.selectedBlock = selectedBlock;
 	}
 
 	@Override

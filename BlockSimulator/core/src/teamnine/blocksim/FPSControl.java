@@ -8,24 +8,30 @@ import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.SelectorBlock;
+import teamnine.blocksim.blocklist.BlockListController;
 import teamnine.blocksim.hud.Notification;
 
 public class FPSControl extends FirstPersonCameraController
 {
-	private BlockSimulator blockSimulator;
 	private Camera camera;
-	private Block.Type blockType = Block.Type.Obstacle;
 
 	// Mouse Variables
 	private int mouseX = 0;
 	private int mouseY = 100;
 	private float rotSpeed = 0.2f;
+	private BlockListController blockListController = null;
+	private Notification notification = null;
+	private SelectorBlock selectorBlock = null;
 
-	public FPSControl(Camera camera, BlockSimulator blockSimulator)
+	public FPSControl(Camera camera)
 	{
 		super(camera);
-		this.blockSimulator = blockSimulator;
 		this.camera = camera;
+		
+		blockListController = BlockListController.getInstance();
+		notification = Notification.getInstance();
+		selectorBlock = SelectorBlock.getInstance();
 	}
 
 	@Override
@@ -66,7 +72,10 @@ public class FPSControl extends FirstPersonCameraController
 					camera.update();
 				}
 			}
-			blockSimulator.blockList.editBoxByRayCast(camera.position, camera.direction, null, false);
+			Vector3 vec;
+			if((vec = blockListController.getPositionAtRayCast(camera.position, camera.direction, false)) != null)
+				selectorBlock.setPosition(vec);
+			
 		}
 		mouseX = screenX;
 		mouseY = screenY;
@@ -83,8 +92,7 @@ public class FPSControl extends FirstPersonCameraController
 
 		if (amount == 1)
 		{
-			blockType = blockType.next();
-			blockSimulator.levelHUD.setSelectedBlock(blockType);
+			selectorBlock.setNextBlock();
 		}
 		return false;
 	}
@@ -96,11 +104,16 @@ public class FPSControl extends FirstPersonCameraController
 		{
 			if (button == 0)
 			{
-				blockSimulator.blockList.editBoxByRayCast(camera.position, camera.direction, blockType, true);
+				Vector3 vec;
+				if((vec = blockListController.getPositionAtRayCast(camera.position, camera.direction, false)) != null)
+					blockListController.createBlock(vec, selectorBlock.getSelectedBlock());
+					
 			}
 			else if (button == 1)
 			{
-				blockSimulator.blockList.editBoxByRayCast(camera.position, camera.direction, null, true);
+				Vector3 vec;
+				if((vec = blockListController.getPositionAtRayCast(camera.position, camera.direction, true)) != null)
+					blockListController.removeBlock(blockListController.getBlockAtPointIgnoreType(vec, Block.Type.Floor));
 			}
 		}
 		return super.touchDown(screenX, screenY, pointer, button);
@@ -115,13 +128,13 @@ public class FPSControl extends FirstPersonCameraController
 			{
 				if(StateManager.state == SimulationState.SIMULATION)
 				{
-					blockSimulator.notification.setNotification("Camera Free", Notification.Type.ModeChange, 2);
+					notification.setNotification("Camera Free", Notification.Type.ModeChange, 2);
 					StateManager.state = SimulationState.SIMULATIONFPS;
 					Gdx.input.setCursorCatched(true);
 				}
 				else if(StateManager.state == SimulationState.SIMULATIONFPS)
 				{
-					blockSimulator.notification.setNotification("Camera Locked", Notification.Type.ModeChange, 2);
+					notification.setNotification("Camera Locked", Notification.Type.ModeChange, 2);
 					StateManager.state = SimulationState.SIMULATION;
 					Gdx.input.setCursorCatched(false);
 				}
@@ -130,68 +143,68 @@ public class FPSControl extends FirstPersonCameraController
 		}
 		if (keycode == Keys.UP)
 		{
-			if (inGrid(blockSimulator.selectorBlock.getPosition().x + 1))
-				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(1, 0, 0));
+			if (inGrid(selectorBlock.getPosition().x + 1))
+				selectorBlock.setPosition(selectorBlock.getPosition().add(1, 0, 0));
 		}
 		else if (keycode == Keys.DOWN)
 		{
-			if (inGrid(blockSimulator.selectorBlock.getPosition().x - 1))
-				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(-1, 0, 0));
+			if (inGrid(selectorBlock.getPosition().x - 1))
+				selectorBlock.setPosition(selectorBlock.getPosition().add(-1, 0, 0));
 		}
 		else if (keycode == Keys.LEFT)
 		{
-			if (inGrid(blockSimulator.selectorBlock.getPosition().z + 1))
-				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(0, 0, 1));
+			if (inGrid(selectorBlock.getPosition().z + 1))
+				selectorBlock.setPosition(selectorBlock.getPosition().add(0, 0, 1));
 		}
 		else if (keycode == Keys.RIGHT)
 		{
-			if (inGrid(blockSimulator.selectorBlock.getPosition().z - 1))
-				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(0, 0, -1));
+			if (inGrid(selectorBlock.getPosition().z - 1))
+				selectorBlock.setPosition(selectorBlock.getPosition().add(0, 0, -1));
 		}
 		else if (keycode == Keys.X)
 		{
-			if (inGrid(blockSimulator.selectorBlock.getPosition().y + 1))
-				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(0, 1, 0));
+			if (inGrid(selectorBlock.getPosition().y + 1))
+				selectorBlock.setPosition(selectorBlock.getPosition().add(0, 1, 0));
 		}
 		else if (keycode == Keys.Z)
 		{
-			if (inGrid(blockSimulator.selectorBlock.getPosition().y - 1))
-				blockSimulator.selectorBlock.setPosition(blockSimulator.selectorBlock.getPosition().add(0, -1, 0));
+			if (inGrid(selectorBlock.getPosition().y - 1))
+				selectorBlock.setPosition(selectorBlock.getPosition().add(0, -1, 0));
 		}
 		else if (keycode == Keys.PLUS)
 		{
-			blockSimulator.blockList.resizeFloor(blockSimulator.gridSize++);
+			blockListController.setFloorGridSize(blockListController.getFloorGridSize() + 1);
 		}
 		else if (keycode == Keys.MINUS)
 		{
-			blockSimulator.blockList.resizeFloor(blockSimulator.gridSize--);
+			blockListController.setFloorGridSize(blockListController.getFloorGridSize() - 1);
 		}
 		else if (keycode == Keys.DEL)
 		{
-			Block blockToDelete = blockSimulator.blockList.blockAtPoint(blockSimulator.selectorBlock.getPosition());
+			Block blockToDelete = blockListController.getBlockAtPoint(selectorBlock.getPosition());
 			if (blockToDelete != null && blockToDelete.getType() != Block.Type.Floor)
-				blockSimulator.blockList.removeBlock(blockToDelete);
+				blockListController.removeBlock(blockToDelete);
 			else if (blockToDelete == null)
-				blockSimulator.notification.setNotification("Block doesn't exist", Notification.Type.Error, 1);
+				notification.setNotification("Block doesn't exist", Notification.Type.Error, 1);
 			else
-				blockSimulator.notification.setNotification("Can't delete the floor", Notification.Type.Error, 1);
+				notification.setNotification("Can't delete the floor", Notification.Type.Error, 1);
 		}
 		else if (keycode == Keys.SPACE)
 		{
-			if (blockSimulator.blockList.blockAtPoint(blockSimulator.selectorBlock.getPosition()) == null)
-				blockSimulator.blockList.createBlock(blockSimulator.selectorBlock.getPosition().cpy(), blockType);
+			if (blockListController.getBlockAtPoint(selectorBlock.getPosition()) == null)
+				blockListController.createBlock(selectorBlock.getPosition().cpy(), selectorBlock.getSelectedBlock());
 		}
 		else if (keycode == Keys.ESCAPE)
 		{
 			if (StateManager.state == SimulationState.BUILD)
 			{
-				blockSimulator.notification.setNotification("Menu Mode", Notification.Type.ModeChange, 2);
+				notification.setNotification("Menu Mode", Notification.Type.ModeChange, 2);
 				StateManager.state = SimulationState.MENU;
 				Gdx.input.setCursorCatched(false);
 			}
 			else if (StateManager.state == SimulationState.MENU)
 			{
-				blockSimulator.notification.setNotification("Build Mode", Notification.Type.ModeChange, 2);
+				notification.setNotification("Build Mode", Notification.Type.ModeChange, 2);
 				StateManager.state = SimulationState.BUILD;
 				Gdx.input.setCursorCatched(true);
 			}
@@ -201,9 +214,9 @@ public class FPSControl extends FirstPersonCameraController
 
 	public boolean inGrid(float value)
 	{
-		if (value >= blockSimulator.gridSize || value < 0)
+		if (value >= blockListController.getFloorGridSize() || value < 0)
 		{
-			blockSimulator.notification.setNotification("Out of bounds", Notification.Type.Error, 1);
+			notification.setNotification("Out of bounds", Notification.Type.Error, 1);
 			return false;
 		}
 		return true;

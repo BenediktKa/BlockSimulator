@@ -5,24 +5,30 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.block.RobotBlock;
+import teamnine.blocksim.blocklist.BlockListController;
 import teamnine.blocksim.hud.LevelEditorHUD.AIMode;
 
 public class BrainAI //
 {
 	private ArrayList<Block> obstacles;
-	private ArrayList<RobotBlock> robots;
+	private ArrayList<RobotBlock> robots = new ArrayList<RobotBlock>();
 	private ArrayList<Block> target;
 	private ArrayList<Block> floor;
-	AIMode typeAI;
+	private AIMode typeAI;
+	private BlockListController blockListController = null;
 
-	public BrainAI(BlockList blockList, AIMode typeAI)
+	public BrainAI(AIMode typeAI)
 	{
-		this.obstacles = blockList.getBlockList(Block.Type.Obstacle);
-		this.robots = blockList.getRobotBlockList();
-		this.target = blockList.getBlockList(Block.Type.Goal);
-		this.floor = blockList.getBlockList(Block.Type.Floor);
+		blockListController = BlockListController.getInstance();
+		this.obstacles = blockListController.getBlockList(Block.Type.Obstacle);
+		ArrayList<Block> tempRobots = blockListController.getBlockList(Block.Type.Robot);
+		for(Block block : tempRobots)
+		{
+			robots.add((RobotBlock)block);
+		}
+		this.target = blockListController.getBlockList(Block.Type.Goal);
+		this.floor = blockListController.getBlockList(Block.Type.Floor);
 		this.typeAI = typeAI;
 		// Block maxTarget=findFurthestTarget();
 		final Block minTarget = findClosestTarget();
@@ -36,7 +42,7 @@ public class BrainAI //
 			final ArrayList<Vector3> finalPath = path.getFinalList();
 			for (Vector3 vector : finalPath)
 			{
-				blockList.createBlock(vector, Block.Type.Path);
+				blockListController.createBlock(vector, Block.Type.Path);
 			}
 			final Move3 movement = new Move3(robots, obstacles, floor);
 			new Thread(new Runnable()
@@ -52,7 +58,7 @@ public class BrainAI //
 		else
 		//Greedy PathFinder
 		{
-			final Path p2 = new Path(blockList, robots.size(), target.size());
+			final Path p2 = new Path(blockListController, robots.size(), target.size());
 			p2.findPath(maxRobot.getPosition(), minTarget);
 			final ArrayList<Vector3> p3= new ArrayList<Vector3>();
 			p3.add(minTarget.getPosition());
@@ -73,8 +79,8 @@ public class BrainAI //
 		}
 		//TODO: START RECONFIGURATION WHEN MOVEMENT IS DONE
 		
-		final SmartMovement smartMovement = new SmartMovement(blockList); //name is not to offend anyone, it isn't smart at all
-		final BlockList thisblocklist = blockList;
+		final SmartMovement smartMovement = new SmartMovement(blockListController); //name is not to offend anyone, it isn't smart at all
+		final BlockListController thisblocklist = blockListController;
 		
 		final Move6 movement = new Move6(robots, obstacles, floor);
 		boolean testingReconfiguration = false;

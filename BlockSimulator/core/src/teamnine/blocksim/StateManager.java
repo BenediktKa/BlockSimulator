@@ -2,7 +2,12 @@ package teamnine.blocksim;
 
 public class StateManager
 {
-	public static SimulationState state = SimulationState.BUILD;
+	public static SimulationState state;
+	
+	public StateManager(SimulationState state)
+	{
+		this.state = state;
+	}
 	
 	public static enum SimulationState
 	{

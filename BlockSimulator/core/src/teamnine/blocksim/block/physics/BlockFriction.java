@@ -3,23 +3,21 @@ package teamnine.blocksim.block.physics;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.blocklist.BlockListController;
 
 public class BlockFriction extends BlockCollision
 {
 
-	private BlockList blockList;
+	private BlockListController blockListController = null;
 	
-	public BlockFriction(Vector3 position, Type type, BlockList blockList)
+	public BlockFriction(Vector3 position, Type type)
 	{
-		super(position, type, blockList);
-		this.blockList = blockList;
+		super(position, type);
+		this.blockListController = BlockListController.getInstance();
 	}
 
 	public float calcFriction(float speed)
-	{
-		float friction = 0;
-		
+	{		
 		if (speed == 0)
 			return 0;
 		else if (speed > 0)
@@ -40,7 +38,7 @@ public class BlockFriction extends BlockCollision
 	
 	public float touchingSurface()
 	{
-		Block blockUnder = blockList.blockAtPointIgnoreGoal(new Vector3(Math.round(position.x), Math.round(position.y) - 1, Math.round(position.z)));
+		Block blockUnder = blockListController.getBlockAtPointIgnoreType(new Vector3(Math.round(position.x), Math.round(position.y) - 1, Math.round(position.z)), Block.Type.Goal);
 		
 		if(blockUnder == null)
 			return 0;
