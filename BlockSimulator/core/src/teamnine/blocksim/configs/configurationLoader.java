@@ -7,8 +7,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.block.Block;
-import teamnine.blocksim.blocklist.BlockListController;
+import teamnine.blocksim.block.BlockType;
+import teamnine.blocksim.block.blocklist.BlockListController;
 
 public class configurationLoader {
 	private BlockListController blockListController;
@@ -24,7 +24,7 @@ public class configurationLoader {
 	{
 		blockListController = BlockListController.getInstance();
 		chooseFiles();
-		blockListController.removeAllBlocksIgnoreType(Block.Type.Floor);
+		blockListController.removeAllBlocksIgnoreType(BlockType.Floor);
 		Reader reader = new Reader();
 		
 		try
@@ -89,10 +89,10 @@ public class configurationLoader {
 	 */
 	private void addToBlockList(String[][] data, int type)
 	{
-		Block.Type thisType;
-		if(type==0) thisType = Block.Type.Robot;
-		else if(type==1) thisType = Block.Type.Goal;
-		else thisType = Block.Type.Obstacle;
+		BlockType thisType;
+		if(type==0) thisType = BlockType.Robot;
+		else if(type==1) thisType = BlockType.Goal;
+		else thisType = BlockType.Obstacle;
 		
 		for(int i=0; i<data.length; i++)
 		{
@@ -115,7 +115,7 @@ public class configurationLoader {
 				{
 					System.out.println("Exception");
 					blockListController.createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), 
-							Float.parseFloat(data[i][2])), Block.Type.Robot);
+							Float.parseFloat(data[i][2])), BlockType.Robot);
 					System.out.println("block created");
 				}
 			}

@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockType;
 
 public class FileCreator
 {
@@ -20,7 +21,7 @@ public class FileCreator
 			{
 				Block block = blockList.get(i);
 
-				if (block.getType() == Block.Type.Obstacle)
+				if (block.getType() == BlockType.Obstacle)
 				{ // FOR NOW NO ID'S
 					// ARE GIVEN TO
 					// OBSTACLE

@@ -7,8 +7,9 @@ import com.badlogic.gdx.InputAdapter;
 import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.SelectorBlock;
-import teamnine.blocksim.blocklist.BlockListController;
+import teamnine.blocksim.block.blocklist.BlockListController;
 import teamnine.blocksim.hud.Notification;
 
 public class KeyboardController extends InputAdapter
@@ -87,7 +88,7 @@ public class KeyboardController extends InputAdapter
 		else if (keycode == Keys.DEL)
 		{
 			Block blockToDelete = blockListController.getBlockAtPoint(selectorBlock.getPosition());
-			if (blockToDelete != null && blockToDelete.getType() != Block.Type.Floor)
+			if (blockToDelete != null && blockToDelete.getType() != BlockType.Floor)
 				blockListController.removeBlock(blockToDelete);
 			else if (blockToDelete == null)
 				notification.setNotification("Block doesn't exist", Notification.Type.Error, 1);

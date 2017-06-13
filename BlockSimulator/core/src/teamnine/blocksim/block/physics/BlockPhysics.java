@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.hud.RobotBlockText;
 
 public class BlockPhysics extends Block
@@ -17,7 +18,7 @@ public class BlockPhysics extends Block
 	
 	protected static RobotBlockText rbText;
 
-	public BlockPhysics(Vector3 position, Type type)
+	public BlockPhysics(Vector3 position, BlockType type)
 	{
 		super(position, type);
 		

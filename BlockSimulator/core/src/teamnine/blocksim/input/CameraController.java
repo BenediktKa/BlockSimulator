@@ -6,9 +6,9 @@ import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
-import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.SelectorBlock;
-import teamnine.blocksim.blocklist.BlockListController;
+import teamnine.blocksim.block.blocklist.BlockListController;
 
 public class CameraController extends FirstPersonCameraController
 {
@@ -109,7 +109,7 @@ public class CameraController extends FirstPersonCameraController
 			{
 				Vector3 vec;
 				if((vec = blockListController.getPositionAtRayCast(camera.position, camera.direction, true)) != null)
-					blockListController.removeBlock(blockListController.getBlockAtPointIgnoreType(vec, Block.Type.Floor));
+					blockListController.removeBlock(blockListController.getBlockAtPointIgnoreType(vec, BlockType.Floor));
 			}
 		}
 		return super.touchDown(screenX, screenY, pointer, button);

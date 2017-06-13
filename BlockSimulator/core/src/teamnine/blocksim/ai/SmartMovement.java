@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector3;
 import teamnine.blocksim.BlockSimulator;
 import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
-import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.RobotBlock;
 
 /**
@@ -28,7 +28,7 @@ public class SmartMovement
 	{
 		this.blocklist = blockList;
 		//this.robotBlockList = blockList.getRobotBlockList();
-		//this.obstacleBlockList = blockList.getBlockList(Block.Type.Obstacle);
+		//this.obstacleBlockList = blockList.getBlockList(BlockType.Obstacle);
 		
 	}
 	
@@ -230,31 +230,31 @@ public class SmartMovement
 	{
 		boolean surrounded = false;
 		Vector3 position = new Vector3(newPosition.x+1, newPosition.y, newPosition.z);
-		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(Block.Type.Robot))
+		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(BlockType.Robot))
 		{
 			surrounded = true;
 		}
 		
 		position = new Vector3(newPosition.x-1, newPosition.y, newPosition.z);
-		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(Block.Type.Robot))
+		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(BlockType.Robot))
 		{
 			surrounded = true;
 		}
 		
 		position = new Vector3(newPosition.x, newPosition.y, newPosition.z+1);
-		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(Block.Type.Robot))
+		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(BlockType.Robot))
 		{
 			surrounded = true;
 		}
 		
 		position = new Vector3(newPosition.x, newPosition.y, newPosition.z-1);
-		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(Block.Type.Robot))
+		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(BlockType.Robot))
 		{
 			surrounded = true;
 		}
 		
 		position = new Vector3(newPosition.x, (newPosition.y)-1, newPosition.z);
-		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(Block.Type.Robot))
+		if(!position.equals(oldPosition) && blocklist.blockAtPointIgnoreGoal(position)!=null && blocklist.blockAtPointIgnoreGoal(position).getType().equals(BlockType.Robot))
 		{
 			System.out.println("TRUE: "+position+" "+blocklist.blockAtPointIgnoreGoal(position).getType());
 			surrounded = true;

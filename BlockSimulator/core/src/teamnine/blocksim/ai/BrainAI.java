@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.RobotBlock;
-import teamnine.blocksim.blocklist.BlockListController;
+import teamnine.blocksim.block.blocklist.BlockListController;
 import teamnine.blocksim.hud.LevelEditorHUD.AIMode;
 
 public class BrainAI //
@@ -21,14 +22,14 @@ public class BrainAI //
 	public BrainAI(AIMode typeAI)
 	{
 		blockListController = BlockListController.getInstance();
-		this.obstacles = blockListController.getBlockList(Block.Type.Obstacle);
-		ArrayList<Block> tempRobots = blockListController.getBlockList(Block.Type.Robot);
+		this.obstacles = blockListController.getBlockList(BlockType.Obstacle);
+		ArrayList<Block> tempRobots = blockListController.getBlockList(BlockType.Robot);
 		for(Block block : tempRobots)
 		{
 			robots.add((RobotBlock)block);
 		}
-		this.target = blockListController.getBlockList(Block.Type.Goal);
-		this.floor = blockListController.getBlockList(Block.Type.Floor);
+		this.target = blockListController.getBlockList(BlockType.Goal);
+		this.floor = blockListController.getBlockList(BlockType.Floor);
 		this.typeAI = typeAI;
 		// Block maxTarget=findFurthestTarget();
 		final Block minTarget = findClosestTarget();
@@ -42,7 +43,7 @@ public class BrainAI //
 			final ArrayList<Vector3> finalPath = path.getFinalList();
 			for (Vector3 vector : finalPath)
 			{
-				blockListController.createBlock(vector, Block.Type.Path);
+				blockListController.createBlock(vector, BlockType.Path);
 			}
 			final Move3 movement = new Move3(robots, obstacles, floor);
 			new Thread(new Runnable()

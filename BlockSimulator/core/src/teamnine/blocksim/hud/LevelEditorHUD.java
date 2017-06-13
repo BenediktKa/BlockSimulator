@@ -17,9 +17,9 @@ import teamnine.blocksim.BlockSimulator;
 import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.ai.BrainAI;
-import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.SelectorBlock;
-import teamnine.blocksim.blocklist.BlockListController;
+import teamnine.blocksim.block.blocklist.BlockListController;
 import teamnine.blocksim.configs.configurationLoader;
 import teamnine.blocksim.configs.simulationLoader;
 
@@ -240,7 +240,7 @@ public class LevelEditorHUD implements Disposable
 					StateManager.state = SimulationState.MENU;
 					startButton.setText("Start");
 					// Remove Path
-					BlockListController.getInstance().removeAllBlocksOfType(Block.Type.Path);
+					BlockListController.getInstance().removeAllBlocksOfType(BlockType.Path);
 					// Hide Pause Button
 					pauseButton.setVisible(false);
 					pauseButton.setTouchable(Touchable.disabled);

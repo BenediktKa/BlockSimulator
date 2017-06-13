@@ -2,7 +2,7 @@ package teamnine.blocksim;
 
 import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockType;
 
 /**
  * Class that saves information of removed/added block for the undo/redo stacks
@@ -14,7 +14,7 @@ public class Action
 	private Vector3 position;
 
 	/** Block Type. */
-	private Block.Type type;
+	private BlockType type;
 
 	/** Block ID. */
 	private double ID;
@@ -30,7 +30,7 @@ public class Action
 	 * @param ID The Block's ID
 	 * @param removed Was Block removed?
 	 */
-	public Action(Vector3 position, Block.Type type, double ID, boolean removed)
+	public Action(Vector3 position, BlockType type, double ID, boolean removed)
 	{
 		this.position = position;
 		this.type = type;
@@ -53,7 +53,7 @@ public class Action
 	 *
 	 * @return The saved block type
 	 */
-	public Block.Type getBlockType()
+	public BlockType getBlockType()
 	{
 		return type;
 	}

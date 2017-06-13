@@ -21,7 +21,7 @@ public class RobotBlock extends BlockGravity
 	private ArrayList<Vector3> unpassableVectors= new ArrayList<Vector3>();
 	private ArrayList<Integer> numOfPass= new ArrayList<Integer>();
 
-	public RobotBlock(Vector3 position, Type type)
+	public RobotBlock(Vector3 position, BlockType type)
 	{
 		super(position, type);
 	}
@@ -175,7 +175,7 @@ public class RobotBlock extends BlockGravity
 		{
 			movement = null;
 			setGravity(true);
-			blockModel = new BlockModel(Block.Type.RobotMoving);
+			blockModel = new BlockModel(BlockType.RobotMoving);
 		}
 		else if ((position.cpy().sub(moveTo).isZero(0.01f) || getOriginalPos().dst(position) > 1 || getOriginalPos().dst(position) < -1) && moving)
 		{
@@ -195,7 +195,7 @@ public class RobotBlock extends BlockGravity
 			position.y += speedY;
 			position.z += speedZ;
 			
-			blockModel = new BlockModel(Block.Type.RobotMoving);
+			blockModel = new BlockModel(BlockType.RobotMoving);
 			
 			rbText.setFrictionText(calcFriction(movement.x) + calcFriction(movement.z));
 			rbText.setHorizontalText(speedX + speedZ);

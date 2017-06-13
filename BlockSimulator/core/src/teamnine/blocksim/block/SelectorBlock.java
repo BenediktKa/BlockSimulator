@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.Vector3;
 public class SelectorBlock extends Block
 {
 	private static SelectorBlock selectorBlock;
-	private Block.Type selectedBlock = Block.Type.Obstacle;
+	private BlockType selectedBlock = BlockType.Obstacle;
 	
 	private SelectorBlock()
 	{
-		super(new Vector3(0, 0, 0), Block.Type.Selector);
+		super(new Vector3(0, 0, 0), BlockType.Selector);
 	}
 	
 	public static SelectorBlock getInstance()
@@ -20,12 +20,12 @@ public class SelectorBlock extends Block
 			return selectorBlock;
 	}
 	
-	public Block.Type getSelectedBlock()
+	public BlockType getSelectedBlock()
 	{
 		return selectedBlock;
 	}
 	
-	public void setSelectedBlock(Block.Type selectedBlock)
+	public void setSelectedBlock(BlockType selectedBlock)
 	{
 		this.selectedBlock = selectedBlock;
 	}

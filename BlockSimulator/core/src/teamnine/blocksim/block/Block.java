@@ -16,12 +16,12 @@ public class Block implements Disposable
 
 	// Block Variables
 	protected Vector3 position;
-	protected Type type;
+	protected BlockType type;
 	protected double ID;
 	private BlockHitbox hitbox;
 	protected float distanceToPath = 0;
 
-	public Block(Vector3 position, Type type)
+	public Block(Vector3 position, BlockType type)
 	{
 		this.position = position;
 		this.type = type;
@@ -78,23 +78,7 @@ public class Block implements Disposable
 		return position;
 	}
 
-	public enum Type
-	{
-		Robot, Obstacle, Goal, Selector, Floor, Path, RobotMoving;
-
-		public Type next()
-		{
-			Type types[] = Type.values();
-			int ordinal = this.ordinal();
-			ordinal = ++ordinal % types.length;
-			if (types[ordinal] == Selector)
-				return types[0];
-
-			return types[ordinal];
-		}
-	}
-
-	public Type getType()
+	public BlockType getType()
 	{
 		return type;
 	}

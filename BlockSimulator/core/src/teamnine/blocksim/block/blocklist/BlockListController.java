@@ -1,4 +1,4 @@
-package teamnine.blocksim.blocklist;
+package teamnine.blocksim.block.blocklist;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
 import teamnine.blocksim.block.Block;
+import teamnine.blocksim.block.BlockType;
 
 /**
  * The BlockListController.
@@ -75,7 +76,7 @@ public class BlockListController implements Disposable
 	public void setFloorGridSize(int floorGridSize)
 	{
 		this.floorGridSize = floorGridSize;
-		removeAllBlocksOfType(Block.Type.Floor);
+		removeAllBlocksOfType(BlockType.Floor);
 	}
 
 	/**
@@ -85,7 +86,7 @@ public class BlockListController implements Disposable
 	{
 		for (int x = 0; x < floorGridSize; x++)
 			for (int z = 0; z < floorGridSize; z++)
-				createBlock(new Vector3(x, 0, z), Block.Type.Floor);
+				createBlock(new Vector3(x, 0, z), BlockType.Floor);
 	}
 
 	/**
@@ -94,7 +95,7 @@ public class BlockListController implements Disposable
 	 * @param blockType the block type
 	 * @return the block list
 	 */
-	public ArrayList<Block> getBlockList(Block.Type blockType)
+	public ArrayList<Block> getBlockList(BlockType blockType)
 	{
 		return blockListFactory.getBlockList(blockType);
 	}
@@ -108,7 +109,7 @@ public class BlockListController implements Disposable
 	{
 		ArrayList<Block> blockList = new ArrayList<Block>();
 
-		for (Block.Type blockType : Block.Type.values())
+		for (BlockType blockType : BlockType.values())
 		{
 			blockList.addAll(getBlockList(blockType));
 		}
@@ -122,11 +123,11 @@ public class BlockListController implements Disposable
 	 * @param blockTypes the block types
 	 * @return the combined block list
 	 */
-	public ArrayList<Block> getCombinedBlockList(Block.Type... blockTypes)
+	public ArrayList<Block> getCombinedBlockList(BlockType... blockTypes)
 	{
 		ArrayList<Block> blockList = new ArrayList<Block>();
 
-		for (Block.Type blockType : blockTypes)
+		for (BlockType blockType : blockTypes)
 		{
 			blockList.addAll(getBlockList(blockType));
 		}
@@ -140,12 +141,12 @@ public class BlockListController implements Disposable
 	 * @param blockTypes the block types
 	 * @return the excluded block list
 	 */
-	public ArrayList<Block> getExcludedBlockList(Block.Type... blockTypes)
+	public ArrayList<Block> getExcludedBlockList(BlockType... blockTypes)
 	{
 		ArrayList<Block> blockList = new ArrayList<Block>();
-		ArrayList<Block.Type> excludedTypes = new ArrayList<Block.Type>(Arrays.asList(blockTypes));
+		ArrayList<BlockType> excludedTypes = new ArrayList<BlockType>(Arrays.asList(blockTypes));
 
-		for (Block.Type blockType : Block.Type.values())
+		for (BlockType blockType : BlockType.values())
 		{
 			if (excludedTypes.contains(blockType))
 				continue;
@@ -162,7 +163,7 @@ public class BlockListController implements Disposable
 	 * @param position the position
 	 * @param blockType the block type
 	 */
-	public void createBlock(Vector3 position, Block.Type blockType)
+	public void createBlock(Vector3 position, BlockType blockType)
 	{
 		if (position == null)
 			return;
@@ -189,9 +190,9 @@ public class BlockListController implements Disposable
 	 *
 	 * @param blockTypes the block types
 	 */
-	public void removeAllBlocksOfType(Block.Type... blockTypes)
+	public void removeAllBlocksOfType(BlockType... blockTypes)
 	{
-		for (Block.Type blockType : blockTypes)
+		for (BlockType blockType : blockTypes)
 			getBlockList(blockType).clear();
 	}
 	
@@ -200,11 +201,11 @@ public class BlockListController implements Disposable
 	 *
 	 * @param blockTypes the block types
 	 */
-	public void removeAllBlocksIgnoreType(Block.Type... blockTypes)
+	public void removeAllBlocksIgnoreType(BlockType... blockTypes)
 	{
-		ArrayList<Block.Type> excludedTypes = new ArrayList<Block.Type>(Arrays.asList(blockTypes));
+		ArrayList<BlockType> excludedTypes = new ArrayList<BlockType>(Arrays.asList(blockTypes));
 
-		for (Block.Type blockType : Block.Type.values())
+		for (BlockType blockType : BlockType.values())
 		{
 			if (excludedTypes.contains(blockType))
 				continue;
@@ -236,7 +237,7 @@ public class BlockListController implements Disposable
 	 * @param blockTypes the block types
 	 * @return the block at point ignore type
 	 */
-	public Block getBlockAtPointIgnoreType(Vector3 position, Block.Type... blockTypes)
+	public Block getBlockAtPointIgnoreType(Vector3 position, BlockType... blockTypes)
 	{
 		for (Block block : getExcludedBlockList(blockTypes))
 			if (block.getPosition().equals(position))
@@ -255,7 +256,7 @@ public class BlockListController implements Disposable
 	{
 		for (Block block : getFullBlockList())
 		{
-			if (block.getType() == Block.Type.Robot)
+			if (block.getType() == BlockType.Robot)
 				block.moveModel();
 
 			modelBatch.render(block.getModelInstance(), environment);

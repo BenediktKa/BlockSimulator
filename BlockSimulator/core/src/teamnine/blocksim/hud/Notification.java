@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
-import teamnine.blocksim.blocklist.BlockListController;
-
 /**
  * Class that allows to display Notification messages on screen
  */

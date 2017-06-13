@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.block.BlockType;
 
 public class PathFinder
 {
@@ -27,7 +28,7 @@ public class PathFinder
 		this.blockList = blockList;
 		this.numRoboBlocks = numRoboBlocks;
 		this.numTargetBlocks = numTargetBlocks;
-		obstacles = blockList.getBlockList(Block.Type.Obstacle);
+		obstacles = blockList.getBlockList(BlockType.Obstacle);
 		maxX = blockList.getGridSize();
 		maxZ = maxX;
 		
