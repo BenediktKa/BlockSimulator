@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.SelectorBlock;
-import teamnine.blocksim.blocklist.BlockListController;
+import teamnine.blocksim.block.blocklist.BlockListController;
 import teamnine.blocksim.hud.Crosshair;
 import teamnine.blocksim.hud.FPSCounter;
 import teamnine.blocksim.hud.LevelEditorHUD;
