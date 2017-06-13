@@ -18,6 +18,8 @@ import teamnine.blocksim.hud.Crosshair;
 import teamnine.blocksim.hud.FPSCounter;
 import teamnine.blocksim.hud.LevelEditorHUD;
 import teamnine.blocksim.hud.Notification;
+import teamnine.blocksim.input.CameraController;
+import teamnine.blocksim.input.KeyboardController;
 
 public class BlockSimulator implements ApplicationListener
 {
@@ -27,11 +29,12 @@ public class BlockSimulator implements ApplicationListener
 	public final float CAMERA_NEAR = 1;
 	public final float CAMERA_FAR = 300;
 
-	public Environment environment;
-	public PerspectiveCamera camera;
-	public FPSControl fpsController;
+	private Environment environment;
+	private PerspectiveCamera camera;
+	private CameraController fpsController;
+	private KeyboardController keyboardController;
 	public SpriteBatch spriteBatch;
-	public ModelBatch modelBatch;
+	private ModelBatch modelBatch;
 
 	// State Manager
 	public StateManager stateManager;
@@ -40,10 +43,10 @@ public class BlockSimulator implements ApplicationListener
 	public InputMultiplexer inputMultiplexer;
 
 	// HUD
-	public LevelEditorHUD levelHUD;
+	private LevelEditorHUD levelHUD;
 
 	// Grid size
-	public static int gridSize = 15; //Needed it for smartmovement xxJurriaan
+	public static int gridSize = 15; // Needed it for smartmovement xxJurriaan
 
 	// BlockList
 	private BlockListController blockListController;
@@ -60,51 +63,12 @@ public class BlockSimulator implements ApplicationListener
 	@Override
 	public void create()
 	{
-
 		// Create State Manager
 		stateManager = new StateManager(SimulationState.BUILD);
-
-		// Create Environment
-		environment = new Environment();
-		spriteBatch = new SpriteBatch();
-		modelBatch = new ModelBatch();
-
-		// Notification
-		notification = Notification.getInstance();
-
-		// Input Multiplexer
-		inputMultiplexer = new InputMultiplexer();
-
-		// Lighting
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-
-		// Crosshair
-		crosshair = new Crosshair();
-
-		// FPS Counter
-		fpsText = new FPSCounter();
-
-		// Create Camera
-		camera = new PerspectiveCamera(FIELDOFVIEW, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.translate(12.5f, 12.5f, 12.5f);
-		camera.lookAt(0, 0, 0);
-		camera.near = CAMERA_NEAR;
-		camera.far = CAMERA_FAR;
-
-		// Camera Control
-		fpsController = new FPSControl(camera);
-
-		// Interface
-		levelHUD = new LevelEditorHUD(this);
-
-		// Input
-		inputMultiplexer.addProcessor(fpsController);
-		Gdx.input.setInputProcessor(inputMultiplexer);
-		Gdx.input.setCursorCatched(true);
 		
-		blockListController = BlockListController.getInstance();
-		blockListController.initialize(gridSize);
+		setupEnvironment();
+		setupInput();
+		setupHUD();
 	}
 
 	@Override
@@ -114,7 +78,7 @@ public class BlockSimulator implements ApplicationListener
 		Gdx.gl.glClearColor(44f / 255f, 62f / 255f, 80f / 255f, 1);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		
+
 		// Rendering Models
 		modelBatch.begin(camera);
 		blockListController.render(modelBatch, environment);
@@ -130,9 +94,64 @@ public class BlockSimulator implements ApplicationListener
 		crosshair.render(spriteBatch);
 		fpsText.render(spriteBatch);
 		spriteBatch.end();
-		
+
 		// Camera Update
 		fpsController.update();
+	}
+
+	private void setupEnvironment()
+	{
+		// Create Environment
+		environment = new Environment();
+		spriteBatch = new SpriteBatch();
+		modelBatch = new ModelBatch();
+
+		// Lighting
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+
+		// Create Camera
+		camera = new PerspectiveCamera(FIELDOFVIEW, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camera.translate(12.5f, 12.5f, 12.5f);
+		camera.lookAt(0, 0, 0);
+		camera.near = CAMERA_NEAR;
+		camera.far = CAMERA_FAR;
+
+		blockListController = BlockListController.getInstance();
+		blockListController.initialize(gridSize);
+	}
+
+	private void setupInput()
+	{
+		// Input Multiplexer
+		inputMultiplexer = new InputMultiplexer();
+
+		// Camera Controller
+		fpsController = new CameraController(camera);
+
+		// Keyboard Controller
+		keyboardController = new KeyboardController();
+
+		// Input
+		inputMultiplexer.addProcessor(keyboardController);
+		inputMultiplexer.addProcessor(fpsController);
+		Gdx.input.setInputProcessor(inputMultiplexer);
+		Gdx.input.setCursorCatched(true);
+	}
+	
+	private void setupHUD()
+	{
+		// Crosshair
+		crosshair = new Crosshair();
+
+		// FPS Counter
+		fpsText = new FPSCounter();
+
+		// Interface
+		levelHUD = new LevelEditorHUD(this);
+
+		// Notification
+		notification = Notification.getInstance();
 	}
 
 	@Override

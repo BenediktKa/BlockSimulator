@@ -8,10 +8,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.blocklist.BlockListController;
 
 public class configurationLoader {
-	private BlockList blockList;
+	private BlockListController blockListController;
 	private File robotConfig;
 	private File targetConfig;
 	private File obstacleConfig;
@@ -20,11 +20,11 @@ public class configurationLoader {
 	private String[][] obstacleData;
 	
 	
-	public configurationLoader(BlockList blockList)
+	public configurationLoader()
 	{
-		this.blockList=blockList;
+		blockListController = BlockListController.getInstance();
 		chooseFiles();
-		blockList.disposeExceptFloor();
+		blockListController.removeAllBlocksIgnoreType(Block.Type.Floor);
 		Reader reader = new Reader();
 		
 		try
@@ -107,14 +107,14 @@ public class configurationLoader {
 				try
 				{
 					double newID = Double.parseDouble(data[i][0]);
-					blockList.createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), 
+					blockListController.createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), 
 							Float.parseFloat(data[i][2])), thisType, newID);
 					System.out.println("block created");
 				} 
 				catch (NumberFormatException e)
 				{
 					System.out.println("Exception");
-					blockList.createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), 
+					blockListController.createBlock(new Vector3(Float.parseFloat(data[i][1]), (Float.parseFloat(data[i][3]) + 1), 
 							Float.parseFloat(data[i][2])), Block.Type.Robot);
 					System.out.println("block created");
 				}

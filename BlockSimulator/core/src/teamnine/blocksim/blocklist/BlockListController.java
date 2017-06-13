@@ -11,14 +11,17 @@ import com.badlogic.gdx.utils.Disposable;
 import teamnine.blocksim.block.Block;
 
 /**
- * The BlockListController
+ * The BlockListController.
  */
 public class BlockListController implements Disposable
 {
+
+	/** The block list controller. */
 	private static BlockListController blockListController;
 	/** The block list factory. */
 	private BlockListFactory blockListFactory;
 
+	/** The floor grid size. */
 	private int floorGridSize;
 
 	/**
@@ -30,6 +33,11 @@ public class BlockListController implements Disposable
 		createFloor();
 	}
 
+	/**
+	 * Gets the single instance of BlockListController.
+	 *
+	 * @return single instance of BlockListController
+	 */
 	public static BlockListController getInstance()
 	{
 		if (blockListController == null)
@@ -38,23 +46,41 @@ public class BlockListController implements Disposable
 			return blockListController;
 	}
 
+	/**
+	 * Initialize.
+	 *
+	 * @param floorGridSize the floor grid size
+	 */
 	public void initialize(int floorGridSize)
 	{
 		this.floorGridSize = floorGridSize;
 		createFloor();
 	}
 
+	/**
+	 * Gets the floor grid size.
+	 *
+	 * @return the floor grid size
+	 */
 	public int getFloorGridSize()
 	{
 		return floorGridSize;
 	}
 
+	/**
+	 * Sets the floor grid size.
+	 *
+	 * @param floorGridSize the new floor grid size
+	 */
 	public void setFloorGridSize(int floorGridSize)
 	{
 		this.floorGridSize = floorGridSize;
 		removeAllBlocksOfType(Block.Type.Floor);
 	}
-	
+
+	/**
+	 * Creates the floor.
+	 */
 	public void createFloor()
 	{
 		for (int x = 0; x < floorGridSize; x++)
@@ -70,15 +96,7 @@ public class BlockListController implements Disposable
 	 */
 	public ArrayList<Block> getBlockList(Block.Type blockType)
 	{
-		ArrayList<Block> blockList;
-		if ((blockList = blockListFactory.getBlockList(blockType)) == null)
-		{
-			throw new NullPointerException("BlockList of requested type could not be found");
-		}
-		else
-		{
-			return blockList;
-		}
+		return blockListFactory.getBlockList(blockType);
 	}
 
 	/**
@@ -116,16 +134,22 @@ public class BlockListController implements Disposable
 		return blockList;
 	}
 
+	/**
+	 * Gets the excluded block list.
+	 *
+	 * @param blockTypes the block types
+	 * @return the excluded block list
+	 */
 	public ArrayList<Block> getExcludedBlockList(Block.Type... blockTypes)
 	{
 		ArrayList<Block> blockList = new ArrayList<Block>();
 		ArrayList<Block.Type> excludedTypes = new ArrayList<Block.Type>(Arrays.asList(blockTypes));
-				
+
 		for (Block.Type blockType : Block.Type.values())
 		{
-			if(excludedTypes.contains(blockType))
+			if (excludedTypes.contains(blockType))
 				continue;
-			
+
 			blockList.addAll(getBlockList(blockType));
 		}
 
@@ -154,9 +178,9 @@ public class BlockListController implements Disposable
 	 */
 	public void removeBlock(Block block)
 	{
-		if(block == null)
+		if (block == null)
 			return;
-		
+
 		getBlockList(block.getType()).remove(block);
 	}
 
@@ -169,6 +193,24 @@ public class BlockListController implements Disposable
 	{
 		for (Block.Type blockType : blockTypes)
 			getBlockList(blockType).clear();
+	}
+	
+	/**
+	 * Removes the all blocks ignoring the specified type(s).
+	 *
+	 * @param blockTypes the block types
+	 */
+	public void removeAllBlocksIgnoreType(Block.Type... blockTypes)
+	{
+		ArrayList<Block.Type> excludedTypes = new ArrayList<Block.Type>(Arrays.asList(blockTypes));
+
+		for (Block.Type blockType : Block.Type.values())
+		{
+			if (excludedTypes.contains(blockType))
+				continue;
+			
+			getBlockList(blockType).clear();
+		}
 	}
 
 	/**
@@ -220,6 +262,14 @@ public class BlockListController implements Disposable
 		}
 	}
 
+	/**
+	 * Gets the position at ray cast.
+	 *
+	 * @param startPoint the start point
+	 * @param direction the direction
+	 * @param getBlockPointingAt the get block pointing at
+	 * @return the position at ray cast
+	 */
 	public Vector3 getPositionAtRayCast(Vector3 startPoint, Vector3 direction, boolean getBlockPointingAt)
 	{
 		int last_point_x = 0;
@@ -237,9 +287,9 @@ public class BlockListController implements Disposable
 			int z = Math.round(line.z);
 			if (x > (floorGridSize - 1) || y > (floorGridSize - 1) || z > (floorGridSize - 1) || x < 0 || y < 0 || z < 0)
 				break;
-			if(getBlockAtPoint(new Vector3(x, y, z)) != null)
+			if (getBlockAtPoint(new Vector3(x, y, z)) != null)
 			{
-				if(getBlockPointingAt)
+				if (getBlockPointingAt)
 					return new Vector3(x, y, z);
 				else
 					return new Vector3(last_point_x, last_point_y, last_point_z);
