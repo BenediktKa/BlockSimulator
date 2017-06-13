@@ -29,6 +29,16 @@ public class Block implements Disposable
 		hitbox = new BlockHitbox(position);
 		moveModel();
 	}
+	
+	public Block(Vector3 position, BlockType type, double ID)
+	{
+		this.position = position;
+		this.type = type;
+		this.ID = ID;
+		blockModel = new BlockModel(type);
+		hitbox = new BlockHitbox(position);
+		moveModel();
+	}
 
 	public void setDistanceToPath(float p)
 	{

@@ -99,7 +99,7 @@ public class configurationLoader {
 			System.out.println(data[i].length);
 			if(type==2) //Does not have an ID
 			{
-				blockList.createBlock(new Vector3(Float.parseFloat(data[i][0]), (Float.parseFloat(data[i][2]) + 1), Float.parseFloat(data[i][1])), thisType);
+				blockListController.createBlock(new Vector3(Float.parseFloat(data[i][0]), (Float.parseFloat(data[i][2]) + 1), Float.parseFloat(data[i][1])), thisType);
 				System.out.println("block created");
 			}
 			else //There is an ID, either an double value or 'x', therefore the try-catch

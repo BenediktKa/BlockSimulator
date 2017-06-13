@@ -171,6 +171,22 @@ public class BlockListController implements Disposable
 		Block block = new Block(position, blockType);
 		getBlockList(blockType).add(block);
 	}
+	
+	/**
+	 * Creates a block of specified position and type and ID.
+	 *
+	 * @param position the position
+	 * @param blockType the block type
+	 * @param ID the id
+	 */
+	public void createBlock(Vector3 position, BlockType blockType, double ID)
+	{
+		if (position == null)
+			return;
+
+		Block block = new Block(position, blockType, ID);
+		getBlockList(blockType).add(block);
+	}
 
 	/**
 	 * Removes a block by it's reference.
@@ -302,7 +318,7 @@ public class BlockListController implements Disposable
 
 		return null;
 	}
-
+	
 	@Override
 	public void dispose()
 	{
