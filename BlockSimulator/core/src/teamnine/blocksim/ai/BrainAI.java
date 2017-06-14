@@ -26,7 +26,7 @@ public class BrainAI //
 		ArrayList<Block> tempRobots = blockListController.getBlockList(BlockType.Robot);
 		for(Block block : tempRobots)
 		{
-			robots.add((RobotBlock)block);
+			robots.add(((RobotBlock)block));
 		}
 		this.target = blockListController.getBlockList(BlockType.Goal);
 		this.floor = blockListController.getBlockList(BlockType.Floor);

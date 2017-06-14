@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockType;
+import teamnine.blocksim.block.RobotBlock;
 
 /**
  * The BlockListController.
@@ -168,7 +169,7 @@ public class BlockListController implements Disposable
 		if (position == null)
 			return;
 
-		Block block = new Block(position, blockType);
+		Block block = new RobotBlock(position, blockType);
 		getBlockList(blockType).add(block);
 	}
 	
