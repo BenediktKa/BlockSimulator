@@ -65,7 +65,7 @@ public class Move5
 		{
 			orderToMove.add(robots.get(i));
 		}
-		RobotBlock end = new RobotBlock(v, null, null);
+		RobotBlock end = new RobotBlock(v, null);
 		robots.add(end);
 		for (int i = 0; i < robots.size(); i++)
 		{

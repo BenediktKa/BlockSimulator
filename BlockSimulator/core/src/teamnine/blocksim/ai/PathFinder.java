@@ -8,14 +8,12 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
 import teamnine.blocksim.block.BlockType;
+import teamnine.blocksim.block.blocklist.BlockListController;
 
 public class PathFinder
 {
-	BlockList blockList;
-	final int numRoboBlocks;
-	final int numTargetBlocks;
+	BlockListController blockListController = null;
 	final int maxX;
 	final int maxZ;
 	ArrayList<DistanceBlock> initialList = new ArrayList<DistanceBlock>();
@@ -24,14 +22,13 @@ public class PathFinder
 	ArrayList<DistanceBlock> disObstacles;
 	ArrayList<Vector3> vectorList = new ArrayList<Vector3>();
 
-	public PathFinder(BlockList blockList, int numRoboBlocks, int numTargetBlocks){
-		this.blockList = blockList;
-		this.numRoboBlocks = numRoboBlocks;
-		this.numTargetBlocks = numTargetBlocks;
-		obstacles = blockList.getBlockList(BlockType.Obstacle);
-		maxX = blockList.getGridSize();
+	public PathFinder()
+	{
+		blockListController = BlockListController.getInstance();
+		obstacles = blockListController.getBlockList(BlockType.Obstacle);
+		maxX = blockListController.getFloorGridSize();
 		maxZ = maxX;
-		
+
 		// create a List with the obstacles
 		disObstacles = new ArrayList<DistanceBlock>();
 		for (int i = 0; i < obstacles.size(); i++)
@@ -40,7 +37,7 @@ public class PathFinder
 			float z = obstacles.get(i).getPosition().z;
 			float y = obstacles.get(i).getPosition().y;
 			boolean add = true;
-			
+
 			for (int j = 0; j < disObstacles.size(); j++)
 			{
 				if ((x == disObstacles.get(j).getData().x) && (z == disObstacles.get(j).getData().z))
@@ -53,22 +50,23 @@ public class PathFinder
 					}
 				}
 			}
-			
-			if(add)
+
+			if (add)
 			{
 				disObstacles.add(new DistanceBlock(MAX_VALUE, obstacles.get(i).getPosition(), (int) y));
 			}
-		} 
+		}
 	}
-	
+
 	public void startPathFinder(Block initialP, Block target)
 	{
 		DistanceBlock initialPosition = new DistanceBlock(0, initialP.getPosition(), 0);
 		int initalX = (int) initialPosition.getData().x;
 		int initalZ = (int) initialPosition.getData().z;
-		
-		if (!vectorList.isEmpty()) vectorList.clear();
-		
+
+		if (!vectorList.isEmpty())
+			vectorList.clear();
+
 		// create a list with all the possible positions
 		for (int i = 0; i < maxX; i++)
 		{
@@ -141,7 +139,7 @@ public class PathFinder
 
 		// implement Dijkstra's algorithm
 		DistanceBlock tar = new DistanceBlock(MAX_VALUE, target.getPosition(), 0);
-		Dijkstra dijkstra = new Dijkstra(initialList, tar,numRoboBlocks,numTargetBlocks);
+		Dijkstra dijkstra = new Dijkstra(initialList, tar, blockListController.getBlockList(BlockType.Robot).size(), blockListController.getBlockList(BlockType.Goal).size());
 		list = dijkstra.getFinalList();
 		setFinalList(list.get(list.size() - 1));
 	}

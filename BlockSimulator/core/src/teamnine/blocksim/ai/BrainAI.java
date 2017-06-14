@@ -38,7 +38,7 @@ public class BrainAI //
 		if (typeAI == AIMode.Dijkstra)
 		// Dijkstra PathFinder
 		{
-			final PathFinder path = new PathFinder(blockList, robots.size(), target.size());
+			final PathFinder path = new PathFinder();
 			path.startPathFinder(maxRobot, minTarget);
 			final ArrayList<Vector3> finalPath = path.getFinalList();
 			for (Vector3 vector : finalPath)
@@ -59,7 +59,7 @@ public class BrainAI //
 		else
 		//Greedy PathFinder
 		{
-			final Path p2 = new Path(blockListController, robots.size(), target.size());
+			final Path p2 = new Path();
 			p2.findPath(maxRobot.getPosition(), minTarget);
 			final ArrayList<Vector3> p3= new ArrayList<Vector3>();
 			p3.add(minTarget.getPosition());
@@ -80,7 +80,7 @@ public class BrainAI //
 		}
 		//TODO: START RECONFIGURATION WHEN MOVEMENT IS DONE
 		
-		final SmartMovement smartMovement = new SmartMovement(blockListController); //name is not to offend anyone, it isn't smart at all
+		final SmartMovement smartMovement = new SmartMovement(); //name is not to offend anyone, it isn't smart at all
 		final BlockListController thisblocklist = blockListController;
 		
 		final Move6 movement = new Move6(robots, obstacles, floor);
@@ -92,7 +92,7 @@ public class BrainAI //
 				@Override
 				public void run()
 				{
-					new Reconfiguration(thisblocklist,minTarget,movement,smartMovement);			
+					new Reconfiguration(minTarget,movement,smartMovement);			
 				}
 			}).start();
 		}

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.block.blocklist.BlockListController;
 
 public class Path {
 	
-	private BlockList blockList;
+	private BlockListController blockListController;
 	//private Block target;
 	private Block intitalPosition;
 	private ArrayList<Vector3> bestPath=new ArrayList<Vector3>();
@@ -17,10 +17,10 @@ public class Path {
 	private int currentDistance=0;
 	private ArrayList<Vector3> currentPath=new ArrayList<Vector3>();
 
-	public Path(BlockList blockList, int numRoboBlocks, int numTargetBlocks)
+	public Path()
 	{
 		//System.out.println("Path" +target.getPosition());
-		this.blockList=blockList;
+		this.blockListController = BlockListController.getInstance(); 
 	}
 	
 	public void findPath(Vector3 startPosition, Block targetPosition)

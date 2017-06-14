@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
-import teamnine.blocksim.block.BlockList;
+import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.RobotBlock;
+import teamnine.blocksim.block.blocklist.BlockListController;
 
 /**
  * Responsible for managing the reconfiguration
@@ -21,7 +22,7 @@ import teamnine.blocksim.block.RobotBlock;
  */
 public class Reconfiguration
 {
-	private BlockList blockList;
+	private BlockListController blockListController;
 	private ArrayList<RobotBlock> robot;
 	private ArrayList<Block> target;
 	private ArrayList<Block>[] sortedTargets;
@@ -48,13 +49,18 @@ public class Reconfiguration
 	 * @param minTarget the target block in the corner, closest to the robot
 	 * @param movement 
 	 */
-	public Reconfiguration(BlockList blockList, Block minTarget, Move6 movement, SmartMovement reconfigurationMovement)
+	public Reconfiguration(Block minTarget, Move6 movement, SmartMovement reconfigurationMovement)
 	{
 		
 
-		this.blockList = blockList;
-		this.robot = blockList.getRobotBlockList();
-		this.target = blockList.getGoalList();
+		this.blockListController = BlockListController.getInstance();
+		
+		for(Block block : blockListController.getBlockList(BlockType.Robot))
+		{
+			robot.add((RobotBlock)block);
+		}
+		
+		this.target = blockListController.getBlockList(BlockType.Goal);
 		targetOrigin = minTarget;
 		this.movement = movement;
 		this.reconfigurationMovement = reconfigurationMovement;
