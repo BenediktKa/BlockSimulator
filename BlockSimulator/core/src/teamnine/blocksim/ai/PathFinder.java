@@ -36,25 +36,34 @@ public class PathFinder
 			float x = obstacles.get(i).getPosition().x;
 			float z = obstacles.get(i).getPosition().z;
 			float y = obstacles.get(i).getPosition().y;
-			boolean add = true;
-
-			for (int j = 0; j < disObstacles.size(); j++)
+			
+			disObstacles.add(new DistanceBlock(MAX_VALUE, obstacles.get(i).getPosition(), (int) y));
+			
+			//is not adding properly the obstacles from here
+			for (int j = 0; j<disObstacles.size(); j++)
 			{
-				if ((x == disObstacles.get(j).getData().x) && (z == disObstacles.get(j).getData().z))
+				if ((x == disObstacles.get(j).getX()) ^ (z == disObstacles.get(j).getZ()))
 				{
-					if (disObstacles.get(j).getHigh() < y)
+					if(y > disObstacles.get(j).getData().y)
 					{
-						System.out.println("arrives");
-						add = false;
+						disObstacles.remove(j);
+						j = disObstacles.size();
+					}
+					else
+					{
+						disObstacles.remove(disObstacles.size() - 1);
 						j = disObstacles.size();
 					}
 				}
 			}
-
-			if (add)
-			{
-				disObstacles.add(new DistanceBlock(MAX_VALUE, obstacles.get(i).getPosition(), (int) y));
-			}
+			//till here.
+		}
+		
+		System.out.println("number obs; " + disObstacles.size());
+		
+		for (int i = 0; i< disObstacles.size(); i++)
+		{
+			System.out.println("Obstacle " + i + " position: " + disObstacles.get(i).getData());
 		}
 	}
 
