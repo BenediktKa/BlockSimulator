@@ -28,14 +28,6 @@ public class PathFinder
 		obstacles = blockListController.getBlockList(BlockType.Obstacle);
 		maxX = blockListController.getFloorGridSize();
 		maxZ = maxX;
-
-		System.out.println("Initial obs; " + obstacles.size());
-		
-		for (int i = 0; i< obstacles.size(); i++)
-		{
-			System.out.println("Initial O " + i + " position: " + obstacles.get(i).getPosition());
-		}
-		System.out.println("---");
 		
 		// create a List with the obstacles
 		disObstacles = new ArrayList<DistanceBlock>();
@@ -62,13 +54,6 @@ public class PathFinder
 					j = disObstacles.size();
 				}
 			}
-		}
-		
-		System.out.println("number obs; " + disObstacles.size());
-		
-		for (int i = 0; i< disObstacles.size(); i++)
-		{
-			System.out.println("Obstacle " + i + " position: " + disObstacles.get(i).getData());
 		}
 	}
 
