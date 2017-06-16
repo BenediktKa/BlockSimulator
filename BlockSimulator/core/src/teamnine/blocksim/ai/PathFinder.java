@@ -29,34 +29,39 @@ public class PathFinder
 		maxX = blockListController.getFloorGridSize();
 		maxZ = maxX;
 
+		System.out.println("Initial obs; " + obstacles.size());
+		
+		for (int i = 0; i< obstacles.size(); i++)
+		{
+			System.out.println("Initial O " + i + " position: " + obstacles.get(i).getPosition());
+		}
+		System.out.println("---");
+		
 		// create a List with the obstacles
 		disObstacles = new ArrayList<DistanceBlock>();
 		for (int i = 0; i < obstacles.size(); i++)
 		{
 			float x = obstacles.get(i).getPosition().x;
-			float z = obstacles.get(i).getPosition().z;
 			float y = obstacles.get(i).getPosition().y;
+			float z = obstacles.get(i).getPosition().z;
 			
 			disObstacles.add(new DistanceBlock(MAX_VALUE, obstacles.get(i).getPosition(), (int) y));
 			
-			//is not adding properly the obstacles from here
-			for (int j = 0; j<disObstacles.size(); j++)
+			for(int j = 0; j < disObstacles.size()-1; j++)
 			{
-				if ((x == disObstacles.get(j).getX()) ^ (z == disObstacles.get(j).getZ()))
+				if((x == disObstacles.get(j).getX()) && (z == disObstacles.get(j).getZ()))
 				{
-					if(y > disObstacles.get(j).getData().y)
+					if (y > disObstacles.get(j).getData().y)
 					{
 						disObstacles.remove(j);
-						j = disObstacles.size();
 					}
 					else
 					{
-						disObstacles.remove(disObstacles.size() - 1);
-						j = disObstacles.size();
+						disObstacles.remove(disObstacles.size()-1);
 					}
+					j = disObstacles.size();
 				}
 			}
-			//till here.
 		}
 		
 		System.out.println("number obs; " + disObstacles.size());
