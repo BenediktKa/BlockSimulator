@@ -189,11 +189,7 @@ public class BlockListController implements Disposable
 		if (position == null)
 			return;
 
-		Block block;
-		if(blockType == BlockType.Robot)
-			block = new RobotBlock(position, blockType, ID);
-		else
-			block = new Block(position, blockType, ID);
+		Block block = new Block(position, blockType, ID);
 		getBlockList(blockType).add(block);
 	}
 
