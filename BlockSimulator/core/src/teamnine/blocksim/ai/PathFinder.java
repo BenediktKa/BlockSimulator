@@ -64,7 +64,9 @@ public class PathFinder
 		int initalZ = (int) initialPosition.getData().z;
 
 		if (!vectorList.isEmpty())
+		{
 			vectorList.clear();
+		}
 
 		// create a list with all the possible positions
 		for (int i = 0; i < maxX; i++)
@@ -96,31 +98,31 @@ public class PathFinder
 			}
 		}
 
-		// set the neighbours
 		// set corners
 		initialList.get(0).setNeighboursAndWeights(new DistanceBlock[]
-		{ initialList.get(1), initialList.get(maxX) }); //
+		{ initialList.get(1), initialList.get(maxX) });
 		initialList.get(maxX - 1).setNeighboursAndWeights(new DistanceBlock[]
-		{ initialList.get(maxX - 2), initialList.get((maxX * 2) - 1) }); //
+		{ initialList.get(maxX - 2), initialList.get((maxX * 2) - 1) });
 		initialList.get(maxX * (maxZ - 1)).setNeighboursAndWeights(new DistanceBlock[]
-		{ initialList.get(maxX * (maxZ - 2)), initialList.get(maxX * (maxZ - 1) + 1) }); //
+		{ initialList.get(maxX * (maxZ - 2)), initialList.get(maxX * (maxZ - 1) + 1) });
 		initialList.get(maxX * maxZ - 1).setNeighboursAndWeights(new DistanceBlock[]
-		{ initialList.get(maxX * (maxZ - 1) - 1), initialList.get(maxX * maxZ - 2) }); //
+		{ initialList.get(maxX * (maxZ - 1) - 1), initialList.get(maxX * maxZ - 2) });
 
 		// set sides
 		for (int i = 1; i < maxZ - 1; i++)
 		{
 			initialList.get(i).setNeighboursAndWeights(new DistanceBlock[]
-			{ initialList.get(i - 1), initialList.get(i + 1), initialList.get(i + maxZ) }); //
+			{ initialList.get(i - 1), initialList.get(i + 1), initialList.get(i + maxZ) });
 			initialList.get(i + (maxX * (maxZ - 1))).setNeighboursAndWeights(new DistanceBlock[]
-			{ initialList.get(i + (maxX * (maxZ - 1)) - 1), initialList.get(i + (maxX * (maxZ - 1)) + 1), initialList.get((i + (maxX * (maxZ - 1))) - maxZ) }); //
+			{ initialList.get(i + (maxX * (maxZ - 1)) - 1), 
+			initialList.get(i + (maxX * (maxZ - 1)) + 1), initialList.get((i + (maxX * (maxZ - 1))) - maxZ) });
 		}
 		for (int i = 1; i < maxX - 1; i++)
 		{
 			initialList.get(i * maxX).setNeighboursAndWeights(new DistanceBlock[]
-			{ initialList.get(i * maxX + maxX), initialList.get(i * maxX - maxX), initialList.get(i * maxX + 1) }); //
+			{ initialList.get(i * maxX + maxX), initialList.get(i * maxX - maxX), initialList.get(i * maxX + 1) }); 
 			initialList.get(((i + 1) * maxZ) - 1).setNeighboursAndWeights(new DistanceBlock[]
-			{ initialList.get((i * maxZ) - 1), initialList.get(((i + 2) * maxZ) - 1), initialList.get(((i + 1) * maxZ) - 2) });//
+			{ initialList.get((i * maxZ) - 1), initialList.get(((i + 2) * maxZ) - 1), initialList.get(((i + 1) * maxZ) - 2) });
 		}
 
 		// set middle
@@ -131,7 +133,8 @@ public class PathFinder
 				if (initialList.get((maxZ * i) + j).getNeighbours() == null)
 				{
 					initialList.get((maxZ * i) + j).setNeighboursAndWeights(new DistanceBlock[]
-					{ initialList.get((maxX * i) + j - maxX), initialList.get((maxX * i) + j - 1), initialList.get((maxX * i) + j + maxX), initialList.get((maxX * i) + j + 1) }); //
+					{ initialList.get((maxX * i) + j - maxX), initialList.get((maxX * i) + j - 1), 
+					initialList.get((maxX * i) + j + maxX), initialList.get((maxX * i) + j + 1) });
 				}
 			}
 		}
