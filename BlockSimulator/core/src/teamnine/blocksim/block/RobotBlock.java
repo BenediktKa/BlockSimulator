@@ -25,6 +25,10 @@ public class RobotBlock extends BlockGravity
 	{
 		super(position, type);
 	}
+	public RobotBlock(Vector3 position, BlockType type, double ID)
+	{
+		super(position, type);
+	}
 	public void addUnpassableVector(Vector3 v)
 	{
 		unpassableVectors.add(v);
