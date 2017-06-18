@@ -37,7 +37,7 @@ public class DistanceBlock
 				}
 				else
 				{
-					weights[i] = (neighbours[i].getHigh()) + 1;
+					weights[i] = (neighbours[i].getHigh()) - high +1;
 				}
 			}
 		}
