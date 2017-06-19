@@ -22,25 +22,29 @@ public class Dijkstra
 		this.target = target;
 		originalList = new PriorityQueue<DistanceBlock>(list.size(), blockComparator);
 
+		//add all elements from ArrayList to the Priority Queue that will be used
 		for (int i = 0; i < list.size(); i++)
 		{
 			originalList.add(list.get(i));
 		}
-
+		
 		completeFinalList(originalList);
 	}
 
+	//The originalList with all the position is reduced, and the positions "visited" are added in the finalList.
 	public void completeFinalList(PriorityQueue<DistanceBlock> listToReduce)
     {
         DistanceBlock position = listToReduce.poll();
         finalList.add(position);
         DistanceBlock[] neighbours = position.getNeighbours();
         int[] weights = position.getWeights();
+        
+        //checks if the position is the target
         if((position.getX() == target.getX()) && (position.getZ() == target.getZ()))
         {
-        	
         	return;
         }
+        
         else if (neighbours != null)
         {
             for (int i = 0; i < neighbours.length; i++)

@@ -2,7 +2,7 @@ package teamnine.blocksim.block;
 
 public enum BlockType
 {
-	Robot, Obstacle, Goal, Selector, Floor, Path, RobotMoving;
+	Robot, Obstacle, Goal, Selector, Floor, Path, RobotMoving, PathFinding;
 
 	public BlockType next()
 	{

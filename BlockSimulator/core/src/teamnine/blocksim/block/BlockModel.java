@@ -58,6 +58,12 @@ public class BlockModel
 			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(0.0f, 0.0f, 1.0f, 1.0f)), new BlendingAttribute(0.1f)), Usage.Position | Usage.Normal);
 			modelInstance = new ModelInstance(model);
 		}
+		else if (type == BlockType.PathFinding)
+		{
+			ModelBuilder modelBuilder = new ModelBuilder();
+			model = modelBuilder.createBox(1f, 1f, 1f, new Material(ColorAttribute.createDiffuse(new Color(0.0f, 1.0f, 0.0f, 1.0f)), new BlendingAttribute(0.1f)), Usage.Position | Usage.Normal);
+			modelInstance = new ModelInstance(model);
+		}
 	}
 
 	public ModelInstance getModelInstance()
