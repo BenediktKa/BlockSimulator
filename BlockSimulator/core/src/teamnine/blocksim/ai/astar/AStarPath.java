@@ -51,7 +51,7 @@ public class AStarPath
 			currentBlock = priorityQueue.poll();
 			
 			if(currentBlock.getPosition().equals(endPos))
-				break;
+				return createPathList(currentBlock);
 			
 			for(Vector3 nextPos : getNeighbors(currentBlock.getPosition()))
 			{
@@ -67,7 +67,7 @@ public class AStarPath
 				}
 			}
 		}
-		return createPathList(currentBlock);
+		return null;
 	}
 	
 	public ArrayList<Vector3> getNeighbors(Vector3 currentPos)
@@ -83,13 +83,13 @@ public class AStarPath
 		Vector3 z2 = new Vector3(currentPos.x, currentPos.y, currentPos.z - 1);
 		Vector3 z2y2 = new Vector3(currentPos.x, currentPos.y + 1, currentPos.z - 1);
 		
-		if(inGrid(x1.x) && blockListController.getBlockTypeAtPoint(x1) != BlockType.Obstacle && blockListController.getBlockTypeAtPoint(x1y1) != BlockType.Obstacle)
+		if(inGrid(x1.x) && validBlock(x1)&& validBlock(x1y1))
 			neighbors.add(x1);
-		if(inGrid(x2.x) && blockListController.getBlockTypeAtPoint(x2) != BlockType.Obstacle && blockListController.getBlockTypeAtPoint(x2y2) != BlockType.Obstacle)
+		if(inGrid(x2.x) && validBlock(x2)&& validBlock(x2y2))
 			neighbors.add(x2);
-		if(inGrid(z1.z) && blockListController.getBlockTypeAtPoint(z1) != BlockType.Obstacle && blockListController.getBlockTypeAtPoint(z1y1) != BlockType.Obstacle)
+		if(inGrid(z1.z) && validBlock(z1) && validBlock(z1y1))
 			neighbors.add(z1);
-		if(inGrid(z2.z) && blockListController.getBlockTypeAtPoint(z2) != BlockType.Obstacle && blockListController.getBlockTypeAtPoint(z2y2) != BlockType.Obstacle)
+		if(inGrid(z2.z) && validBlock(z2) && validBlock(z2y2))
 			neighbors.add(z2);
 		
 		return neighbors;
@@ -123,6 +123,11 @@ public class AStarPath
 		}
 		
 		return path;
+	}
+	
+	private boolean validBlock(Vector3 pos)
+	{
+		return blockListController.getBlockTypeAtPoint(pos) != BlockType.Obstacle;
 	}
 	
 	public boolean inGrid(float value)
