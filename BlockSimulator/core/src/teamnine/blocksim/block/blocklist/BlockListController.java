@@ -253,6 +253,21 @@ public class BlockListController implements Disposable
 
 		return null;
 	}
+	
+	/**
+	 * Gets a block type at a specified point.
+	 *
+	 * @param position the position
+	 * @return the block type at point
+	 */
+	public BlockType getBlockTypeAtPoint(Vector3 position)
+	{
+		for (Block block : getFullBlockList())
+			if (block.getPosition().equals(position))
+				return block.getType();
+
+		return null;
+	}
 
 	/**
 	 * Gets a block at a specified point which is not any of the specified block
