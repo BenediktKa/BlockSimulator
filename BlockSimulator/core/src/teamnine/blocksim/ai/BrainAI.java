@@ -1,5 +1,4 @@
 package teamnine.blocksim.ai;
-//shit shit shit
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector3;
