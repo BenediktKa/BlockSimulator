@@ -1,6 +1,7 @@
 package teamnine.blocksim.ai;
 import java.util.ArrayList;
 
+
 import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.Block;
@@ -8,6 +9,7 @@ import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.RobotBlock;
 import teamnine.blocksim.block.blocklist.BlockListController;
 import teamnine.blocksim.hud.LevelEditorHUD.AIMode;
+import teamnine.blocksim.ai.astar.*;
 
 public class BrainAI //
 {
@@ -54,7 +56,25 @@ public class BrainAI //
 				}
 			}).start();
 		}
-		
+		else if (typeAI == AIMode.Astar)
+		// Astar PathFinder
+		{
+			AStarPath aStar = new AStarPath();
+			final ArrayList<Vector3> aPath=  aStar.initializeAStar();
+			for (Vector3 vector : aPath)
+			{
+				blockListController.createBlock(vector, BlockType.Path);
+			}
+			final Move3 aMovement = new Move3(robots, obstacles, floor);
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					aMovement.startMove3(aPath);
+				}
+			}).start();
+		}
 		else
 		//Greedy PathFinder
 		{

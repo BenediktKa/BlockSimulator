@@ -73,7 +73,7 @@ public class LevelEditorHUD implements Disposable
 
 	public enum AIMode
 	{
-		Greedy, Dijkstra;
+		Greedy, Dijkstra, Astar;
 
 		public AIMode next()
 		{
