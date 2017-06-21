@@ -65,13 +65,18 @@ public class BrainAI //
 			{
 				blockListController.createBlock(vector, BlockType.Path);
 			}
+			final ArrayList<Vector3> aPath2=  new ArrayList<Vector3>();
+			for(int i=aPath.size()-1;i>-1;i--)
+			{
+				aPath2.add(aPath.get(i));
+			}
 			final Move3 aMovement = new Move3(robots, obstacles, floor);
 			new Thread(new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					aMovement.startMove3(aPath);
+					aMovement.startMove3(aPath2);
 				}
 			}).start();
 		}
