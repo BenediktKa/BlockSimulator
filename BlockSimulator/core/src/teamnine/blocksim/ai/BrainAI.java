@@ -42,7 +42,12 @@ public class BrainAI //
 			final PathFinder path = new PathFinder();
 			path.startPathFinder(maxRobot, minTarget);
 			final ArrayList<Vector3> finalPath = path.getFinalList();
-			for (Vector3 vector : finalPath)
+			final ArrayList<Vector3> aPath2=  new ArrayList<Vector3>();
+			for(int i=finalPath.size()-1;i>-1;i--)
+			{
+				aPath2.add(finalPath.get(i));
+			}
+			for (Vector3 vector : aPath2)
 			{
 				blockListController.createBlock(vector, BlockType.Path);
 			}
@@ -52,7 +57,7 @@ public class BrainAI //
 				@Override
 				public void run()
 				{
-					movement.startMove3(finalPath);
+					movement.startMove3(aPath2);
 				}
 			}).start();
 		}
@@ -65,11 +70,7 @@ public class BrainAI //
 			{
 				blockListController.createBlock(vector, BlockType.Path);
 			}
-			final ArrayList<Vector3> aPath2=  new ArrayList<Vector3>();
-		/*	for(int i=aPath.size()-1;i>-1;i--)
-			{
-				aPath2.add(aPath.get(i));
-			}*/
+			
 			final MoveSnake aMovement = new MoveSnake(robots, obstacles, floor);
 			new Thread(new Runnable()
 			{
@@ -109,7 +110,7 @@ public class BrainAI //
 		final BlockListController thisblocklist = blockListController;
 		
 		final Moves movement = new Moves(robots, obstacles, floor, target.size());
-		boolean testingReconfiguration = true;
+		boolean testingReconfiguration=false;
 		if(testingReconfiguration)
 		{
 			new Thread(new Runnable()

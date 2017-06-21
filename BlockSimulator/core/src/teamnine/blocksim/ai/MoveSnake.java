@@ -46,8 +46,8 @@ public class MoveSnake
 			System.out.println(this.path.get(i));
 		while(!targetFound)
 		{			
-			decideMove(path.get(next));
-			
+			System.out.println("while loop + next "+next+" "+path.get(next));
+			decideMove(path.get(next));			
 		}
 			
 
@@ -137,8 +137,23 @@ public class MoveSnake
 		//////////////////////////
 
 		ArrayList<RobotBlock> newOrderToMove = order(orderToMove);
-		
-			moving(newOrderToMove.get(0), v);
+		int lastNext = next;
+		int move =-1;
+		while(lastNext==next)
+		{
+			if(move<newOrderToMove.size()-1)
+			{
+				move++;
+				moving(newOrderToMove.get(move), v);
+			}
+			else
+			{
+				targetFound=true;
+				next++;
+			}
+			
+		}
+			
 		
 	}
 
