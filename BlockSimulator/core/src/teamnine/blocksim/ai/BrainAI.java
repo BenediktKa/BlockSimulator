@@ -117,7 +117,7 @@ public class BrainAI //
 				@Override
 				public void run()
 				{
-					new Reconfiguration(minTarget,movement,smartMovement);			
+					new Reconfiguration(minTarget.getPosition(),smartMovement);			
 				}
 			}).start();
 		}

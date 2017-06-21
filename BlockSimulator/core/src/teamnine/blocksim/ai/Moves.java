@@ -16,6 +16,7 @@ import teamnine.blocksim.StateManager;
 import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.RobotBlock;
+import teamnine.blocksim.block.blocklist.BlockListController;
 
 public class Moves
 {
@@ -44,7 +45,7 @@ public class Moves
 		 */	
 	}
 	
-	public void startMove3 (ArrayList<Vector3> path)
+	public void startMove3 (final ArrayList<Vector3> path)
 	{
 		this.path = path;
 		System.out.println("poep " + path.size());
@@ -102,6 +103,25 @@ public class Moves
 
 		System.out.println("Timestep: " + timestep);
 		Thread.currentThread().interrupt();
+		
+		if(found)
+		{
+
+			final SmartMovement smartMovement = new SmartMovement(); //name is not to offend anyone, it isn't smart at all
+			
+			boolean testingReconfiguration = true;
+			if(testingReconfiguration)
+			{
+				new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						new Reconfiguration(path.get(path.size()-1),smartMovement);			
+					}
+				}).start();
+			}
+		}
 	}
 
 	public Vector3 findOpening(Vector3 start)
