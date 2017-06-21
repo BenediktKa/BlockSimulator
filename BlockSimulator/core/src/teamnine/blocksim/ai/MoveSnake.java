@@ -1,3 +1,4 @@
+
 package teamnine.blocksim.ai;
 
 import java.util.ArrayList;
@@ -150,6 +151,7 @@ public class MoveSnake
 			{
 				targetFound=true;
 				next++;
+				
 			}
 			
 		}
