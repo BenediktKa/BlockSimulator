@@ -27,7 +27,7 @@ public class Reconfiguration
 	private ArrayList<Block> target;
 	private ArrayList<Block>[] sortedTargets;
 	private ArrayList<Block> easySortedTargets;
-	private Block targetOrigin;
+	private Vector3 targetOrigin;
 	
 	private final SmartMovement reconfigurationMovement;
 
@@ -41,10 +41,10 @@ public class Reconfiguration
 	 * @param robot list with all robot blocks in the neighborhood (how do we
 	 *            know where they are exactly)
 	 * @param target list with all target blocks
-	 * @param minTarget the target block in the corner, closest to the robot
+	 * @param vector3 the target block in the corner, closest to the robot
 	 * @param movement 
 	 */
-	public Reconfiguration(Block minTarget, Moves movement, SmartMovement reconfigurationMovement)
+	public Reconfiguration(Vector3 vector3, SmartMovement reconfigurationMovement)
 	{
 		robot = new ArrayList<RobotBlock>();
 
@@ -56,7 +56,7 @@ public class Reconfiguration
 		}
 		
 		this.target = blockListController.getBlockList(BlockType.Goal);
-		targetOrigin = minTarget;
+		targetOrigin = vector3;
 		this.reconfigurationMovement = reconfigurationMovement;
 
 		if (robot.size() < target.size())
@@ -101,8 +101,8 @@ public class Reconfiguration
 
 		// Define origin for layer 0: point where robot blocks enter the goal
 		// region
-		Vector3 layer0Origin = new Vector3(targetOrigin.getPosition().x, 1, targetOrigin.getPosition().z);
-		System.out.println("// RECONFIG: "+targetOrigin.getPosition());
+		Vector3 layer0Origin = new Vector3(targetOrigin.x, 1, targetOrigin.z);
+		System.out.println("// RECONFIG: "+targetOrigin);
 
 		// Figure out what the dimensions of the target objects together are
 		int targetWidth = 0;
@@ -370,7 +370,7 @@ public class Reconfiguration
 		RobotBlock furthestBlock = null;
 		int biggestDistance = 0;
 		int maxHeight = 0;
-		Vector3 targetOrigin = this.targetOrigin.getPosition();
+		Vector3 targetOrigin = this.targetOrigin;
 		
 		for(RobotBlock block : robot)
 		{
