@@ -1,5 +1,5 @@
 package teamnine.blocksim.ai;
-
+//shit shit shit
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector3;
@@ -59,11 +59,12 @@ public class BrainAI //
 		else
 		//Greedy PathFinder
 		{
-			final Path p2 = new Path();
-			p2.findPath(maxRobot.getPosition(), minTarget);
+		
+			//final Path p2 = new Path();
+			//p2.findPath(maxRobot.getPosition(), minTarget);
 			final ArrayList<Vector3> p3= new ArrayList<Vector3>();
 			p3.add(minTarget.getPosition());
-			final Move6 movement = new Move6(robots, obstacles, floor);
+			final Moves movement = new Moves(robots, obstacles, floor, target.size());
 		
 			boolean testingMovement = true;
 			if(testingMovement)
@@ -73,7 +74,7 @@ public class BrainAI //
 					@Override
 					public void run()
 					{
-						movement.startMove3(p3, minTarget);
+						movement.startMove3(p3);
 					}
 				}).start();
 			}
@@ -83,7 +84,7 @@ public class BrainAI //
 		final SmartMovement smartMovement = new SmartMovement(); //name is not to offend anyone, it isn't smart at all
 		final BlockListController thisblocklist = blockListController;
 		
-		final Move6 movement = new Move6(robots, obstacles, floor);
+		final Moves movement = new Moves(robots, obstacles, floor, target.size());
 		boolean testingReconfiguration = false;
 		if(testingReconfiguration)
 		{

@@ -44,7 +44,7 @@ public class Reconfiguration
 	 * @param minTarget the target block in the corner, closest to the robot
 	 * @param movement 
 	 */
-	public Reconfiguration(Block minTarget, Move6 movement, SmartMovement reconfigurationMovement)
+	public Reconfiguration(Block minTarget, Moves movement, SmartMovement reconfigurationMovement)
 	{
 		robot = new ArrayList<RobotBlock>();
 
