@@ -104,25 +104,6 @@ public class BrainAI //
 				}).start();
 			}
 		}
-		//TODO: START RECONFIGURATION WHEN MOVEMENT IS DONE
-		
-		final SmartMovement smartMovement = new SmartMovement(); //name is not to offend anyone, it isn't smart at all
-		final BlockListController thisblocklist = blockListController;
-		
-		final Moves movement = new Moves(robots, obstacles, floor, target.size());
-		boolean testingReconfiguration=false;
-		if(testingReconfiguration)
-		{
-			new Thread(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					new Reconfiguration(minTarget,movement,smartMovement);			
-				}
-			}).start();
-		}
-
 	}
 
 	/*
