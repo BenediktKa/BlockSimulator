@@ -47,7 +47,7 @@ public class MoveSnake
 		while(!targetFound)
 		{			
 			decideMove(path.get(next));
-			next++;
+			
 		}
 			
 
@@ -282,6 +282,7 @@ public class MoveSnake
 					System.out.println("targetReached");
 					targetFound=true;
 				}
+				next++;
 				break;
 			}
 			if (possibleMovements.size() == 0)

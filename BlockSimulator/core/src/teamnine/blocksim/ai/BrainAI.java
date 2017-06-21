@@ -109,7 +109,7 @@ public class BrainAI //
 		final BlockListController thisblocklist = blockListController;
 		
 		final Moves movement = new Moves(robots, obstacles, floor, target.size());
-		boolean testingReconfiguration = false;
+		boolean testingReconfiguration = true;
 		if(testingReconfiguration)
 		{
 			new Thread(new Runnable()
