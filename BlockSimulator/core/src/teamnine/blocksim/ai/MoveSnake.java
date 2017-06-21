@@ -34,7 +34,7 @@ public class MoveSnake
 	}
 	
 	
-	public void startMove3 (ArrayList<Vector3> path)
+	public void startMove3 (final ArrayList<Vector3> path)
 	{
 		this.path = path;
 		for(int i=0;i<path.size();i++)
@@ -54,6 +54,24 @@ public class MoveSnake
 		//decideMove(new Vector3(mt.getPosition().x, mt.getPosition().y, mt.getPosition().z));
 		System.out.println("Timestep: " + timestep);
 		Thread.currentThread().interrupt();
+		if(targetFound)
+		{
+
+			final SmartMovement smartMovement = new SmartMovement(); //name is not to offend anyone, it isn't smart at all
+			
+			boolean testingReconfiguration = true;
+			if(testingReconfiguration)
+			{
+				new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						new Reconfiguration(path.get(path.size()-1),smartMovement);			
+					}
+				}).start();
+			}
+		}
 	}
 
 	public void decideMove(Vector3 v)
