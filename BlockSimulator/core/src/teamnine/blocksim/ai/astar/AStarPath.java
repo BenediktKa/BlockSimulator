@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector3;
 
 import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.blocklist.BlockListController;
-import teamnine.blocksim.hud.Notification;
 
 public class AStarPath
 {
@@ -62,7 +61,7 @@ public class AStarPath
 				{
 					nextBlock.setCost(newCost);
 					nextBlock.setPreviousBlock(currentBlock);
-					nextBlock.setPriority(newCost + (maxDistance - nextPos.dst(endPos)));
+					nextBlock.setPriority(newCost + mannhattanDistance(nextPos, endPos));
 					priorityQueue.add(nextBlock);
 				}
 			}
@@ -99,9 +98,9 @@ public class AStarPath
 	{
 		while(aStarBlock.getPreviousBlock() != null)
 		{
-			aStarBlock = aStarBlock.getPreviousBlock();
 			if(aStarBlock.getPosition().equals(pos))
 				return aStarBlock;
+			aStarBlock = aStarBlock.getPreviousBlock();
 		}
 		return new AStarBlock(pos);
 	}
@@ -135,5 +134,10 @@ public class AStarPath
 		if (value >= blockListController.getFloorGridSize() || value < 0)
 			return false;
 		return true;
+	}
+	
+	public double mannhattanDistance(Vector3 pos1, Vector3 pos2)
+	{
+		return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) + Math.abs(pos1.z - pos2.z);
 	}
 }

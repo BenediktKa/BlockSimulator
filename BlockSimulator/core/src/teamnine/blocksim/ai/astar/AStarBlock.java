@@ -51,12 +51,10 @@ public class AStarBlock implements Comparable<AStarBlock>
 
 	public int compareTo(AStarBlock block2)
 	{
-		if(this.priority > block2.priority)
-			return -1;
 		if(this.priority < block2.priority)
+			return -1;
+		if(this.priority > block2.priority)
 			return 1;
 		return 0;
 	}
-	
-	
 }
