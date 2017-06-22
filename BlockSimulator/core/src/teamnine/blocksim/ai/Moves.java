@@ -165,6 +165,7 @@ public class Moves
 				}
 			}
 		}
+		
 		System.out.println("current " + currentVector);
 		boolean found2 = false;
 		
@@ -284,27 +285,53 @@ public class Moves
 			
 			System.out.println("current2 " + currentVector);
 		}
-		
-		if (lastVector.x < currentVector.x)
+		if(passedWalls.size()>2)
 		{
-			System.out.println("x<x");
-			return new Vector3(currentVector.x + 1, 1, currentVector.z);
-		}
-		else if (lastVector.x > currentVector.x)
-		{
-			System.out.println("x>x");
-			return new Vector3(currentVector.x - 1, 1, currentVector.z);
-		}
-		else if (lastVector.z < currentVector.z)
-		{
-			System.out.println("z<z");
-			return new Vector3(currentVector.x, 1, currentVector.z + 1);
+			if (lastVector.x < currentVector.x)
+			{
+				System.out.println("x<x");
+				return new Vector3(currentVector.x + 1, 1, currentVector.z);
+			}
+			else if (lastVector.x > currentVector.x)
+			{
+				System.out.println("x>x");
+				return new Vector3(currentVector.x - 1, 1, currentVector.z);
+			}
+			else if (lastVector.z < currentVector.z)
+			{
+				System.out.println("z<z");
+				return new Vector3(currentVector.x, 1, currentVector.z + 1);
+			}
+			else
+			{
+				System.out.println("z>z");
+				return new Vector3(currentVector.x, 1, currentVector.z - 1);
+			}
 		}
 		else
 		{
-			System.out.println("z>z");
-			return new Vector3(currentVector.x, 1, currentVector.z - 1);
+			if (lastVector.x < currentVector.x)
+			{
+				System.out.println("x<x");
+				return new Vector3(currentVector.x , 1, currentVector.z-1);
+			}
+			else if (lastVector.x > currentVector.x)
+			{
+				System.out.println("x>x");
+				return new Vector3(currentVector.x , 1, currentVector.z-1);
+			}
+			else if (lastVector.z < currentVector.z)
+			{
+				System.out.println("z<z");
+				return new Vector3(currentVector.x-1, 1, currentVector.z );
+			}
+			else
+			{
+				System.out.println("z>z");
+				return new Vector3(currentVector.x-1, 1, currentVector.z );
+			}
 		}
+		
 		
 	}
 	public void decideMove(Vector3 v)
