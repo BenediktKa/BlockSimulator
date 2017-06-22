@@ -22,6 +22,7 @@ public class Moves
 {
 	private ArrayList<Vector3> path;
 	private ArrayList<Vector3> passages = new ArrayList<Vector3>();
+	private ArrayList<Vector3> passagesNotToErase = new ArrayList<Vector3>();
 	private Vector3 intermediatePath=null;
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> obstacles;
@@ -73,7 +74,7 @@ public class Moves
 					}
 				}
 				intermediatePath=findOpening(closest.getPosition());
-			
+				passagesNotToErase.add(new Vector3(intermediatePath.x,intermediatePath.y,intermediatePath.z));
 				for(int z=0;z<robots.size();z++)
 				{
 					robots.get(z).setOriginalPos(new Vector3(-1,-1,-1));
@@ -88,6 +89,7 @@ public class Moves
 				}
 				
 				passages.add(new Vector3(intermediatePath.x,intermediatePath.y,intermediatePath.z));
+				System.out.println("add to passage "+intermediatePath);
 				intermediatePath=null;
 				intermediateFound=false;		
 				firstReached=true;
@@ -277,7 +279,7 @@ public class Moves
 				{
 					System.out.println("found hole, use it "+height+" os "+openingSize );
 					found2=true;
-					return currentVector;
+					return new Vector3(currentVector.x,1,currentVector.z);
 				}
 			}
 				
@@ -686,15 +688,33 @@ public class Moves
 			{
 				if(possibleMovements.get(i).x==obstacles.get(j).getPosition().x &&possibleMovements.get(i).z==obstacles.get(j).getPosition().z)
 				{
-					int totalNeeded=3;
-					for(int q=(int)obstacles.get(j).getPosition().y;q>0;q--)
+					boolean passage=false;
+					System.out.println("passages size"+ passages.size());
+					for(int k=0;k<passagesNotToErase.size();k++)
 					{
-						totalNeeded=totalNeeded+q;
+						if(possibleMovements.get(i).x==passagesNotToErase.get(k).x&&possibleMovements.get(i).z==passagesNotToErase.get(k).z)
+						{
+							System.out.println("check pass problem "+passagesNotToErase.get(k));
+							System.out.println("pass problem "+possibleMovements.get(i));
+							passage=true;
+							break;
+						}
 					}
-					if(robots.size()<totalNeeded+(amountOfTargets-2))
+					if(passage)
 					{
-						toRemove.add(possibleMovements.get(i));
+						continue;
 					}
+						int totalNeeded=3;
+						for(int q=(int)obstacles.get(j).getPosition().y;q>0;q--)
+						{
+							totalNeeded=totalNeeded+q;
+						}
+						if(robots.size()<totalNeeded+(amountOfTargets-2))
+						{
+							System.out.println("bad climb problem "+possibleMovements.get(i));
+							toRemove.add(possibleMovements.get(i));
+						}
+					
 				}
 			}
 		}
@@ -709,10 +729,12 @@ public class Moves
 		{
 			if (possibleMovements.get(i).equals(b.getOriginalPos()))
 			{
+				System.out.println("orPos problem "+possibleMovements.get(i));
 				toRemove.add(possibleMovements.get(i));
 			}
 			else if (possibleMovements.size() > 1 && Math.abs(b.getPosition().x - v.x) + Math.abs(b.getPosition().z - v.z) < Math.abs(possibleMovements.get(i).x - v.x) + Math.abs(possibleMovements.get(i).z - v.z))
 			{
+				System.out.println("further away problem "+possibleMovements.get(i));
 				toRemove.add(possibleMovements.get(i));
 			}
 		}
