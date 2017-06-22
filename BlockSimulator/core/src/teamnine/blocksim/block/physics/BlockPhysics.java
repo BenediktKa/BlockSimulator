@@ -2,8 +2,6 @@ package teamnine.blocksim.block.physics;
 
 import com.badlogic.gdx.math.Vector3;
 
-import teamnine.blocksim.StateManager;
-import teamnine.blocksim.StateManager.SimulationState;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.hud.RobotBlockText;
