@@ -34,9 +34,6 @@ public class BlockListController implements Disposable
 	private BlockListController()
 	{
 		blockListFactory = new BlockListFactory();
-		preConfigs = new PreConfigs(this);
-		createFloor();
-		
 	}
 
 	/**
@@ -61,6 +58,9 @@ public class BlockListController implements Disposable
 	{
 		this.floorGridSize = floorGridSize;
 		createFloor();
+		
+		preConfigs = new PreConfigs(this);
+		preConfigs.experiment1();
 	}
 
 	/**
