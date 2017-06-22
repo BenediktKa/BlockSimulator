@@ -169,8 +169,8 @@ public class MoveSnake
 			}
 			else
 			{
-				
-				next++;
+				if(next<newOrderToMove.size()-1)
+					next++;
 				
 			}
 			
