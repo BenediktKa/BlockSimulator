@@ -169,7 +169,7 @@ public class MoveSnake
 			}
 			else
 			{
-				targetFound=true;
+				
 				next++;
 				
 			}
