@@ -15,25 +15,24 @@ public class BlockPhysics extends Block
 	private float GRAVITY = 0.098f;
 	private float TERMINALVELOCITY = 10;
 	private float FRICTIONCONSTANT = 0.25f;
-	
+
 	protected static RobotBlockText rbText;
 
 	public BlockPhysics(Vector3 position, BlockType type)
 	{
 		super(position, type);
-		
-		if(rbText == null)
-			rbText = new RobotBlockText();
-		
+
+		rbText = RobotBlockText.getInstance();
+
 		calcSpeed();
 	}
-	
+
 	public void calcSpeed()
 	{
-		float maxFriction = 2* (FRICTIONCONSTANT * GRAVITY);
+		float maxFriction = 2 * (FRICTIONCONSTANT * GRAVITY);
 		SPEED = Math.abs(maxFriction + ANIMATIONSPEED);
 	}
-	
+
 	public float getSpeed()
 	{
 		return SPEED;
@@ -67,13 +66,5 @@ public class BlockPhysics extends Block
 	public void setFrictionConstant(float FRICTIONCONSTANT)
 	{
 		this.FRICTIONCONSTANT = FRICTIONCONSTANT;
-	}
-	
-	public void moveModel()
-	{
-		if(StateManager.state == SimulationState.SIMULATIONFPS || StateManager.state == StateManager.SimulationState.SIMULATION || StateManager.state == StateManager.SimulationState.PAUSE)
-			rbText.render();
-		
-		super.moveModel();
 	}
 }

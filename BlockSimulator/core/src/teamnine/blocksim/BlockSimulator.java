@@ -18,6 +18,7 @@ import teamnine.blocksim.hud.Crosshair;
 import teamnine.blocksim.hud.FPSCounter;
 import teamnine.blocksim.hud.LevelEditorHUD;
 import teamnine.blocksim.hud.Notification;
+import teamnine.blocksim.hud.RobotBlockText;
 import teamnine.blocksim.input.CameraController;
 import teamnine.blocksim.input.KeyboardController;
 
@@ -84,6 +85,9 @@ public class BlockSimulator implements ApplicationListener
 		blockListController.render(modelBatch, environment);
 		modelBatch.render(SelectorBlock.getInstance().getModelInstance(), environment);
 		modelBatch.end();
+		
+		if (StateManager.state == SimulationState.SIMULATIONFPS || StateManager.state == StateManager.SimulationState.SIMULATION || StateManager.state == StateManager.SimulationState.PAUSE)
+			RobotBlockText.getInstance().render();
 
 		// Render LevelHUD
 		levelHUD.render();

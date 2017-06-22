@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import teamnine.blocksim.block.blocklist.BlockListController;
+
 public class RobotBlockText implements Disposable
 {
 	private Skin skin;
@@ -20,8 +22,10 @@ public class RobotBlockText implements Disposable
 	private Label frictionLabel;
 	private Label horizontalSpeedLabel;
 	private Label verticalSpeedLabel;
+	
+	private static RobotBlockText robotBlockText;
 
-	public RobotBlockText()
+	private RobotBlockText()
 	{
 		stage = new Stage(new ScreenViewport());
 		table = new Table();
@@ -41,6 +45,14 @@ public class RobotBlockText implements Disposable
 		
 		
 		stage.addActor(table);
+	}
+	
+	public static RobotBlockText getInstance()
+	{
+		if (robotBlockText == null)
+			return (robotBlockText = new RobotBlockText());
+		else
+			return robotBlockText;
 	}
 	
 	public void render()
