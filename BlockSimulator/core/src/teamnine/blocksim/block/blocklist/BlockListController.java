@@ -268,6 +268,15 @@ public class BlockListController implements Disposable
 
 		return null;
 	}
+	
+	public Block getBlockAtPointWithType(Vector3 position, BlockType... blockTypes)
+	{
+		for (Block block : getCombinedBlockList(blockTypes))
+			if (block.getPosition().equals(position))
+				return block;
+
+		return null;
+	}
 
 	/**
 	 * Gets a block at a specified point which is not any of the specified block
