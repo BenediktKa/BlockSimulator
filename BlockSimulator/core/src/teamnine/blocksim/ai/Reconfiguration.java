@@ -84,7 +84,6 @@ public class Reconfiguration
 	private void prepare()
 	{
 		sortTarget(); // Sort the targetblocks in a specific way, to fill them
-		//findTarget(); // Check if there is an Target Block with the same ID, not taken into account now
 	}
 
 	/**
@@ -159,7 +158,7 @@ public class Reconfiguration
 			}
 			else
 			{
-				int bucket = (int) (Math.abs(target.getPosition().x - layer0Origin.x) + Math.abs(target.getPosition().z - layer0Origin.z)+Math.abs(target.getPosition().y - layer0Origin.y))+floorLevels-1;
+				int bucket = (int) (Math.abs(target.getPosition().x - otherOrigin.x) + Math.abs(target.getPosition().z - otherOrigin.z)+Math.abs(target.getPosition().y - otherOrigin.y))+floorLevels-1;
 				if (DEBUG)
 				{
 					System.out.println("// RECONFIG: " + target.getID() + ": " + bucket);
@@ -178,124 +177,6 @@ public class Reconfiguration
 			}
 		}
 	}
-
-	private void findTarget()
-	{
-		for (int i = 0; i < robot.size(); i++)
-		{
-			try
-			{
-				double ID = robot.get(i).getID();
-				for (int j = 0; j < target.size(); j++)
-				{
-					try
-					{
-						if (target.get(j).getID() == ID)
-						{
-							robot.get(i).setTarget(target.get(j));
-						}
-					} catch (NullPointerException e)
-					{
-					}
-				}
-				// At the end of the for-loop it may occur that the target is
-				// still unspecified, then there wasn't a target block assigned
-				// to it
-			} catch (NullPointerException e)
-			{
-			} // specifiedTarget stays uninitialized, i.e. there is no target
-				// specified for this robotBlock
-		}
-	}
-
-	/**
-	 * 1) Get last a targetBlock in the current level 2) Check if the
-	 * targetBlock has an ID 2.1) In case not, check if the last RobotBlock in
-	 * the chain is not determined to be at another position (method findTarget
-	 * should have been run before) 2.2) In case it did, check if the last
-	 * RobotBlock in the chain has this block as an target (method findTarget
-	 * should have been run before) 3.1) IF the last Robot block in the chain
-	 * meets the criteria above, THEN move it to the target position 3.2) IF
-	 * NOT, THEN move it to the other chain 4) Do this WHILE not all target
-	 * blocks of the same level have been filled up > this might not be the most
-	 * efficient (since blocks are move between chains), however it is the best
-	 * way to avoid dead-locks
-	 */
-	private void start()
-	{
-		// Get last robotblock from 'chain'
-		// Check if it can be moved to one of the next targets (i.e. target ID
-		// matches) --> Not done for now
-		// IF so THEN move the block to that position
-		// IF not THEN move the block to another chain
-
-		int currentLevel;
-
-		for (currentLevel = 0; currentLevel < sortedTargets.length; currentLevel++)
-		{
-			if (sortedTargets[currentLevel].size() != 0)
-			{
-				int cntr = 0;
-
-				while (sortedTargets[currentLevel].size() != 0)
-				{
-
-					for (int j = 0; j < sortedTargets[currentLevel].size(); j++)
-					{
-						try
-						{
-							// The ID for this Target Position IS specified
-							sortedTargets[currentLevel].get(j).getID(); 
-							try
-							{
-								if (sortedTargets[currentLevel].get(j) == robot.get(0).getTarget()) // The
-								// Robot Block that is moved into the position, has to have the same ID
-								{
-									// TODO: Move the robotBlock from the end of
-									// the chain to its targetPosition, keep
-									// track of indexes in Robot!
-									sortedTargets[currentLevel].remove(j); // Remove in
-									// order to prevent from filling up again
-								}
-							} catch (NullPointerException f)
-							{
-								// TODO: Put Robot Block aside, keep track of
-								// indexes in Robot!
-							}
-
-						} 
-						// The ID WAS NOT specified for the Target block, 
-						// so if the robot block doesn't have an assigned target, 
-						// it can move into it.
-						catch (NullPointerException e) 
-						{
-							try
-							{
-								robot.get(0).getTarget(); // This should not be
-															// there
-								// TODO: Put Robot Block aside, keep track of
-								// indexes in Robot!
-							} 
-							catch (NullPointerException g)
-							{
-								// TODO: Move the robotBlock from the end of the
-								// chain to its targetPosition, keep track of
-								// indexes in Robot!
-								sortedTargets[currentLevel].remove(j); // Remove
-								// Remove in order to prevent from filling up again
-							}
-						}
-						if (DEBUG)
-							cntr++;
-						if (DEBUG && cntr > robot.size())
-						{
-							System.out.println("// RECONFIG: " + "All robot blocks have been tried, but no one was able to move to the target position since ID's didn't match");
-						}
-					}
-				}
-			}
-		}
-	}
 	
 	private void startEasy()
 	{
@@ -308,14 +189,12 @@ public class Reconfiguration
 			if (DEBUG) System.out.println("// RECONFIG: Cntr: "+cntr);
 			// 1) Select last robot block to move, i.e. robot.get(0)????!!!!!?????!!!!!?????!!!!!?????!!!!
 			final RobotBlock blockToMove = getFurthestRobot();
-
 			
 			// 2) Select the target position where it has to go to, there should not be a robot block on it
 			Block targetBlock = easySortedTargets.get(cntr);
 			cntr++; 
 			
 			// Check if there is not already a robot block on this position
-			//TODO: Improve implementation
 			for(int i=0; i<robot.size(); i++)
 			{
 				if(robot.get(i).getPosition().x==targetBlock.getPosition().x&&robot.get(i).getPosition().y==targetBlock.getPosition().y&&robot.get(i).getPosition().z==targetBlock.getPosition().z)
@@ -355,9 +234,6 @@ public class Reconfiguration
 			blockToMove.setInFinalPosition(true);
 			
 			if (DEBUG) System.out.println("// RECONFIG: CNTR: "+cntr+" ROBOT SIZE: "+robot.size());
-			// TODO: SECOND: Try to get the block out of the list for move3
-			
-			
 		}
 		
 		if (DEBUG) System.out.println("// RECONFIG: End of While loop");
