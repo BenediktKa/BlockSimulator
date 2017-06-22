@@ -22,6 +22,8 @@ public class BlockListController implements Disposable
 	private static BlockListController blockListController;
 	/** The block list factory. */
 	private BlockListFactory blockListFactory;
+	
+	private PreConfigs preConfigs;
 
 	/** The floor grid size. */
 	private int floorGridSize;
@@ -32,7 +34,9 @@ public class BlockListController implements Disposable
 	private BlockListController()
 	{
 		blockListFactory = new BlockListFactory();
+		preConfigs = new PreConfigs(this);
 		createFloor();
+		
 	}
 
 	/**
@@ -293,6 +297,14 @@ public class BlockListController implements Disposable
 				return block;
 
 		return null;
+	}
+	
+	public void printConfig()
+	{
+		for(Block block : getCombinedBlockList(BlockType.Goal, BlockType.Robot, BlockType.Obstacle))
+		{
+			System.out.println("blockListController.createBlock(new Vector3(" + (int)block.getPosition().x + ", " + (int)block.getPosition().y + ", " + (int)block.getPosition().z + "), BlockType." + block.getType() + ");");
+		}
 	}
 
 	/**

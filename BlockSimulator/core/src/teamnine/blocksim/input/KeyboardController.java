@@ -115,6 +115,10 @@ public class KeyboardController extends InputAdapter
 				Gdx.input.setCursorCatched(true);
 			}
 		}
+		else if(keycode == Keys.K)
+		{
+			blockListController.printConfig();
+		}
 		return super.keyDown(keycode);
 	}
 
