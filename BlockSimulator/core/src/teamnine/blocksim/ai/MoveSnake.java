@@ -59,7 +59,7 @@ public class MoveSnake
 		if(targetFound)
 		{
 
-			final SmartMovement smartMovement = new SmartMovement(); //name is not to offend anyone, it isn't smart at all
+			final SmartMovement smartMovement = new SmartMovement(timestep); //name is not to offend anyone, it isn't smart at all
 			
 			boolean testingReconfiguration = true;
 			if(testingReconfiguration)

@@ -21,12 +21,14 @@ public class SmartMovement
 {
 	private BlockListController blockListController;
 	private final boolean DEBUG = true;
+	private int timestep;
 	//private ArrayList<RobotBlock> robotBlockList;
 	//private ArrayList<Block> obstacleBlockList;
 	
-	public SmartMovement()
+	public SmartMovement(int timestep)
 	{
 		this.blockListController = BlockListController.getInstance();
+		this.timestep = timestep;
 		//this.robotBlockList = blockListController.getRobotBlockList();
 		//this.obstacleBlockList = blockListController.getBlockList(BlockType.Obstacle);
 		
@@ -219,7 +221,7 @@ public class SmartMovement
 		else if(movingBlock.getPosition().z < moveTo.z) movingBlock.moveForward();
 		else if(moveTo.z < movingBlock.getPosition().z) movingBlock.moveBackwards();
 		
-		//timestep++;
+		timestep++;
 		
 	}
 	

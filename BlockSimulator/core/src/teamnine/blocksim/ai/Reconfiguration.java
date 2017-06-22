@@ -69,7 +69,7 @@ public class Reconfiguration
 		{
 			System.out.println("//RECONFIG: STARTED");
 		}
-		// start(); //Take ID's into account
+		// start(); //Take ID's into account -- Not implemented
 		startEasy(); //ID's are not important
 		check();
 		Thread.currentThread().interrupt();
