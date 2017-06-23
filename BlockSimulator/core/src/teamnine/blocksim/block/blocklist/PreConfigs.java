@@ -40,7 +40,6 @@ public class PreConfigs
 		blockListController.createBlock(new Vector3(8, 1, 16), BlockType.Obstacle);
 		blockListController.createBlock(new Vector3(7, 1, 16), BlockType.Obstacle);
 		blockListController.createBlock(new Vector3(6, 1, 16), BlockType.Obstacle);
-		blockListController.createBlock(new Vector3(5, 1, 16), BlockType.Obstacle);
 		blockListController.createBlock(new Vector3(3, 1, 15), BlockType.Obstacle);
 		blockListController.createBlock(new Vector3(3, 1, 16), BlockType.Obstacle);
 		blockListController.createBlock(new Vector3(3, 2, 16), BlockType.Obstacle);
@@ -65,6 +64,7 @@ public class PreConfigs
 		blockListController.createBlock(new Vector3(8, 2, 16), BlockType.Obstacle);
 		blockListController.createBlock(new Vector3(7, 2, 16), BlockType.Obstacle);
 		blockListController.createBlock(new Vector3(6, 2, 16), BlockType.Obstacle);
-		blockListController.createBlock(new Vector3(5, 2, 16), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 2, 16), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 1, 16), BlockType.Obstacle);
 	}
 }

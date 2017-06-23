@@ -35,8 +35,8 @@ public class Dijkstra
 	public void completeFinalList(PriorityQueue<DistanceBlock> listToReduce)
     {
         DistanceBlock position = listToReduce.poll();
-        if (((((position.getHigh() * (position.getHigh()+1))/2)) <= numTargetBlocks) &&
-         	((((position.getHigh() * (position.getHigh()+1))/2)) <= numRoboBlocks))
+        if (((((position.getHigh() * (position.getHigh()+1))/2)) < numTargetBlocks) &&
+         	((((position.getHigh() * (position.getHigh()+1))/2)) < numRoboBlocks))
         {
 	        finalList.add(position);
 	        DistanceBlock[] neighbours = position.getNeighbours();
