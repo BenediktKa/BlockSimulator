@@ -24,6 +24,7 @@ public class Moves
 	private ArrayList<Vector3> passages = new ArrayList<Vector3>();
 	private ArrayList<Vector3> passagesNotToErase = new ArrayList<Vector3>();
 	private Vector3 intermediatePath=null;
+	private Vector3 lastIntermediatePath=null;
 	private ArrayList<RobotBlock> robots;
 	private ArrayList<Block> obstacles;
 	private ArrayList<Block> floor;
@@ -74,6 +75,7 @@ public class Moves
 					}
 				}
 				intermediatePath=findOpening(closest.getPosition());
+				lastIntermediatePath = new Vector3(intermediatePath.x,intermediatePath.y,intermediatePath.z);
 				passagesNotToErase.add(new Vector3(intermediatePath.x,intermediatePath.y,intermediatePath.z));
 				for(int z=0;z<robots.size();z++)
 				{
@@ -88,7 +90,7 @@ public class Moves
 					}
 				}
 				
-				passages.add(new Vector3(intermediatePath.x,intermediatePath.y,intermediatePath.z));
+				passages.add(new Vector3(lastIntermediatePath.x,lastIntermediatePath.y,lastIntermediatePath.z));
 				System.out.println("add to passage "+intermediatePath);
 				intermediatePath=null;
 				intermediateFound=false;		
@@ -271,6 +273,11 @@ public class Moves
 			{
 				System.out.println("found hole "+height+" os "+openingSize );
 				int totalNeeded=3;
+				if((height-1)==0)
+				{
+					totalNeeded=0;
+				}
+				
 				for(int q=height-1;q>0;q--)
 				{
 					totalNeeded=totalNeeded+q;
@@ -677,6 +684,10 @@ public class Moves
 			}
 		}
 		System.out.println("remove pass"+ toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.println("to remove "+toRemove.get(i));
+		}
 		possibleMovements.removeAll(toRemove);
 	}
 	public void removeBadClimbs(ArrayList<Vector3> possibleMovements)
@@ -719,6 +730,10 @@ public class Moves
 			}
 		}
 		System.out.println("remove bad climb "+ toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.println("to remove "+toRemove.get(i));
+		}
 		possibleMovements.removeAll(toRemove);
 		
 	}
@@ -738,8 +753,13 @@ public class Moves
 				toRemove.add(possibleMovements.get(i));
 			}
 		}
-		possibleMovements.removeAll(toRemove);
 		System.out.println("removed orPos or bad move "+ toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.println("to remove "+toRemove.get(i));
+		}
+		possibleMovements.removeAll(toRemove);
+		
 	}
 
 	public void removeRobots(ArrayList<Vector3> pm)
@@ -755,8 +775,13 @@ public class Moves
 				}
 			}
 		}
-		pm.removeAll(toRemove);
 		System.out.println("removed other robots "+ toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.println("to remove "+toRemove.get(i));
+		}
+		pm.removeAll(toRemove);
+		
 	}
 
 	public void removeObstacles(ArrayList<Vector3> pm)
@@ -773,6 +798,10 @@ public class Moves
 			}
 		}
 		System.out.println("removed obstacles "+ toRemove.size());
+		for(int i=0;i<toRemove.size();i++)
+		{
+			System.out.println("to remove "+toRemove.get(i));
+		}
 		pm.removeAll(toRemove);
 	}
 
@@ -959,6 +988,10 @@ public class Moves
 			}
 			pm.removeAll(toRemove);
 			System.out.println("removed impossible moves "+ toRemove.size());
+			for(int i=0;i<toRemove.size();i++)
+			{
+				System.out.println("to remove "+toRemove.get(i));
+			}
 		}
 	}
 
