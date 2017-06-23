@@ -73,26 +73,24 @@ public class MoveSnake
 					}
 				}).start();
 			}
-		}
-		
+		}		
 	}
 
 	public void decideMove(Vector3 v)
 	{
 
 		ArrayList<RobotBlock> orderToMove = new ArrayList<RobotBlock>();
-		/*
-		 * float targetX=v.x; float targetZ=v.z; //finds distance from the block
-		 * to the target assigns the value to the block
-		 * 
-		 * for(int i=0;i<robots.size();i++) { float
-		 * distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.
-		 * abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition(
-		 * ).y; robots.get(i).setDistanceToPath(distanceToPath);
-		 * orderToMove.add(robots.get(i)); }
-		 */
-		////////////////////////////
-
+		
+		 float targetX=v.x; float targetZ=v.z; //finds distance from the block
+		// to the target assigns the value to the block
+		 
+		 for(int i=0;i<robots.size();i++) { float
+		 distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.
+		 abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition(
+		 ).y; robots.get(i).setDistanceToPath(distanceToPath);
+		 orderToMove.add(robots.get(i)); }
+		 
+/*
 		for (int i = 0; i < robots.size(); i++)
 		{
 			orderToMove.add(robots.get(i));
@@ -155,7 +153,7 @@ public class MoveSnake
 			robots.get(i).setCounter(0);
 		}
 		robots.remove(robots.size() - 1);
-		//////////////////////////
+		//////////////////////////*/
 
 		ArrayList<RobotBlock> newOrderToMove = order(orderToMove);
 		int lastNext = next;

@@ -126,6 +126,7 @@ public class Moves
 				}).start();
 			}
 		}
+		System.out.println("Timestep: " + timestep);
 	}
 
 	public Vector3 findOpening(Vector3 start)
