@@ -241,14 +241,22 @@ public class BrainAI //
 		
 		
 		//To prevent that the origin would be positioned on a place where a obstacle is 
-		//TODO: CHECK how to deal with both x and z increasing/decreasing... only one, the right one, would be more usefull.
+		//Biased to change X prior to Z, no logic used.
 		Vector3 Targetorigin = new Vector3(TargetXOrigin, TargetYOrigin, TargetZOrigin);
 		while(null!=blockListController.getBlockAtPointWithType(Targetorigin, BlockType.Obstacle))
 		{
-			if(Xgreater) TargetXOrigin++;
-			else if(Xsmaller) TargetXOrigin--;
-			if(Zgreater) TargetZOrigin++;
-			else if(Zsmaller) TargetZOrigin--;
+			boolean changeXsuccess = false;
+			if(Xgreater && maxX > TargetXOrigin){
+				TargetXOrigin++;
+				changeXsuccess = true;
+			}
+			else if(Xsmaller && minX < TargetXOrigin) 
+			{
+				TargetXOrigin--;
+				changeXsuccess = true;
+			}
+			if(Zgreater && maxZ > TargetZOrigin && !changeXsuccess) TargetZOrigin++;
+			else if(Zsmaller && minZ < TargetZOrigin && !changeXsuccess) TargetZOrigin--;
 			Targetorigin = new Vector3(TargetXOrigin, TargetYOrigin, TargetZOrigin);
 		}
 		return Targetorigin;
