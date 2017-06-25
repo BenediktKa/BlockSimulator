@@ -60,8 +60,12 @@ public class AStarPath
 				AStarBlock nextBlock = posExists(nextPos);
 				
 				if(nextPos.y == currentBlock.getPosition().y + 1)
-					for(int i = (int)(nextPos.y - currentBlock.getPosition().y); i > 0; i--)
+					for(int i = (int) nextPos.y - 1; i > 0; i--)
+					{
+						System.out.println("i is: " + i);
 						blocksLeft -= i;
+						System.out.println("Blocks Left: " +  blocksLeft + " Goal Count: " + goalCount);
+					}
 
 				if (newCost < nextBlock.getCost() && blocksLeft >= goalCount)
 				{
