@@ -90,19 +90,15 @@ public class BrainAI //
 			final ArrayList<Vector3> p3= new ArrayList<Vector3>();
 			p3.add(minTarget.getPosition());
 			final Moves movement = new Moves(robots, obstacles, floor, target.size());
-		
-			boolean testingMovement = true;
-			if(testingMovement)
+			new Thread(new Runnable()
 			{
-				new Thread(new Runnable()
+				@Override
+				public void run()
 				{
-					@Override
-					public void run()
-					{
-						movement.startMove3(p3);
-					}
-				}).start();
-			}
+					movement.startMove3(p3);
+				}
+			}).start();
+			
 		}
 	}
 
@@ -128,6 +124,8 @@ public class BrainAI //
 		}
 		return maxTarget;
 	}
+	
+	
 
 	public Block findClosestTarget()
 	{
@@ -148,9 +146,114 @@ public class BrainAI //
 				minTarget = target.get(i);
 			}
 		}
-		return minTarget;
+		
+		return new Block(findTargetOrigin(), BlockType.Path);
 	}
 
+	public Vector3 findTargetOrigin()
+	{
+		float minX = Float.MAX_VALUE;
+		float maxX = -1;
+		float minZ = Float.MAX_VALUE;
+		float maxZ = -1;
+		float minY = Float.MAX_VALUE;
+		
+		for (Block target : target)
+		{
+			if(target.getPosition().x < minX)
+			{
+				minX = target.getPosition().x;
+			}
+			if(target.getPosition().x > maxX)
+			{
+				maxX = target.getPosition().x;
+			}
+			if(target.getPosition().z < minZ)
+			{
+				minZ = target.getPosition().z;
+			}
+			if(target.getPosition().z > maxZ)
+			{
+				maxZ = target.getPosition().z;
+			}
+			if(target.getPosition().y < minY)
+			{
+				minY = target.getPosition().y;
+			}
+		}
+		
+		float minRobotX = Float.MAX_VALUE;
+		float maxRobotX = -1;
+		float minRobotZ = Float.MAX_VALUE;
+		float maxRobotZ = -1;
+		
+		for (Block robot : robots)
+		{
+			if(robot.getPosition().x < minRobotX)
+			{
+				minRobotX = robot.getPosition().x;
+			}
+			if(robot.getPosition().x > maxRobotX)
+			{
+				maxRobotX = robot.getPosition().x;
+			}
+			if(robot.getPosition().z < minRobotZ)
+			{
+				minRobotZ = robot.getPosition().z;
+			}
+			if(robot.getPosition().z > maxRobotZ)
+			{
+				maxRobotZ = robot.getPosition().z;
+			}
+		}
+		
+		float TargetXOrigin;
+		float TargetZOrigin;
+		float TargetYOrigin = minY;
+		boolean Xgreater = false;
+		boolean Xsmaller = false;
+		boolean Zgreater = false;
+		boolean Zsmaller = false;
+		
+		if(maxX <= minRobotX)
+		{
+			TargetXOrigin = maxX;
+			Xsmaller = true;
+		}
+		else if(minX >= maxRobotX)
+		{
+			TargetXOrigin = minX;
+			Xgreater = true;
+		}
+		else TargetXOrigin = minX;
+		
+		if(maxZ <= minRobotZ)
+		{
+			TargetZOrigin = maxZ;
+			Zsmaller = true;
+		}
+		else if(minZ >= maxRobotZ)
+		{
+			TargetZOrigin = minZ;
+			Zgreater = true;
+		}
+		else TargetZOrigin = minZ;
+		
+		
+		//To prevent that the origin would be positioned on a place where a obstacle is 
+		//TODO: CHECK how to deal with both x and z increasing/decreasing... only one, the right one, would be more usefull.
+		Vector3 Targetorigin = new Vector3(TargetXOrigin, TargetYOrigin, TargetZOrigin);
+		while(null!=blockListController.getBlockAtPointWithType(Targetorigin, BlockType.Obstacle))
+		{
+			if(Xgreater) TargetXOrigin++;
+			else if(Xsmaller) TargetXOrigin--;
+			if(Zgreater) TargetZOrigin++;
+			else if(Zsmaller) TargetZOrigin--;
+			Targetorigin = new Vector3(TargetXOrigin, TargetYOrigin, TargetZOrigin);
+		}
+		return Targetorigin;
+	}
+	
 	public RobotBlock findClosestRobot(Block mt)
 	{
 
