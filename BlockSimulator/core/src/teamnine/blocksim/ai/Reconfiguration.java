@@ -23,7 +23,8 @@ import teamnine.blocksim.block.blocklist.BlockListController;
 public class Reconfiguration
 {
 	private BlockListController blockListController;
-	private ArrayList<RobotBlock> robot;
+	private ArrayList<RobotBlock> robots;
+	private ArrayList<RobotBlock> robot; // robot modules that can be used for reconfiguration
 	private ArrayList<Block> target;
 	private ArrayList<Block>[] sortedTargets;
 	private ArrayList<Block> easySortedTargets;
@@ -47,14 +48,17 @@ public class Reconfiguration
 	 */
 	public Reconfiguration(Vector3 vector3, SmartMovement reconfigurationMovement)
 	{
-		robot = new ArrayList<RobotBlock>();
+		robots = new ArrayList<RobotBlock>();
+		
 
 		this.blockListController = BlockListController.getInstance();
 		
 		for(Block block : blockListController.getBlockList(BlockType.Robot))
 		{
-			robot.add((RobotBlock)block);
+			robots.add((RobotBlock)block);
 		}
+		
+		robot = findConnectedRobots();
 		
 		this.target = blockListController.getBlockList(BlockType.Goal);
 		targetOrigin = vector3;
@@ -272,6 +276,7 @@ public class Reconfiguration
 		int biggestDistance = 0;
 		int maxHeight = 0;
 		Vector3 targetOrigin = this.targetOrigin;
+		System.out.println("ROBOT SIZE FOR RECONFIG: "+robot.size());
 		
 		for(RobotBlock block : robot)
 		{
@@ -348,5 +353,75 @@ public class Reconfiguration
 			return true;
 		}
 		return false;
+	}
+	
+	public ArrayList<RobotBlock> findConnectedRobots()
+	{
+		RobotBlock closest=null;
+		for (int z = 0; z < robots.size(); z++)
+		{
+			
+			if (closest == null)
+			{
+				closest = robots.get(z);
+			}
+			else
+			{
+				if (closest.getDistanceToPath() > robots.get(z).getDistanceToPath())
+				{
+					closest = robots.get(z);
+				}
+			}
+		}
+		boolean next=true;
+		ArrayList<RobotBlock> alreadyFound= new ArrayList<RobotBlock>();
+		alreadyFound.add(closest);
+		while(next)
+		{
+			next=false;
+			for(RobotBlock robots : robots) //robots == robots.get(i)
+			{
+				boolean yup=false;
+				for(int k=0;k<alreadyFound.size();k++)
+				{
+					if(alreadyFound.get(k).getPosition().x==robots.getPosition().x&&alreadyFound.get(k).getPosition().y==robots.getPosition().y&&alreadyFound.get(k).getPosition().z==robots.getPosition().z)
+					{
+						yup=true;
+						break;
+					}
+				}
+				if(yup)
+				{
+					continue;
+				}
+				if(alreadyFound.get(alreadyFound.size()-1).getPosition().x+1==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z==robots.getPosition().z)
+				{
+					alreadyFound.add(robots);
+					next=true;
+					break;					
+				}
+				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x-1==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z==robots.getPosition().z)
+				{
+					alreadyFound.add(robots);
+					next=true;
+					break;					
+				}
+				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z+1==robots.getPosition().z)
+				{
+					alreadyFound.add(robots);
+					next=true;
+					break;					
+				}
+				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z-1==robots.getPosition().z)
+				{
+					alreadyFound.add(robots);
+					next=true;
+					break;					
+				}
+			}
+		}
+		for(int i=0;i<alreadyFound.size();i++)
+			System.out.println(alreadyFound.get(i));
+		return alreadyFound;
 	}
 }
