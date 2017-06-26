@@ -23,11 +23,13 @@ import teamnine.blocksim.block.blocklist.BlockListController;
 public class Reconfiguration
 {
 	private BlockListController blockListController;
-	private ArrayList<RobotBlock> robot;
+	private ArrayList<RobotBlock> robots;
+	private ArrayList<RobotBlock> robot; // robot modules that can be used for reconfiguration
 	private ArrayList<Block> target;
 	private ArrayList<Block>[] sortedTargets;
 	private ArrayList<Block> easySortedTargets;
 	private Vector3 targetOrigin;
+	private int cntr;
 	
 	private final SmartMovement reconfigurationMovement;
 
@@ -46,14 +48,17 @@ public class Reconfiguration
 	 */
 	public Reconfiguration(Vector3 vector3, SmartMovement reconfigurationMovement)
 	{
-		robot = new ArrayList<RobotBlock>();
+		robots = new ArrayList<RobotBlock>();
+		
 
 		this.blockListController = BlockListController.getInstance();
 		
 		for(Block block : blockListController.getBlockList(BlockType.Robot))
 		{
-			robot.add((RobotBlock)block);
+			robots.add((RobotBlock)block);
 		}
+		
+		robot = findConnectedRobots();
 		
 		this.target = blockListController.getBlockList(BlockType.Goal);
 		targetOrigin = vector3;
@@ -101,23 +106,40 @@ public class Reconfiguration
 		// Define origin for layer 0: point where robot blocks enter the goal
 		// region
 		Vector3 layer0Origin = new Vector3(targetOrigin.x, 1, targetOrigin.z);
-		System.out.println("// RECONFIG: "+targetOrigin);
+		//System.out.println("// RECONFIG: "+targetOrigin);
 
 		// Figure out what the dimensions of the target objects together are
 		int targetWidth = 0;
 		int targetLength = 0;
 		int targetHeight = 0;
+		
+		float OppositeX = layer0Origin.x;
+		float OppositeZ = layer0Origin.z;
 
-		for (int i = 0; i < target.size(); i++)
+		for (Block target: target)
 		{
-			targetWidth = (int) Math.max(targetWidth, Math.abs(target.get(i).getPosition().x - layer0Origin.x)+1); // +1:if there
-			// was only one block, the abs distance would be 0, but should be 1
-			targetLength = (int) Math.max(targetLength, Math.abs(target.get(i).getPosition().z - layer0Origin.z)+1);
-			targetHeight = (int) Math.max(targetHeight, target.get(i).getPosition().y - 1); 
-			// Robot blocks on the first level are not taken into account for height; so -1
+			float XDist = Math.abs(target.getPosition().x - layer0Origin.x);
+			float ZDist = Math.abs(target.getPosition().z - layer0Origin.z);
+			
+			if(targetWidth < XDist+1)
+			{
+				targetWidth = (int) XDist+1;
+				OppositeX = target.getPosition().x;
+			}
+			if(targetLength < ZDist+1)
+			{
+				targetLength = (int) ZDist+1;
+				OppositeZ = target.getPosition().z;
+			}
+
+			targetHeight = (int) Math.max(targetHeight, target.getPosition().y - 1); 
+			
 		}
+		Vector3 otherOrigin = new Vector3(OppositeX, 1, OppositeZ);
 		
 		if (DEBUG) System.out.println("// RECONFIG: TW: "+targetWidth+" TL: "+targetLength+" TH: "+targetHeight);
+		if (DEBUG) System.out.println("// RECONFIG: Origin: "+layer0Origin+ " Other Origin " +otherOrigin);
+		
 
 		// The size of these arraylists depend on the dimension of the target
 		// region (which is seen as one whole cube covering the region
@@ -136,11 +158,7 @@ public class Reconfiguration
 			System.out.println("// RECONFIG: " + "floor: " + floorLevels);
 			System.out.println("// RECONFIG: " + "nonFloor: " + nonFloorLevels);
 		}
-
-		// Define origin for other layers: point opposite to layer0 origin
-		Vector3 otherOrigin = new Vector3(layer0Origin.x + targetWidth - 1, 1, layer0Origin.z + targetLength - 1);
-		// TODO: double check -1
-
+		
 		// Put target blocks in the right bucket
 		for (Block target: target)
 		{
@@ -181,7 +199,7 @@ public class Reconfiguration
 	private void startEasy()
 	{
 		
-		int cntr = 0;
+		cntr = 0;
 		
 		while(cntr<target.size()) 
 		{
@@ -191,7 +209,8 @@ public class Reconfiguration
 			final RobotBlock blockToMove = getFurthestRobot();
 			
 			// 2) Select the target position where it has to go to, there should not be a robot block on it
-			Block targetBlock = easySortedTargets.get(cntr);
+			//TODO: VULNERABLE POINT
+			Block targetBlock = easySortedTargets.get(cntr); 
 			cntr++; 
 			
 			// Check if there is not already a robot block on this position
@@ -216,7 +235,11 @@ public class Reconfiguration
 				@Override
 				public void run()
 				{
-					reconfigurationMovement.newSmartMove(blockToMove, targetBlockForMove.getPosition());
+					if(reconfigurationMovement.newSmartMove(blockToMove, targetBlockForMove.getPosition()))
+					{
+						blockToMove.setInFinalPosition(true);
+					}
+					else changeCntr();
 				}
 				
 			});
@@ -231,15 +254,21 @@ public class Reconfiguration
 				}
 			}
 			
-			blockToMove.setInFinalPosition(true);
+			
 			
 			if (DEBUG) System.out.println("// RECONFIG: CNTR: "+cntr+" ROBOT SIZE: "+robot.size());
 		}
 		
 		if (DEBUG) System.out.println("// RECONFIG: End of While loop");
 		
+		System.out.println("TIMESTEP: "+reconfigurationMovement.getTimestep());
+		
 		//CLOSE MOVING MODE
 
+	}
+	
+	private void changeCntr(){
+		cntr--;
 	}
 
 	private RobotBlock getFurthestRobot() {
@@ -247,6 +276,7 @@ public class Reconfiguration
 		int biggestDistance = 0;
 		int maxHeight = 0;
 		Vector3 targetOrigin = this.targetOrigin;
+		System.out.println("ROBOT SIZE FOR RECONFIG: "+robot.size());
 		
 		for(RobotBlock block : robot)
 		{
@@ -323,5 +353,75 @@ public class Reconfiguration
 			return true;
 		}
 		return false;
+	}
+	
+	public ArrayList<RobotBlock> findConnectedRobots()
+	{
+		RobotBlock closest=null;
+		for (int z = 0; z < robots.size(); z++)
+		{
+			
+			if (closest == null)
+			{
+				closest = robots.get(z);
+			}
+			else
+			{
+				if (closest.getDistanceToPath() > robots.get(z).getDistanceToPath())
+				{
+					closest = robots.get(z);
+				}
+			}
+		}
+		boolean next=true;
+		ArrayList<RobotBlock> alreadyFound= new ArrayList<RobotBlock>();
+		alreadyFound.add(closest);
+		while(next)
+		{
+			next=false;
+			for(RobotBlock robots : robots) //robots == robots.get(i)
+			{
+				boolean yup=false;
+				for(int k=0;k<alreadyFound.size();k++)
+				{
+					if(alreadyFound.get(k).getPosition().x==robots.getPosition().x&&alreadyFound.get(k).getPosition().y==robots.getPosition().y&&alreadyFound.get(k).getPosition().z==robots.getPosition().z)
+					{
+						yup=true;
+						break;
+					}
+				}
+				if(yup)
+				{
+					continue;
+				}
+				if(alreadyFound.get(alreadyFound.size()-1).getPosition().x+1==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z==robots.getPosition().z)
+				{
+					alreadyFound.add(robots);
+					next=true;
+					break;					
+				}
+				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x-1==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z==robots.getPosition().z)
+				{
+					alreadyFound.add(robots);
+					next=true;
+					break;					
+				}
+				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z+1==robots.getPosition().z)
+				{
+					alreadyFound.add(robots);
+					next=true;
+					break;					
+				}
+				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z-1==robots.getPosition().z)
+				{
+					alreadyFound.add(robots);
+					next=true;
+					break;					
+				}
+			}
+		}
+		for(int i=0;i<alreadyFound.size();i++)
+			System.out.println(alreadyFound.get(i));
+		return alreadyFound;
 	}
 }
