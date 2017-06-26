@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector3;
 
+import teamnine.blocksim.BlockSimulator;
 import teamnine.blocksim.block.Block;
 import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.RobotBlock;
@@ -58,12 +59,12 @@ public class Reconfiguration
 			robots.add((RobotBlock)block);
 		}
 		
-		robot = findConnectedRobots();
-		
 		this.target = blockListController.getBlockList(BlockType.Goal);
 		targetOrigin = vector3;
 		this.reconfigurationMovement = reconfigurationMovement;
 
+		robot = findConnectedRobots();
+		
 		if (robot.size() < target.size())
 		{
 			throw new IllegalArgumentException("The number of robot blocks is less than to the number of target blocks!");
@@ -357,71 +358,36 @@ public class Reconfiguration
 	
 	public ArrayList<RobotBlock> findConnectedRobots()
 	{
-		RobotBlock closest=null;
-		for (int z = 0; z < robots.size(); z++)
-		{
-			
-			if (closest == null)
-			{
-				closest = robots.get(z);
-			}
-			else
-			{
-				if (closest.getDistanceToPath() > robots.get(z).getDistanceToPath())
-				{
-					closest = robots.get(z);
-				}
-			}
-		}
-		boolean next=true;
-		ArrayList<RobotBlock> alreadyFound= new ArrayList<RobotBlock>();
-		alreadyFound.add(closest);
-		while(next)
-		{
-			next=false;
-			for(RobotBlock robots : robots) //robots == robots.get(i)
-			{
-				boolean yup=false;
-				for(int k=0;k<alreadyFound.size();k++)
-				{
-					if(alreadyFound.get(k).getPosition().x==robots.getPosition().x&&alreadyFound.get(k).getPosition().y==robots.getPosition().y&&alreadyFound.get(k).getPosition().z==robots.getPosition().z)
-					{
-						yup=true;
-						break;
-					}
-				}
-				if(yup)
-				{
-					continue;
-				}
-				if(alreadyFound.get(alreadyFound.size()-1).getPosition().x+1==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z==robots.getPosition().z)
-				{
-					alreadyFound.add(robots);
-					next=true;
-					break;					
-				}
-				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x-1==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z==robots.getPosition().z)
-				{
-					alreadyFound.add(robots);
-					next=true;
-					break;					
-				}
-				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z+1==robots.getPosition().z)
-				{
-					alreadyFound.add(robots);
-					next=true;
-					break;					
-				}
-				else if(alreadyFound.get(alreadyFound.size()-1).getPosition().x==robots.getPosition().x&&alreadyFound.get(alreadyFound.size()-1).getPosition().z-1==robots.getPosition().z)
-				{
-					alreadyFound.add(robots);
-					next=true;
-					break;					
-				}
-			}
-		}
-		for(int i=0;i<alreadyFound.size();i++)
-			System.out.println(alreadyFound.get(i));
+		ArrayList<RobotBlock> alreadyFound = new ArrayList<RobotBlock>();
+		alreadyFound.add((RobotBlock) blockListController.getBlockAtPointWithType(targetOrigin, BlockType.Robot)); 
+		getConnectedRobots(alreadyFound.get(0), alreadyFound);
 		return alreadyFound;
+	}
+	
+	private void getConnectedRobots(Block block, ArrayList<RobotBlock> alreadyFound)
+	{
+		//TODO: ADD FOR INDEX OUT OF BOUNDS
+		RobotBlock blockToAdd;
+		ArrayList<Vector3> positions = new ArrayList<Vector3>();
+		if(block.getPosition().x > 0) positions.add(new Vector3 (block.getPosition().x+1, block.getPosition().y, block.getPosition().z));
+		if(block.getPosition().x < BlockSimulator.gridSize) positions.add(new Vector3 (block.getPosition().x, block.getPosition().y, block.getPosition().z-1));
+		if(block.getPosition().z > 0) positions.add(new Vector3 (block.getPosition().x-1, block.getPosition().y, block.getPosition().z));
+		if(block.getPosition().x < BlockSimulator.gridSize) positions.add(new Vector3 (block.getPosition().x, block.getPosition().y, block.getPosition().z+1));
+		positions.add(new Vector3(block.getPosition().x, block.getPosition().y+1, block.getPosition().z));
+		
+		for(Vector3 position : positions)
+		{
+			if(null!=blockListController.getBlockAtPointWithType(position, BlockType.Robot))
+			{
+				blockToAdd = (RobotBlock) blockListController.getBlockAtPointWithType(position, BlockType.Robot);
+				//if not added already > add and recurse
+				if(!alreadyFound.contains(blockToAdd))
+				{
+					alreadyFound.add(blockToAdd);
+					getConnectedRobots(blockToAdd, alreadyFound);
+				}
+			}
+		}
+		System.out.println(alreadyFound.size());
 	}
 }
