@@ -356,7 +356,8 @@ public class Moves
 		float targetZ=v.z;
 		for(int i=0;i<robots.size();i++) 
 		{
-			float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y; robots.get(i).setDistanceToPath(distanceToPath);
+			float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y; 
+			robots.get(i).setDistanceToPath(distanceToPath);
 	    }
 		System.out.println("distances are set ");
 		System.out.println("blocks are going to be ordered "+orderToMove.size() );
@@ -760,6 +761,24 @@ public class Moves
 		boolean next=true;
 		ArrayList<Vector3> alreadyFound= new ArrayList<Vector3>();
 		alreadyFound.add(closest.getPosition());
+		ArrayList<Vector3> toAdd = new ArrayList<Vector3>();
+		for(int i=0;i<robots.size();i++)
+		{
+			if(alreadyFound.get(alreadyFound.size()-1).x==robots.get(i).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z==robots.get(i).getPosition().z)
+			{
+				if(alreadyFound.get(alreadyFound.size()-1).y==robots.get(i).getPosition().y)
+				{
+					continue;
+				}
+				else
+				{
+					toAdd.add(robots.get(i).getPosition());
+				}
+			}
+		}
+		alreadyFound.addAll(toAdd);
+		
+		
 		while(next)
 		{
 			next=false;
@@ -781,29 +800,94 @@ public class Moves
 				if(alreadyFound.get(alreadyFound.size()-1).x+1==robots.get(j).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z==robots.get(j).getPosition().z)
 				{
 					alreadyFound.add(robots.get(j).getPosition());
+					toAdd = new ArrayList<Vector3>();
+					for(int i=0;i<robots.size();i++)
+					{
+						if(alreadyFound.get(alreadyFound.size()-1).x==robots.get(i).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z==robots.get(i).getPosition().z)
+						{
+							if(alreadyFound.get(alreadyFound.size()-1).y==robots.get(i).getPosition().y)
+							{
+								continue;
+							}
+							else
+							{
+								toAdd.add(robots.get(i).getPosition());
+							}
+						}
+					}
+					alreadyFound.addAll(toAdd);
 					next=true;
 					break;					
 				}
 				else if(alreadyFound.get(alreadyFound.size()-1).x-1==robots.get(j).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z==robots.get(j).getPosition().z)
 				{
 					alreadyFound.add(robots.get(j).getPosition());
+					toAdd = new ArrayList<Vector3>();
+					for(int i=0;i<robots.size();i++)
+					{
+						if(alreadyFound.get(alreadyFound.size()-1).x==robots.get(i).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z==robots.get(i).getPosition().z)
+						{
+							if(alreadyFound.get(alreadyFound.size()-1).y==robots.get(i).getPosition().y)
+							{
+								continue;
+							}
+							else
+							{
+								toAdd.add(robots.get(i).getPosition());
+							}
+						}
+					}
+					alreadyFound.addAll(toAdd);
 					next=true;
 					break;					
 				}
 				else if(alreadyFound.get(alreadyFound.size()-1).x==robots.get(j).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z+1==robots.get(j).getPosition().z)
 				{
 					alreadyFound.add(robots.get(j).getPosition());
+					toAdd = new ArrayList<Vector3>();
+					for(int i=0;i<robots.size();i++)
+					{
+						if(alreadyFound.get(alreadyFound.size()-1).x==robots.get(i).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z==robots.get(i).getPosition().z)
+						{
+							if(alreadyFound.get(alreadyFound.size()-1).y==robots.get(i).getPosition().y)
+							{
+								continue;
+							}
+							else
+							{
+								toAdd.add(robots.get(i).getPosition());
+							}
+						}
+					}
+					alreadyFound.addAll(toAdd);
 					next=true;
 					break;					
 				}
 				else if(alreadyFound.get(alreadyFound.size()-1).x==robots.get(j).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z-1==robots.get(j).getPosition().z)
 				{
 					alreadyFound.add(robots.get(j).getPosition());
+					toAdd = new ArrayList<Vector3>();
+					for(int i=0;i<robots.size();i++)
+					{
+						if(alreadyFound.get(alreadyFound.size()-1).x==robots.get(i).getPosition().x&&alreadyFound.get(alreadyFound.size()-1).z==robots.get(i).getPosition().z)
+						{
+							if(alreadyFound.get(alreadyFound.size()-1).y==robots.get(i).getPosition().y)
+							{
+								continue;
+							}
+							else
+							{
+								toAdd.add(robots.get(i).getPosition());
+							}
+						}
+					}
+					alreadyFound.addAll(toAdd);
 					next=true;
 					break;					
 				}
 			}
 		}
+		System.out.println("soze "+alreadyFound.size());
 		return alreadyFound.size();
 	}
 	public void removeOrPos(ArrayList<Vector3> possibleMovements, RobotBlock b, Vector3 v)

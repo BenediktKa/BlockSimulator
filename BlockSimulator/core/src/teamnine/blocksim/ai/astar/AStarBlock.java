@@ -7,7 +7,9 @@ public class AStarBlock implements Comparable<AStarBlock>
 	private Vector3 position;
 	private double cost = Integer.MAX_VALUE;
 	private double priority = 0;
+	private int blocksLeft;
 	private AStarBlock previousBlock;
+	private boolean climbing = false;
 	
 	public AStarBlock(Vector3 position)
 	{
@@ -37,6 +39,26 @@ public class AStarBlock implements Comparable<AStarBlock>
 	public void setPriority(double priority)
 	{
 		this.priority = priority;
+	}
+	
+	public int getBlocksLeft()
+	{
+		return blocksLeft;
+	}
+	
+	public void setBlocksLeft(int blocksLeft)
+	{
+		this.blocksLeft = blocksLeft;
+	}
+	
+	public boolean getClimbing()
+	{
+		return climbing;
+	}
+	
+	public void setClimbing(boolean climbing)
+	{
+		this.climbing = climbing;
 	}
 	
 	public AStarBlock getPreviousBlock()

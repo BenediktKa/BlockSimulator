@@ -42,6 +42,7 @@ public class AStarPath
 		PriorityQueue<AStarBlock> priorityQueue = new PriorityQueue<AStarBlock>();
 		AStarBlock rootBlock = new AStarBlock(startPos);
 		rootBlock.setCost(0);
+		rootBlock.setBlocksLeft(agentCount);
 		AStarBlock currentBlock = rootBlock;
 
 		priorityQueue.add(rootBlock);
@@ -52,13 +53,28 @@ public class AStarPath
 			if (currentBlock.getPosition().equals(endPos))
 				return createPathList(currentBlock);
 
-			for (Vector3 nextPos : getNeighbors(currentBlock.getPosition()))
+			for (Vector3 nextPos : getNeighbors(currentBlock))
 			{
 				double newCost = currentBlock.getCost() + 1;
+				int blocksLeft = currentBlock.getBlocksLeft();
 				AStarBlock nextBlock = posExists(nextPos);
+				
+				if(nextPos.y == currentBlock.getPosition().y + 1)
+					for(int i = (int) nextPos.y - 1; i > 0; i--)
+					{
+						System.out.println("i is: " + i);
+						blocksLeft -= i;
+						System.out.println("Blocks Left: " +  blocksLeft + " Goal Count: " + goalCount);
+					}
 
-				if (newCost < nextBlock.getCost())
+				if (newCost < nextBlock.getCost() && blocksLeft >= goalCount)
 				{
+					if(nextPos.y == currentBlock.getPosition().y + 1)
+						nextBlock.setClimbing(true);
+					else
+						nextBlock.setClimbing(false);
+						
+					nextBlock.setBlocksLeft(blocksLeft);
 					nextBlock.setCost(newCost);
 					nextBlock.setPreviousBlock(currentBlock);
 					nextBlock.setPriority(newCost + mannhattanDistance(nextPos, endPos));
@@ -70,23 +86,49 @@ public class AStarPath
 		return null;
 	}
 
-	public ArrayList<Vector3> getNeighbors(Vector3 currentPos)
+	public ArrayList<Vector3> getNeighbors(AStarBlock currentBlock)
 	{
+		Vector3 currentPos = currentBlock.getPosition();
 		ArrayList<Vector3> neighbors = new ArrayList<Vector3>();
+		float y = currentPos.y;
+		
+		if(!currentBlock.getClimbing() && y > 1)
+		{
+			while(blockListController.getBlockTypeAtPoint(new Vector3(currentPos.x, y - 1, currentPos.z)) != BlockType.Floor)
+			{
+				y -= 1;
+			}
+		}
 
-		Vector3 x1 = new Vector3(currentPos.x + 1, currentPos.y, currentPos.z);
-		Vector3 x1y1 = new Vector3(currentPos.x + 1, currentPos.y + 1, currentPos.z);
-		Vector3 x2 = new Vector3(currentPos.x - 1, currentPos.y, currentPos.z);
-		Vector3 x2y2 = new Vector3(currentPos.x - 1, currentPos.y + 1, currentPos.z);
-		Vector3 z1 = new Vector3(currentPos.x, currentPos.y, currentPos.z + 1);
-		Vector3 z1y1 = new Vector3(currentPos.x, currentPos.y + 1, currentPos.z + 1);
-		Vector3 z2 = new Vector3(currentPos.x, currentPos.y, currentPos.z - 1);
-		Vector3 z2y2 = new Vector3(currentPos.x, currentPos.y + 1, currentPos.z - 1);
+		// X-Coordinate
+		Vector3 x1 = new Vector3(currentPos.x + 1, y, currentPos.z);
+		Vector3 x1y1 = new Vector3(currentPos.x + 1, y + 1, currentPos.z);
+		Vector3 x2 = new Vector3(currentPos.x - 1, y, currentPos.z);
+		Vector3 x2y2 = new Vector3(currentPos.x - 1, y + 1, currentPos.z);
 
+		// Y-Coordinate
+		Vector3 y1 = new Vector3(currentPos.x, y + 1, currentPos.z);
+		Vector3 y2 = new Vector3(currentPos.x, y - 1, currentPos.z);
+
+		// Z-Coordinate
+		Vector3 z1 = new Vector3(currentPos.x, y, currentPos.z + 1);
+		Vector3 z1y1 = new Vector3(currentPos.x, y + 1, currentPos.z + 1);
+		Vector3 z2 = new Vector3(currentPos.x, y, currentPos.z - 1);
+		Vector3 z2y2 = new Vector3(currentPos.x, y + 1, currentPos.z - 1);
+
+		// X-Coordinate
 		if (inGrid(x1.x) && validBlock(x1) && validBlock(x1y1))
 			neighbors.add(x1);
 		if (inGrid(x2.x) && validBlock(x2) && validBlock(x2y2))
 			neighbors.add(x2);
+
+		// Y-Coordinate
+		if (inGrid(y1.y) && validBlock(y1))
+			neighbors.add(y1);
+		if (inGrid(y2.y) && validBlock(y2))
+			neighbors.add(y2);
+
+		// Z-Coordinate
 		if (inGrid(z1.z) && validBlock(z1) && validBlock(z1y1))
 			neighbors.add(z1);
 		if (inGrid(z2.z) && validBlock(z2) && validBlock(z2y2))
@@ -102,7 +144,7 @@ public class AStarPath
 			if (pos.equals(aStarBlock.getPosition()))
 				return aStarBlock;
 		}
-		
+
 		AStarBlock aStarBlock = new AStarBlock(pos);
 		aStarArray.add(aStarBlock);
 		return aStarBlock;

@@ -84,11 +84,12 @@ public class MoveSnake
 		 float targetX=v.x; float targetZ=v.z; //finds distance from the block
 		// to the target assigns the value to the block
 		 
-		 for(int i=0;i<robots.size();i++) { float
-		 distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.
-		 abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition(
-		 ).y; robots.get(i).setDistanceToPath(distanceToPath);
-		 orderToMove.add(robots.get(i)); }
+		 for(int i=0;i<robots.size();i++)
+		 {
+			 float distanceToPath=Math.abs(robots.get(i).getPosition().x-targetX)+Math.abs(robots.get(i).getPosition().z-targetZ)+robots.get(i).getPosition().y;
+			 robots.get(i).setDistanceToPath(distanceToPath);
+			 orderToMove.add(robots.get(i)); 
+		 }
 		 
 /*
 		for (int i = 0; i < robots.size(); i++)
