@@ -71,4 +71,81 @@ public class PreConfigs
 		blockListController.createBlock(new Vector3(16, 2, 0), BlockType.Obstacle);
 
 	}
+	
+	public void experiment2()
+	{
+		blockListController.createBlock(new Vector3(9, 1, 7), BlockType.Goal);
+		blockListController.createBlock(new Vector3(9, 1, 8), BlockType.Goal);
+		blockListController.createBlock(new Vector3(1, 1, 1), BlockType.Robot);
+		blockListController.createBlock(new Vector3(0, 1, 1), BlockType.Robot);
+		blockListController.createBlock(new Vector3(1, 1, 0), BlockType.Robot);
+		blockListController.createBlock(new Vector3(0, 1, 0), BlockType.Robot);
+		blockListController.createBlock(new Vector3(0, 1, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(1, 1, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(3, 1, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 1, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(5, 1, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 1, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 1, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 1, 3), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 1, 2), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(5, 1, 2), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 1, 2), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 1, 1), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 1, 0), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 1, 1), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 1, 2), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(1, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(2, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(2, 1, 7), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 1, 7), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(5, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(9, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(2, 1, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(1, 1, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(0, 1, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 1, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 1, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 1, 9), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 1, 7), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 1, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(5, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 2, 7), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 2, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(9, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(8, 3, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(9, 3, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(1, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(2, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(3, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 2, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 2, 1), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 2, 2), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(5, 2, 2), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 2, 2), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 2, 3), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(5, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(0, 2, 4), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(1, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(2, 2, 7), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(2, 2, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(1, 2, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(0, 2, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(2, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 2, 8), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(6, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(4, 2, 7), BlockType.Obstacle);
+	}
 }
