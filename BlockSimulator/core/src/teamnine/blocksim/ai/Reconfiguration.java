@@ -13,12 +13,10 @@ import teamnine.blocksim.block.blocklist.BlockListController;
 /**
  * Responsible for managing the reconfiguration
  * > Defining the order in which targets should be filled
- * > Appointing matching robot and target block
+ * > Selecting the robot module that should be moved to the next target position
  * > Initializing movement of robot to target position
  * Issues:
  * > ID's not fully implemented
- * > Possibly problems with target-blocks that are not on the floor, since the PathFinding is only 2D
- * @author Jurriaan
  *
  */
 public class Reconfiguration
@@ -34,7 +32,7 @@ public class Reconfiguration
 	
 	private final SmartMovement reconfigurationMovement;
 
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 
 	/**
 	 * Constructor for reconfiguration algorithm Checks if the number of robot
@@ -186,7 +184,7 @@ public class Reconfiguration
 			}
 		}
 		
-		//Easy sorting targets
+		//Easy sorting targets - since ID's are not taken into account
 		easySortedTargets = new ArrayList<Block>();
 		for(int i=0; i<sortedTargets.length; i++)
 		{
@@ -197,6 +195,9 @@ public class Reconfiguration
 		}
 	}
 	
+	/*
+	 * Performing reconfiguration when ID's are not taken into account
+	 */
 	private void startEasy()
 	{
 		
@@ -264,7 +265,7 @@ public class Reconfiguration
 		
 		System.out.println("TIMESTEP: "+reconfigurationMovement.getTimestep());
 		
-		//CLOSE MOVING MODE
+		
 
 	}
 	

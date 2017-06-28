@@ -38,23 +38,11 @@ public class LevelEditorHUD implements Disposable
 	// Import Button
 	private TextButton importButton;
 
-	// Export Button
-	private TextButton exportButton;
-
-	// Undo Button
-	private TextButton undoButton;
-
-	// Redo Button
-	private TextButton redoButton;
-
 	// Start Button
 	private TextButton startButton;
 
 	// Pause Button
 	private TextButton pauseButton;
-
-	// Load Simulation Button
-	private TextButton simulationButton;
 
 	// AI Mode Button
 	private TextButton aiModeButton;
@@ -99,15 +87,11 @@ public class LevelEditorHUD implements Disposable
 
 		// Create Buttons
 		importButton = new TextButton("Import", skin);
-		exportButton = new TextButton("Export", skin);
-		undoButton = new TextButton("Undo", skin, "midnight");
-		redoButton = new TextButton("Redo", skin, "midnight");
 		aiModeButton = new TextButton("AI: " + aiMode, skin);
 		startButton = new TextButton("Start", skin);
 		pauseButton = new TextButton("Pause", skin);
 		pauseButton.setVisible(false);
 		pauseButton.setTouchable(Touchable.disabled);
-		simulationButton = new TextButton("Load Simulation", skin);
 
 		// Create Labels
 		blockLabel = new Label("Selected: " + selectorBlock.getSelectedBlock(), skin);
@@ -115,13 +99,9 @@ public class LevelEditorHUD implements Disposable
 
 		// Add to Table
 		table.add(importButton).padRight(20);
-		table.add(exportButton).padRight(20);
-		table.add(simulationButton).padRight(20);
 		table.add(blockLabel).padRight(20);
 		table.add(selectorPosLabel).padRight(20);
 		table.row().height(20);
-		table.add(undoButton).padRight(20);
-		table.add(redoButton).padRight(20);
 		table.add(aiModeButton).padRight(20);
 		table.add(startButton).padRight(20);
 		table.add(pauseButton);
@@ -140,82 +120,6 @@ public class LevelEditorHUD implements Disposable
 				super.clicked(event, x, y);
 			}
 		});
-
-		// Export Button Listener
-		exportButton.addListener(new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				if (StateManager.state == StateManager.SimulationState.MENU)
-				{
-					// check = new
-					// ConfigurationChecker(blockSimulator.blockList);
-
-					/*
-					 * if (check.checkConfiguration()) {
-					 * 
-					 * FileCreator fileCreator = new FileCreator(); File
-					 * robotFile = new File("myRobot.txt"); File targetFile =
-					 * new File("myTarget.txt"); File obstacleFile = new
-					 * File("myObstacle.txt");
-					 * 
-					 * fileChooser.setSelectedFile(robotFile); if
-					 * (fileChooser.showSaveDialog(null) ==
-					 * JFileChooser.APPROVE_OPTION) {
-					 * fileCreator.print(fileChooser.getSelectedFile(),
-					 * check.getRobotBlockList()); }
-					 * 
-					 * fileChooser.setSelectedFile(targetFile); if
-					 * (fileChooser.showSaveDialog(null) ==
-					 * JFileChooser.APPROVE_OPTION) {
-					 * fileCreator.print(fileChooser.getSelectedFile(),
-					 * check.getGoalBlockList()); }
-					 * 
-					 * fileChooser.setSelectedFile(obstacleFile); if
-					 * (fileChooser.showSaveDialog(null) ==
-					 * JFileChooser.APPROVE_OPTION) {
-					 * fileCreator.print(fileChooser.getSelectedFile(),
-					 * check.getObstacleBlockList()); }
-					 * 
-					 * } else { JPanel panel = new JPanel();
-					 * JOptionPane.showMessageDialog(panel,
-					 * check.getErrorMessage(), "Error",
-					 * JOptionPane.ERROR_MESSAGE); }
-					 */
-				}
-
-				super.clicked(event, x, y);
-			}
-		});
-
-		// Undo Button Listener
-		/*undoButton.addListener(new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				if (StateManager.state == StateManager.SimulationState.MENU)
-				{
-					blockSimulator.blockList.undo();
-				}
-				super.clicked(event, x, y);
-			}
-		});*/
-
-		// Redo Button Listener
-		/*redoButton.addListener(new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				if (StateManager.state == StateManager.SimulationState.MENU)
-				{
-					blockSimulator.blockList.redo();
-				}
-				super.clicked(event, x, y);
-			}
-		});*/
 
 		// AI Button Listener
 		aiModeButton.addListener(new ClickListener()
@@ -280,22 +184,6 @@ public class LevelEditorHUD implements Disposable
 
 				super.clicked(event, x, y);
 			}
-		});
-
-		// Simulation Button Listener
-		simulationButton.addListener(new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				if (StateManager.state == StateManager.SimulationState.MENU)
-				{
-					new simulationLoader();
-				}
-
-				super.clicked(event, x, y);
-			}
-
 		});
 
 		// Add to Stage

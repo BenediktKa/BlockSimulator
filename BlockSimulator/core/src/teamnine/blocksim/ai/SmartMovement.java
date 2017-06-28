@@ -12,32 +12,26 @@ import teamnine.blocksim.block.RobotBlock;
 import teamnine.blocksim.block.blocklist.BlockListController;
 
 /**
- * Is not so smart
- * Only useful for reconfiguration purposes, when a robotblock is first moved to the targetOrigin by other movement method
- * @author jurri
+ * Used to move a robot block from a certain position, to a specified target position
+ * Required is that from all the robot modules, at least one is already placed in a target position.
  *
  */
 public class SmartMovement 
 {
 	private BlockListController blockListController;
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	private int timestep;
-	//private ArrayList<RobotBlock> robotBlockList;
-	//private ArrayList<Block> obstacleBlockList;
+	private boolean climbPossible;
 	
 	public SmartMovement(int timestep)
 	{
 		this.blockListController = BlockListController.getInstance();
 		this.timestep = timestep;
-		//this.robotBlockList = blockListController.getRobotBlockList();
-		//this.obstacleBlockList = blockListController.getBlockList(BlockType.Obstacle);
 		
 	}
 	
 	public boolean newSmartMove(RobotBlock movingBlock, Vector3 targetPosition)
 	{
-		//first move it to targetOrigin by other movement, then get rid of the block stored in that list
-		
 		//keep track of performed movements
 		ArrayList<Vector3> possibleMovements = getPossibleMovements(movingBlock);
 		
@@ -54,8 +48,6 @@ public class SmartMovement
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			//TODO: POSSIBLE MOVEMENTS INVALID
 			possibleMovements = getPossibleMovements(movingBlock);
 			
 			
@@ -76,9 +68,8 @@ public class SmartMovement
 	private ArrayList<Vector3> getPossibleMovements(RobotBlock movingBlock)
 	{
 		ArrayList<Vector3> possibleMovements = new ArrayList<Vector3>();
-		//TODO: WHAT ABOUT y-1
 		
-		boolean climbPossible = false;
+		climbPossible = false;
 		Vector3 aboveBlock = new Vector3(movingBlock.getPosition().x, movingBlock.getPosition().y+1, movingBlock.getPosition().z);
 		if (blockListController.getBlockAtPointWithType(aboveBlock, BlockType.Robot) == null) climbPossible=true;
 		
@@ -91,40 +82,7 @@ public class SmartMovement
 			Vector3 underClimb = shift;
 			Vector3 underFall = new Vector3 (movingBlock.getPosition().x-1,1,movingBlock.getPosition().z);
 			
-			/*SHIFT ALS
-			 * Geen Robot/Obstacle block op de nieuwe positie
-			 * Robot block onder de nieuwe positie, of robot block onder de nieuwe positie y-1
-			 * Goal block onder de nieuwe positie -> er moet een robot block grenzen aan de nieuwe positie
-			*/
-			
-			if(blockListController.getBlockAtPointIgnoreType(shift, BlockType.Goal)==null)
-			{
-				//TODO: FIX FOR FALLING MORE THAN 1
-				if(blockListController.getBlockAtPointWithType(underShift, BlockType.Robot)!=null 
-					|| blockListController.getBlockAtPointWithType(underFall, BlockType.Robot)!=null)
-				{
-					possibleMovements.add(shift);
-				}
-				else if(blockListController.getBlockAtPointWithType(underShift, BlockType.Goal)!=null
-						|| blockListController.getBlockAtPointWithType(underFall, BlockType.Goal)!=null)
-				{
-					possibleMovements.add(shift);
-				}
-			}
-			
-			/*CLIMB ALS
-			 * Geen module boven de huidige positie
-			 * Robot block onder de nieuwe positie
-			 * Geen module op de nieuwe positie
-			 */
-
-			else if(climbPossible && 
-					blockListController.getBlockAtPointWithType(underClimb, BlockType.Robot)!=null &&
-					blockListController.getBlockAtPointIgnoreType(climb, BlockType.Goal)==null)
-			{
-				possibleMovements.add(climb);
-			}
-			
+			doChecks(possibleMovements, shift, climb, fall, underShift, underClimb, underFall);
 		}
 		
 		if(movingBlock.getPosition().z>0)
@@ -136,26 +94,7 @@ public class SmartMovement
 			Vector3 underClimb = shift;
 			Vector3 underFall = new Vector3(movingBlock.getPosition().x,1,movingBlock.getPosition().z-1);
 			
-			if(blockListController.getBlockAtPointIgnoreType(shift, BlockType.Goal)==null)
-			{
-				//TODO: FIX FOR FALLING MORE THAN 1
-				if(blockListController.getBlockAtPointWithType(underShift, BlockType.Robot)!=null 
-					|| blockListController.getBlockAtPointWithType(underFall, BlockType.Robot)!=null)
-				{
-					possibleMovements.add(shift);
-				}
-				else if(blockListController.getBlockAtPointWithType(underShift, BlockType.Goal)!=null
-						|| blockListController.getBlockAtPointWithType(underFall, BlockType.Goal)!=null)
-				{
-					possibleMovements.add(shift);
-				}
-			}
-			else if(climbPossible && 
-					blockListController.getBlockAtPointWithType(underClimb, BlockType.Robot)!=null &&
-					blockListController.getBlockAtPointIgnoreType(climb, BlockType.Goal)==null)
-			{
-				possibleMovements.add(climb);
-			}
+			doChecks(possibleMovements, shift, climb, fall, underShift, underClimb, underFall);
 			
 		}
 		
@@ -168,25 +107,7 @@ public class SmartMovement
 			Vector3 underClimb = shift;
 			Vector3 underFall = new Vector3(movingBlock.getPosition().x+1,1,movingBlock.getPosition().z);
 			
-			if(blockListController.getBlockAtPointIgnoreType(shift, BlockType.Goal)==null)
-			{
-				if(blockListController.getBlockAtPointWithType(underShift, BlockType.Robot)!=null 
-					|| blockListController.getBlockAtPointWithType(underFall, BlockType.Robot)!=null)
-				{
-					possibleMovements.add(shift);
-				}
-				else if(blockListController.getBlockAtPointWithType(underShift, BlockType.Goal)!=null
-						|| blockListController.getBlockAtPointWithType(underFall, BlockType.Goal)!=null)
-				{
-					possibleMovements.add(shift);
-				}
-			}
-			else if(climbPossible && 
-					blockListController.getBlockAtPointWithType(underClimb, BlockType.Robot)!=null &&
-					blockListController.getBlockAtPointIgnoreType(climb, BlockType.Goal)==null)
-			{
-				possibleMovements.add(climb);
-			}
+			doChecks(possibleMovements, shift, climb, fall, underShift, underClimb, underFall);
 			
 		}
 		
@@ -199,31 +120,48 @@ public class SmartMovement
 			Vector3 underClimb = shift;
 			Vector3 underFall = new Vector3(movingBlock.getPosition().x,1,movingBlock.getPosition().z+1);
 			
-			if(blockListController.getBlockAtPointIgnoreType(shift, BlockType.Goal)==null)
-			{
-				//TODO: FIX FOR FALLING MORE THAN 1
-				if(blockListController.getBlockAtPointWithType(underShift, BlockType.Robot)!=null 
-					|| blockListController.getBlockAtPointWithType(underFall, BlockType.Robot)!=null)
-				{
-					possibleMovements.add(shift);
-				}
-				else if(blockListController.getBlockAtPointWithType(underShift, BlockType.Goal)!=null
-						|| blockListController.getBlockAtPointWithType(underFall, BlockType.Goal)!=null)
-				{
-					possibleMovements.add(shift);
-				}
-			}
-			else if(climbPossible && 
-					blockListController.getBlockAtPointWithType(underClimb, BlockType.Robot)!=null &&
-					blockListController.getBlockAtPointIgnoreType(climb, BlockType.Goal)==null)
-			{
-				possibleMovements.add(climb);
-			}
+			doChecks(possibleMovements, shift, climb, fall, underShift, underClimb, underFall);
 			
 		}
 		
 		if(DEBUG) System.out.println("//S-MOVE: # possiblilities: "+possibleMovements.size());
 		return possibleMovements;
+	}
+	
+	private void doChecks(ArrayList<Vector3> possibleMovements, Vector3 shift, Vector3 climb, Vector3 fall, Vector3 underShift, Vector3 underClimb, Vector3 underFall)
+	{
+		/*SHIFT IF
+		 * No robot or obstacle module is on the new position
+		 * Robot module is underneath the new position
+		 * A goal block is on the new position, but should be surrounded by at least one robot module
+		*/
+		
+		if(blockListController.getBlockAtPointIgnoreType(shift, BlockType.Goal)==null)
+		{
+			if(blockListController.getBlockAtPointWithType(underShift, BlockType.Robot)!=null 
+				|| blockListController.getBlockAtPointWithType(underFall, BlockType.Robot)!=null)
+			{
+				possibleMovements.add(shift);
+			}
+			else if(blockListController.getBlockAtPointWithType(underShift, BlockType.Goal)!=null
+					|| blockListController.getBlockAtPointWithType(underFall, BlockType.Goal)!=null)
+			{
+				possibleMovements.add(shift);
+			}
+		}
+		
+		/*CLIMB ALS
+		 * No robot module is above the moving robot module
+		 * Robot module underneath the new position
+		 * No robot/obstacle module on the new position
+		 */
+
+		else if(climbPossible && 
+				blockListController.getBlockAtPointWithType(underClimb, BlockType.Robot)!=null &&
+				blockListController.getBlockAtPointIgnoreType(climb, BlockType.Goal)==null)
+		{
+			possibleMovements.add(climb);
+		}
 	}
 	
 	private Vector3 bestMovement(ArrayList<Vector3> possibleMovements, Vector3 targetPosition, Vector3 oldPosition)
