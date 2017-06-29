@@ -21,7 +21,6 @@ import teamnine.blocksim.block.BlockType;
 import teamnine.blocksim.block.SelectorBlock;
 import teamnine.blocksim.block.blocklist.BlockListController;
 import teamnine.blocksim.configs.configurationLoader;
-import teamnine.blocksim.configs.simulationLoader;
 
 public class LevelEditorHUD implements Disposable
 {
@@ -46,7 +45,7 @@ public class LevelEditorHUD implements Disposable
 
 	// AI Mode Button
 	private TextButton aiModeButton;
-	private AIMode aiMode = AIMode.Greedy;
+	private AIMode aiMode = AIMode.DCA;
 
 	// Block Dialog
 	private Label blockLabel;
@@ -61,7 +60,7 @@ public class LevelEditorHUD implements Disposable
 
 	public enum AIMode
 	{
-		Greedy, Dijkstra, Astar;
+		DCA, Dijkstra, Astar;
 
 		public AIMode next()
 		{
