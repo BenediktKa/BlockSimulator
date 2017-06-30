@@ -151,7 +151,34 @@ public class PreConfigs
 	
 	public void Test1()
 	{
-		//Need to find this one
+		blockListController.createBlock(new Vector3(11, 1, 18), BlockType.Goal);
+		blockListController.createBlock(new Vector3(11, 1, 19), BlockType.Goal);
+		blockListController.createBlock(new Vector3(2, 1, 8), BlockType.Robot);
+		blockListController.createBlock(new Vector3(2, 1, 7), BlockType.Robot);
+		blockListController.createBlock(new Vector3(2, 1, 6), BlockType.Robot);
+		blockListController.createBlock(new Vector3(2, 1, 9), BlockType.Robot);
+		blockListController.createBlock(new Vector3(7, 1, 21), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 20), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 19), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 18), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 17), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 21), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 20), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 17), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 16), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 16), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 12), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 11), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 10), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 12), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 11), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 10), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 7), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 2, 5), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 5), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 6), BlockType.Obstacle);
+		blockListController.createBlock(new Vector3(7, 1, 7), BlockType.Obstacle);
 	}
 	
 	public void Test2()
