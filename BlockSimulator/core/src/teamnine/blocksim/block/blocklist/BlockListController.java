@@ -60,7 +60,7 @@ public class BlockListController implements Disposable
 		createFloor();
 		
 		preConfigs = new PreConfigs(this);
-		preConfigs.experiment1();
+		preConfigs.Test4();
 	}
 
 	/**

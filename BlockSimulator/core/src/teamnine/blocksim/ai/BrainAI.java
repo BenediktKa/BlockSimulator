@@ -146,8 +146,8 @@ public class BrainAI //
 				minTarget = target.get(i);
 			}
 		}
-		
-		return new Block(findTargetOrigin(), BlockType.Path);
+		return minTarget;
+		//return new Block(findTargetOrigin(), BlockType.Path);
 	}
 
 	public Vector3 findTargetOrigin()
